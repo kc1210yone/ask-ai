@@ -1,0 +1,2 @@
+port: 8000
+persist_path: ./chroma
