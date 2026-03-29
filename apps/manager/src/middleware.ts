@@ -1,7 +1,7 @@
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
 import { fetchAuthSession } from 'aws-amplify/auth/server';
 import { type NextRequest, NextResponse } from 'next/server';
-import { amplifyConfig } from '#src/features/auth/config';
+import { amplifyConfig } from '#src/features/auth';
 
 const { runWithAmplifyServerContext } = createServerRunner({
   config: amplifyConfig,
@@ -20,7 +20,9 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
   const authed = await isAuthenticated(request);
 
-  if (pathname === '/login') {
+  const isPublicPath = pathname === '/login' || pathname === '/signup';
+
+  if (isPublicPath) {
     if (authed) return NextResponse.redirect(new URL('/', request.url));
     return NextResponse.next();
   }

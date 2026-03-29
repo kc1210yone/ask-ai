@@ -1,10 +1,10 @@
 import '#src/app/globals.css';
-import { AmplifyProvider } from '#src/features/auth/provider';
+import { AmplifyProvider } from '#src/features/auth';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Next.js Example',
+  title: 'Ask AI 管理ツール',
 };
 
 const RootLayout = ({

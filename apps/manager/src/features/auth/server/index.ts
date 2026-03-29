@@ -2,7 +2,7 @@ import { createServerRunner } from '@aws-amplify/adapter-nextjs';
 import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth/server';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-import { amplifyConfig } from './config';
+import { amplifyConfig } from '#src/features/auth/lib/config';
 
 const { runWithAmplifyServerContext } = createServerRunner({
   config: amplifyConfig,
