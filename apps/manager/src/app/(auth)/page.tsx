@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { LogoutButton } from '#src/features/auth/logout-button';
 import { getUser } from '#src/features/auth/server';
 
 export default async function Home() {
@@ -7,5 +8,10 @@ export default async function Home() {
     redirect('/login');
   });
 
-  return <pre>{JSON.stringify(user, null, 2)}</pre>;
+  return (
+    <div>
+      <LogoutButton />
+      <pre>{JSON.stringify(user, null, 2)}</pre>
+    </div>
+  );
 }

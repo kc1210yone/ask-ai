@@ -54,5 +54,5 @@ export default function LoginPage() {
   if (step === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') {
     // step に応じた処理
   }
-  return <Login handleSubmit={void handleLogin} />;
+  return <Login handleSubmit={(e) => void handleLogin(e)} />;
 }

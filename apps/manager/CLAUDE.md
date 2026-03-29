@@ -14,6 +14,8 @@ AIアシスタントが回答するときに参照するデータを入稿する
 - React Compiler
 - React Hook Form
 - Prisma
+- AWS Cognito
+- AWS Amplify
 
 ## コードスタイル
 
@@ -26,7 +28,7 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 
 - `npm run dev -w @internal/manager`: Next.jsのDevモード起動
 - `npm run test:typecheck -w @internal/manager`: TypeScriptのタイプチェック
-- `npm run test:vitest -w @internal/manager`: Vitestによるテスト（テストはほとんど書かない）
+- `npm run test:vitest -w @internal/manager`: Vitestによるテスト
 - `npm run lint -w @internal/manager`: ESLint/Prettierによるチェック
 - `npm run fix -w @internal/manager`: ESLint/Prettierによる自動Fix
 
@@ -37,4 +39,4 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 
 ## その他注意事項
 
-- 特になし
+- テストは書かない
