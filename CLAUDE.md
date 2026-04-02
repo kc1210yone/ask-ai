@@ -22,11 +22,11 @@
 ## アーキテクチャ
 
 npm workspacesを使ったモノレポ構成。
-各workspace内のコマンドは、プロジェクトルートディレクトリ内で、`npm run xxx -w @internal/xxx`のように実行。（各workspaceのディレクトリで実行しない）
+各workspace内のコマンドは、プロジェクトルートディレクトリ内で、`npm run xxx -w @internal/xxx`のように実行。（各workspaceのディレクトリで実行しない。）
 
-- `@internal/manager` (`./apps/manager`): 管理ユーザー用の管理画面
-- `@internal/rag-server` (`./apps/rag-server`): AIアシスタントが回答する時に参照するデータをベクトル化して入れるRAGサーバ
+- `@internal/manager` (`./apps/manager`): 管理ユーザー用の管理画面。
+- `@internal/rag-server` (`./apps/rag-server`): AIアシスタントが回答する時に参照するデータをベクトル化して入れるRAGサーバ。
 
 ## その他注意事項
 
-- 特になし
+- 特になし。
