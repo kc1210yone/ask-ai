@@ -19,8 +19,7 @@ AIアシスタントが回答するときに参照するデータを入稿する
 
 ## コードスタイル
 
-- TypeScriptのstrictモード。（npmスクリプトの`test:typecheck`。）
-- ESLint/Prettierに従う。（npmスクリプトの`lint`、`fix`。）
+TypeScriptのタイプチェック、ESLint/Prettierによるスタイルチェックを行うこと。
 
 ## コマンド
 
