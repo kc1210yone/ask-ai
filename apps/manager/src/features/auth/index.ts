@@ -1,4 +1,3 @@
-export { HomePage } from './components/home-page';
 export { LoginForm } from './components/login-form';
 export { LoginPage } from './components/login-page';
 export { LogoutButton } from '../auth-layout/components/logout-button';

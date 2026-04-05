@@ -9,7 +9,7 @@ AIアシスタントが回答するときに参照するデータを入稿する
 - React 19
 - Next.js 16
 - Tailwind CSS 4
-- Tailwind Variants
+- shadcn/ui
 - Vitest
 - React Compiler
 - React Hook Form 7.x, @hookform/resolvers/zod
