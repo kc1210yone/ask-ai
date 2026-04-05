@@ -15,7 +15,7 @@ const RootLayout = ({ children }: Props) => {
   return (
     <html lang="ja">
       <AmplifyProvider>
-        <body className="antialiased">{children}</body>
+        <body>{children}</body>
       </AmplifyProvider>
     </html>
   );
