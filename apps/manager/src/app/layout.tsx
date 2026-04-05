@@ -4,14 +4,14 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Ask AI 管理ツール',
+  title: 'Ask AI 管理画面',
 };
 
-const RootLayout = ({
-  children,
-}: Readonly<{
+interface Props {
   children: ReactNode;
-}>) => {
+}
+
+const RootLayout = ({ children }: Props) => {
   return (
     <html lang="ja">
       <AmplifyProvider>

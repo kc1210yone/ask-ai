@@ -3,11 +3,12 @@
 import { signOut } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { Button } from '#src/components/ui/button';
+import type { ReactNode } from 'react';
 
-export const LogoutButton = () => {
+export const LogoutButton = (): ReactNode => {
   const router = useRouter();
 
-  const handleLogout = async () => {
+  const handleLogout = async (): Promise<void> => {
     await signOut();
     router.push('/login');
   };
@@ -15,7 +16,7 @@ export const LogoutButton = () => {
   return (
     <Button
       variant="secondary"
-      size="sm"
+      size="small"
       type="button"
       onClick={() => void handleLogout()}
     >

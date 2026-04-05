@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getUser } from '#src/features/auth/server';
-import { LogoutButton } from './logout-button';
+import { LogoutButton } from '../../auth-layout/components/logout-button';
 
 export const HomePage = async () => {
   const user = await getUser().catch((error: unknown) => {

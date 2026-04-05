@@ -1,3 +1,3 @@
-import { SignUpPage } from '#src/features/auth';
+import { SignupPage } from '#src/features/auth';
 
-export default SignUpPage;
+export default SignupPage;

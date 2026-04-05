@@ -1,3 +1,3 @@
-import { HomePage } from '#src/features/auth';
+import { DashboardPage } from '#src/features/dashboard';
 
-export default HomePage;
+export default DashboardPage;
