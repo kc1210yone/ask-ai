@@ -76,7 +76,7 @@ export const LoginForm = () => {
       <p className="text-center text-sm text-gray-500">
         アカウントをお持ちでない方は{' '}
         <Link
-          href="/signup"
+          href="/sign-up"
           className="font-medium text-blue-600 hover:text-blue-500"
         >
           新規登録

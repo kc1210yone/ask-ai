@@ -20,7 +20,7 @@ export const proxy = async (request: NextRequest): Promise<NextResponse> => {
   const { pathname } = request.nextUrl;
   const authed = await isAuthenticated(request);
 
-  const isPublicPath = pathname === '/login' || pathname === '/signup';
+  const isPublicPath = pathname === '/login' || pathname === '/sign-up';
 
   if (isPublicPath) {
     if (authed) return NextResponse.redirect(new URL('/', request.url));

@@ -1,6 +1,6 @@
-import { SignUpForm } from './signup-form';
+import { SignUpForm } from './sign-up-form';
 
-export const SignupPage = () => {
+export const SignUpPage = () => {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
       <div className="w-full max-w-sm space-y-6">
