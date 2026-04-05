@@ -19,7 +19,8 @@ AIアシスタントが回答するときに参照するデータを入稿する
 
 ## コードスタイル
 
-TypeScriptのタイプチェック、ESLint/Prettierによるスタイルチェックを行うこと。
+- TypeScriptのタイプチェック、ESLint/Prettierによるスタイルチェックを行うこと。
+- `function xxx() {}`ではなく`const xxx = () => {}`を使うこと。ただし、クラスのメソッドでは`xxx () {}`を使うこと。
 
 ## コマンド
 

@@ -7,16 +7,16 @@ const { runWithAmplifyServerContext } = createServerRunner({
   config: amplifyConfig,
 });
 
-async function isAuthenticated(request: NextRequest): Promise<boolean> {
+const isAuthenticated = async (request: NextRequest): Promise<boolean> => {
   const response = NextResponse.next();
   const session = await runWithAmplifyServerContext({
     nextServerContext: { request, response },
     operation: (contextSpec) => fetchAuthSession(contextSpec),
   });
   return session.tokens !== undefined;
-}
+};
 
-export async function proxy(request: NextRequest): Promise<NextResponse> {
+export const proxy = async (request: NextRequest): Promise<NextResponse> => {
   const { pathname } = request.nextUrl;
   const authed = await isAuthenticated(request);
 
@@ -32,7 +32,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
