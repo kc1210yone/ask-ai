@@ -16,7 +16,7 @@ async function isAuthenticated(request: NextRequest): Promise<boolean> {
   return session.tokens !== undefined;
 }
 
-export async function middleware(request: NextRequest): Promise<NextResponse> {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
   const authed = await isAuthenticated(request);
 
