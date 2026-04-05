@@ -60,15 +60,15 @@ export const SignUpForm = () => {
         <div className="rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-700">
           <strong>{email}</strong> に確認コードを送信しました。
         </div>
-        <Input
+        <input
           id="code"
           type="text"
-          label="確認コード"
+          // label="確認コード"
           placeholder="123456"
           autoComplete="one-time-code"
           inputMode="numeric"
           maxLength={6}
-          error={confirmForm.formState.errors.code?.message}
+          // error={confirmForm.formState.errors.code?.message}
           {...confirmForm.register('code')}
         />
         {error != null && (
@@ -76,7 +76,7 @@ export const SignUpForm = () => {
             {error}
           </div>
         )}
-        <Button type="submit" fullWidth disabled={isLoading}>
+        <Button type="submit" disabled={isLoading}>
           {isLoading ? '確認中...' : '確認する'}
         </Button>
         <button
@@ -100,28 +100,28 @@ export const SignUpForm = () => {
       <Input
         id="email"
         type="email"
-        label="メールアドレス"
+        // label="メールアドレス"
         placeholder="email@example.com"
         autoComplete="email"
-        error={signUpForm.formState.errors.email?.message}
+        // error={signUpForm.formState.errors.email?.message}
         {...signUpForm.register('email')}
       />
       <Input
         id="password"
         type="password"
-        label="パスワード"
+        // label="パスワード"
         placeholder="••••••••"
         autoComplete="new-password"
-        error={signUpForm.formState.errors.password?.message}
+        // error={signUpForm.formState.errors.password?.message}
         {...signUpForm.register('password')}
       />
       <Input
         id="confirmPassword"
         type="password"
-        label="パスワード（確認）"
+        // label="パスワード（確認）"
         placeholder="••••••••"
         autoComplete="new-password"
-        error={signUpForm.formState.errors.confirmPassword?.message}
+        // error={signUpForm.formState.errors.confirmPassword?.message}
         {...signUpForm.register('confirmPassword')}
       />
       {error != null && (
@@ -129,7 +129,7 @@ export const SignUpForm = () => {
           {error}
         </div>
       )}
-      <Button type="submit" fullWidth disabled={isLoading}>
+      <Button type="submit" disabled={isLoading}>
         {isLoading ? '作成中...' : 'アカウントを作成'}
       </Button>
       <p className="text-center text-sm text-gray-500">

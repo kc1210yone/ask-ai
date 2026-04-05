@@ -1,4 +1,3 @@
-import { Card } from '#src/components/ui/card';
 import { SignUpForm } from './signup-form';
 
 export const SignupPage = () => {
@@ -13,9 +12,9 @@ export const SignupPage = () => {
             管理画面の新規アカウントを作成します
           </p>
         </div>
-        <Card>
+        <div>
           <SignUpForm />
-        </Card>
+        </div>
       </div>
     </main>
   );

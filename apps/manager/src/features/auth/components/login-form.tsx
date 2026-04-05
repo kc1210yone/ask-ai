@@ -23,6 +23,7 @@ export const LoginForm = () => {
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
+  console.log(errors); // TODO
 
   const onSubmit = async (data: LoginInput) => {
     const signInStep = await execute(data);
@@ -49,19 +50,19 @@ export const LoginForm = () => {
       <Input
         id="email"
         type="email"
-        label="メールアドレス"
+        // label="メールアドレス"
         placeholder="email@example.com"
         autoComplete="email"
-        error={errors.email?.message}
+        // error={errors.email?.message}
         {...register('email')}
       />
       <Input
         id="password"
         type="password"
-        label="パスワード"
+        // label="パスワード"
         placeholder="••••••••"
         autoComplete="current-password"
-        error={errors.password?.message}
+        // error={errors.password?.message}
         {...register('password')}
       />
       {error != null && (
@@ -69,7 +70,7 @@ export const LoginForm = () => {
           {error}
         </div>
       )}
-      <Button type="submit" fullWidth disabled={isLoading}>
+      <Button type="submit" disabled={isLoading}>
         {isLoading ? 'ログイン中...' : 'ログイン'}
       </Button>
       <p className="text-center text-sm text-gray-500">

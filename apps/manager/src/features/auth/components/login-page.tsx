@@ -1,4 +1,3 @@
-import { Card } from '#src/components/ui/card';
 import { LoginForm } from './login-form';
 
 export const LoginPage = () => {
@@ -13,9 +12,9 @@ export const LoginPage = () => {
             管理画面にログインしてください
           </p>
         </div>
-        <Card>
+        <div>
           <LoginForm />
-        </Card>
+        </div>
       </div>
     </main>
   );

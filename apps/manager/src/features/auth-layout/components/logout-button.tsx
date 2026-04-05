@@ -16,7 +16,6 @@ export const LogoutButton = (): ReactNode => {
   return (
     <Button
       variant="secondary"
-      size="small"
       type="button"
       onClick={() => void handleLogout()}
     >
