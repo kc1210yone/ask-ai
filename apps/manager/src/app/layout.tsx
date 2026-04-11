@@ -1,5 +1,6 @@
 import '#src/app/globals.css';
 import { Inter } from 'next/font/google';
+import { Toaster } from '#src/components/ui/sonner';
 import { AmplifyProvider } from '#src/features/auth';
 import { cn } from '#src/lib/utils';
 import type { Metadata } from 'next';
@@ -19,7 +20,10 @@ const RootLayout = ({ children }: Props) => {
   return (
     <html lang="ja" className={cn('font-sans', inter.variable)}>
       <AmplifyProvider>
-        <body>{children}</body>
+        <body>
+          <Toaster />
+          {children}
+        </body>
       </AmplifyProvider>
     </html>
   );
