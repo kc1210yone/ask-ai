@@ -1,15 +1,74 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { confirmSignUp, signUp } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState, type ReactNode } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '#src/components/ui/button';
+import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
-import { useSignUp } from '#src/features/auth/hooks/use-sign-up';
-import { signUpSchema } from '#src/features/auth/lib/schemas';
-import type { SignUpInput } from '#src/features/auth/lib/schemas';
+import { cn } from '#src/lib/utils';
+
+export type SignUpStep = 'DONE' | 'CONFIRM_SIGN_UP' | 'COMPLETE_AUTO_SIGN_IN';
+
+export const signUpSchema = z
+  .object({
+    email: z.email('有効なメールアドレスを入力してください'),
+    password: z.string().min(8, 'パスワードは8文字以上で入力してください'),
+    confirmPassword: z.string().min(1, '確認用パスワードを入力してください'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'パスワードが一致しません',
+    path: ['confirmPassword'],
+  });
+
+export type SignUpInput = z.infer<typeof signUpSchema>;
+
+export const useSignUp = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const execute = async (data: SignUpInput): Promise<SignUpStep | null> => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await signUp({
+        username: data.email,
+        password: data.password,
+      });
+      return result.nextStep.signUpStep as SignUpStep;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'アカウント作成に失敗しました');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const confirm = async (
+    email: string,
+    code: string,
+  ): Promise<SignUpStep | null> => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await confirmSignUp({
+        username: email,
+        confirmationCode: code,
+      });
+      return result.nextStep.signUpStep as SignUpStep;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '確認コードが正しくありません');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { execute, confirm, isLoading, error };
+};
 
 const confirmCodeSchema = z.object({
   code: z.string().length(6, '確認コードは6桁です'),
@@ -20,7 +79,7 @@ interface Props {
   className?: string | undefined;
 }
 
-export const SignUpForm = ({ className }: Props) => {
+export const SignUpForm = ({ className }: Props): ReactNode => {
   const router = useRouter();
   const { execute, confirm, isLoading, error } = useSignUp();
   const [step, setStep] = useState<'form' | 'confirm'>('form');
@@ -28,13 +87,21 @@ export const SignUpForm = ({ className }: Props) => {
 
   const signUpForm = useForm<SignUpInput>({
     resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
   });
 
   const confirmForm = useForm<ConfirmCodeInput>({
     resolver: zodResolver(confirmCodeSchema),
+    defaultValues: {
+      code: '',
+    },
   });
 
-  const onSignUp = async (data: SignUpInput) => {
+  const onSignUp = async (data: SignUpInput): Promise<void> => {
     const signUpStep = await execute(data);
     if (signUpStep === 'CONFIRM_SIGN_UP') {
       setEmail(data.email);
@@ -47,7 +114,7 @@ export const SignUpForm = ({ className }: Props) => {
     }
   };
 
-  const onConfirm = async (data: ConfirmCodeInput) => {
+  const onConfirm = async (data: ConfirmCodeInput): Promise<void> => {
     const signUpStep = await confirm(email, data.code);
     if (signUpStep === 'DONE' || signUpStep === 'COMPLETE_AUTO_SIGN_IN') {
       router.push('/login');
@@ -57,31 +124,39 @@ export const SignUpForm = ({ className }: Props) => {
   if (step === 'confirm') {
     return (
       <form
-        onSubmit={(e) => void confirmForm.handleSubmit(onConfirm)(e)}
-        className={className}
+        onSubmit={(event) => void confirmForm.handleSubmit(onConfirm)(event)}
+        className={cn('flex w-full flex-col gap-4', className)}
       >
         <div className="rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-700">
           <strong>{email}</strong> に確認コードを送信しました。
         </div>
-        <input
-          id="code"
-          type="text"
-          // label="確認コード"
-          placeholder="123456"
-          autoComplete="one-time-code"
-          inputMode="numeric"
-          maxLength={6}
-          // error={confirmForm.formState.errors.code?.message}
-          {...confirmForm.register('code')}
+        <Controller
+          name="code"
+          control={confirmForm.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>確認コード</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+                placeholder="123456"
+                autoComplete="one-time-code"
+                inputMode="numeric"
+                maxLength={6}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
         />
         {error != null && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
           </div>
         )}
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? '確認中...' : '確認する'}
-        </Button>
+        <Field>
+          <Button disabled={isLoading}>確認する</Button>
+        </Field>
         <button
           type="button"
           className="w-full text-center text-sm text-gray-500 hover:text-gray-700"
@@ -97,44 +172,70 @@ export const SignUpForm = ({ className }: Props) => {
 
   return (
     <form
-      onSubmit={(e) => void signUpForm.handleSubmit(onSignUp)(e)}
-      className={className}
+      onSubmit={(event) => void signUpForm.handleSubmit(onSignUp)(event)}
+      className={cn('flex w-full flex-col gap-4', className)}
     >
-      <Input
-        id="email"
-        type="email"
-        // label="メールアドレス"
-        placeholder="email@example.com"
-        autoComplete="email"
-        // error={signUpForm.formState.errors.email?.message}
-        {...signUpForm.register('email')}
+      <Controller
+        name="email"
+        control={signUpForm.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>メールアドレス</FieldLabel>
+            <Input
+              {...field}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+              placeholder="email@example.com"
+              autoComplete="email"
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
       />
-      <Input
-        id="password"
-        type="password"
-        // label="パスワード"
-        placeholder="••••••••"
-        autoComplete="new-password"
-        // error={signUpForm.formState.errors.password?.message}
-        {...signUpForm.register('password')}
+      <Controller
+        name="password"
+        control={signUpForm.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>パスワード</FieldLabel>
+            <Input
+              {...field}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+              placeholder="••••••••"
+              type="password"
+              autoComplete="new-password"
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
       />
-      <Input
-        id="confirmPassword"
-        type="password"
-        // label="パスワード（確認）"
-        placeholder="••••••••"
-        autoComplete="new-password"
-        // error={signUpForm.formState.errors.confirmPassword?.message}
-        {...signUpForm.register('confirmPassword')}
+      <Controller
+        name="confirmPassword"
+        control={signUpForm.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>パスワード（確認）</FieldLabel>
+            <Input
+              {...field}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+              placeholder="••••••••"
+              type="password"
+              autoComplete="new-password"
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
       />
       {error != null && (
         <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
       )}
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? '作成中...' : 'アカウントを作成'}
-      </Button>
+      <Field>
+        <Button disabled={isLoading}>アカウントを作成</Button>
+      </Field>
     </form>
   );
 };
