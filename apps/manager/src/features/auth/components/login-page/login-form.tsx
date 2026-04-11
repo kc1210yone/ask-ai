@@ -1,11 +1,12 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'aws-amplify/auth';
+import { signIn, type SignInOutput } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
@@ -14,7 +15,7 @@ import { cn } from '#src/lib/utils';
 
 const FormSchema = z.object({
   email: z.email('有効なメールアドレスを入力してください。'),
-  password: z.string('パスワードを入力してください。'),
+  password: z.string().min(1, 'パスワードを入力してください。'),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
@@ -29,21 +30,35 @@ export const LoginForm = ({ className }: Props): ReactNode => {
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
-    const result = await signIn({
-      username: data.email,
-      password: data.password,
-    });
+
+    let result: SignInOutput;
+    try {
+      result = await signIn({
+        username: data.email,
+        password: data.password,
+      });
+    } catch (error) {
+      invariant(error instanceof Error);
+      toast.error(error.message);
+      setIsLoading(false);
+      return;
+    }
+
     const signInStep = result.nextStep.signInStep;
     if (signInStep === 'DONE') {
       router.push('/');
     } else {
       toast(signInStep);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   return (

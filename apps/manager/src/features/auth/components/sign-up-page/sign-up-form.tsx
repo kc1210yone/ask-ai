@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,7 +16,11 @@ const confirmCodeSchema = z.object({
 });
 type ConfirmCodeInput = z.infer<typeof confirmCodeSchema>;
 
-export const SignUpForm = () => {
+interface Props {
+  className?: string | undefined;
+}
+
+export const SignUpForm = ({ className }: Props) => {
   const router = useRouter();
   const { execute, confirm, isLoading, error } = useSignUp();
   const [step, setStep] = useState<'form' | 'confirm'>('form');
@@ -55,7 +58,7 @@ export const SignUpForm = () => {
     return (
       <form
         onSubmit={(e) => void confirmForm.handleSubmit(onConfirm)(e)}
-        className="space-y-5"
+        className={className}
       >
         <div className="rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-700">
           <strong>{email}</strong> に確認コードを送信しました。
@@ -95,7 +98,7 @@ export const SignUpForm = () => {
   return (
     <form
       onSubmit={(e) => void signUpForm.handleSubmit(onSignUp)(e)}
-      className="space-y-5"
+      className={className}
     >
       <Input
         id="email"
@@ -132,15 +135,6 @@ export const SignUpForm = () => {
       <Button type="submit" disabled={isLoading}>
         {isLoading ? '作成中...' : 'アカウントを作成'}
       </Button>
-      <p className="text-center text-sm text-gray-500">
-        すでにアカウントをお持ちの方は{' '}
-        <Link
-          href="/login"
-          className="font-medium text-blue-600 hover:text-blue-500"
-        >
-          ログイン
-        </Link>
-      </p>
     </form>
   );
 };

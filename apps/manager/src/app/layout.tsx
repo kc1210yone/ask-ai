@@ -21,8 +21,8 @@ const RootLayout = ({ children }: Props) => {
     <html lang="ja" className={cn('font-sans', inter.variable)}>
       <AmplifyProvider>
         <body>
-          <Toaster />
           {children}
+          <Toaster />
         </body>
       </AmplifyProvider>
     </html>
