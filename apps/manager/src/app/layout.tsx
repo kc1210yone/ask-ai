@@ -16,7 +16,7 @@ interface Props {
   children: ReactNode;
 }
 
-const RootLayout = ({ children }: Props) => {
+const RootLayout = ({ children }: Props): ReactNode => {
   return (
     <html lang="ja" className={cn('font-sans', inter.variable)}>
       <AmplifyProvider>

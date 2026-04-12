@@ -8,17 +8,13 @@ import type { ReactNode } from 'react';
 export const LogoutButton = (): ReactNode => {
   const router = useRouter();
 
-  const handleLogout = async (): Promise<void> => {
+  const onClick = async (): Promise<void> => {
     await signOut();
     router.push('/login');
   };
 
   return (
-    <Button
-      variant="secondary"
-      type="button"
-      onClick={() => void handleLogout()}
-    >
+    <Button variant="secondary" type="button" onClick={() => void onClick()}>
       ログアウト
     </Button>
   );

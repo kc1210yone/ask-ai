@@ -1,11 +1,11 @@
 import { LogoutButton } from './logout-button';
 import type { ReactNode } from 'react';
 
-export const AuthLayout = ({
-  children,
-}: {
+interface Props {
   children: ReactNode;
-}): ReactNode => {
+}
+
+export const PrivateLayout = ({ children }: Props): ReactNode => {
   return (
     <>
       <div>

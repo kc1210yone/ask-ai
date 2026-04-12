@@ -12,7 +12,7 @@ export const LoginPage = (): ReactNode => {
         </p>
         <LoginForm className="mt-8" />
         <p className="mt-8 text-sm text-gray-500">
-          アカウントをお持ちでない方は{' '}
+          アカウントをお持ちでない方は
           <Link
             href="/sign-up"
             className="font-medium text-blue-600 hover:text-blue-500"

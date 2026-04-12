@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn, type SignInOutput } from 'aws-amplify/auth';
+import { signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -28,31 +28,6 @@ export const LoginForm = ({ className }: Props): ReactNode => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = async (data: FormSchemaType): Promise<void> => {
-    setIsLoading(true);
-
-    let result: SignInOutput;
-    try {
-      result = await signIn({
-        username: data.email,
-        password: data.password,
-      });
-    } catch (error) {
-      invariant(error instanceof Error);
-      toast.error(error.message);
-      setIsLoading(false);
-      return;
-    }
-
-    const signInStep = result.nextStep.signInStep;
-    if (signInStep === 'DONE') {
-      router.push('/');
-    } else {
-      toast(signInStep);
-      setIsLoading(false);
-    }
-  };
-
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -60,6 +35,32 @@ export const LoginForm = ({ className }: Props): ReactNode => {
       password: '',
     },
   });
+
+  const onSubmit = async (data: FormSchemaType): Promise<void> => {
+    setIsLoading(true);
+    let result;
+    try {
+      result = await signIn({
+        username: data.email,
+        password: data.password,
+      });
+    } catch (e) {
+      invariant(e instanceof Error);
+      toast.error(e.message);
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+
+    switch (result.nextStep.signInStep) {
+      case 'DONE':
+        router.push('/');
+        break;
+      default:
+        toast(result.nextStep.signInStep);
+        break;
+    }
+  };
 
   return (
     <form
@@ -92,7 +93,7 @@ export const LoginForm = ({ className }: Props): ReactNode => {
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
-              placeholder="**********"
+              placeholder="••••••••"
               type="password"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

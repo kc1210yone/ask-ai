@@ -1,6 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import { type ReactNode } from 'react';
 import { SignUpForm } from './sign-up-form';
-import type { ReactNode } from 'react';
 
 export const SignUpPage = (): ReactNode => {
   return (
@@ -12,7 +14,7 @@ export const SignUpPage = (): ReactNode => {
         </p>
         <SignUpForm className="mt-8" />
         <p className="mt-8 text-sm text-gray-500">
-          すでにアカウントをお持ちの方は{' '}
+          すでにアカウントをお持ちの方は
           <Link
             href="/login"
             className="font-medium text-blue-600 hover:text-blue-500"
