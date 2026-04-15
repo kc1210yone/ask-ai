@@ -1,15 +1,15 @@
 import { redirect } from 'next/navigation';
-import { getUser } from '#src/features/auth/server';
+import { getAuthUser } from '#src/features/auth';
 
 export const DashboardPage = async () => {
-  const user = await getUser().catch((error: unknown) => {
+  const authUser = await getAuthUser().catch((error: unknown) => {
     console.error(error);
     redirect('/login');
   });
 
   return (
     <div>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <pre>{JSON.stringify(authUser, null, 2)}</pre>
     </div>
   );
 };

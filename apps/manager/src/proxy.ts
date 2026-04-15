@@ -8,23 +8,22 @@ const { runWithAmplifyServerContext } = createServerRunner({
 });
 
 export const proxy = async (request: NextRequest): Promise<NextResponse> => {
-  const pathname = request.nextUrl.pathname;
-  if (pathname === '/') {
-    const isAuthenticatedResult = await isAuthenticated(request);
-    if (!isAuthenticatedResult) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-  }
-  return NextResponse.next();
-};
-
-const isAuthenticated = async (request: NextRequest): Promise<boolean> => {
   const response = NextResponse.next();
-  const session = await runWithAmplifyServerContext({
+
+  const isAuthenticated = await runWithAmplifyServerContext({
     nextServerContext: { request, response },
-    operation: (contextSpec) => fetchAuthSession(contextSpec),
+    operation: async (contextSpec) => {
+      const session = await fetchAuthSession(contextSpec);
+      return !!session.tokens;
+    },
   });
-  return !!session.tokens;
+
+  const { pathname } = request.nextUrl;
+  if (pathname === '/' && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  return response;
 };
 
 export const config = {
