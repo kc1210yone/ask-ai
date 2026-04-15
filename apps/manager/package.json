@@ -10,12 +10,14 @@
     "test": "run-s test:{typecheck,vitest}",
     "test:typecheck": "tsc --noEmit",
     "test:vitest": "vitest run",
-    "lint": "run-s lint:{eslint,prettier}",
+    "lint": "run-s lint:{eslint,prettier,prisma}",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check --ignore-path ../../.prettierignore .",
-    "fix": "run-s fix:{eslint,prettier}",
+    "lint:prisma": "prisma validate",
+    "fix": "run-s fix:{eslint,prettier,prisma}",
     "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
+    "fix:prettier": "prettier --write --ignore-path ../../.prettierignore .",
+    "fix:prisma": "prisma format"
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "1.7.2",
@@ -43,6 +45,7 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv": "16.6.1",
     "prisma": "7.6.0",
     "shadcn": "4.1.2",
     "tailwindcss": "4.2.2",
