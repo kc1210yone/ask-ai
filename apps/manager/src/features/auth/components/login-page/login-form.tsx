@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'aws-amplify/auth';
+import { AuthError, signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
+import { useAuth } from '#src/features/auth/providers/auth-provider';
 import { cn } from '#src/lib/utils';
 
 const FormSchema = z.object({
@@ -25,6 +26,8 @@ interface Props {
 
 export const LoginForm = ({ className }: Props): ReactNode => {
   const router = useRouter();
+
+  const { setEmail } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,9 +47,20 @@ export const LoginForm = ({ className }: Props): ReactNode => {
         username: data.email,
         password: data.password,
       });
-    } catch (e) {
-      invariant(e instanceof Error);
-      toast.error(e.message);
+    } catch (error) {
+      invariant(error instanceof AuthError);
+      let errorMessage;
+      switch (error.name) {
+        case 'NotAuthorizedException':
+          errorMessage = 'ユーザー名かパスワードが間違っています。';
+          break;
+        default:
+          errorMessage = 'ログインに失敗しました。';
+          break;
+      }
+      toast.error(errorMessage, {
+        position: 'top-center',
+      });
       return;
     } finally {
       setIsLoading(false);
@@ -56,9 +70,12 @@ export const LoginForm = ({ className }: Props): ReactNode => {
       case 'DONE':
         router.push('/');
         break;
-      default:
-        toast(result.nextStep.signInStep);
+      case 'CONFIRM_SIGN_UP':
+        setEmail(data.email);
+        router.push('/sign-up-confirm');
         break;
+      default:
+        throw new Error('Unexpected signInStep.');
     }
   };
 

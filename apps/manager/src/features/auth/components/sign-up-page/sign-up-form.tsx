@@ -1,7 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUp } from 'aws-amplify/auth';
+import { AuthError, signUp } from 'aws-amplify/auth';
+import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -10,6 +11,7 @@ import { z } from 'zod';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
+import { useAuth } from '#src/features/auth/providers/auth-provider';
 import { cn } from '#src/lib/utils';
 
 const FormSchema = z
@@ -29,6 +31,10 @@ interface Props {
 }
 
 export const SignUpForm = ({ className }: Props): ReactNode => {
+  const router = useRouter();
+
+  const { setEmail } = useAuth();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormSchemaType>({
@@ -47,10 +53,27 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
       result = await signUp({
         username: data.email,
         password: data.password,
+        options: {
+          userAttributes: {
+            email: data.email,
+          },
+          autoSignIn: true,
+        },
       });
     } catch (error) {
-      invariant(error instanceof Error);
-      toast.error(error.message);
+      invariant(error instanceof AuthError);
+      let errorMessage;
+      switch (error.name) {
+        case 'UsernameExistsException':
+          errorMessage = 'このメールアドレスは既に使用されています。';
+          break;
+        default:
+          errorMessage = 'アカウント作成に失敗しました。';
+          break;
+      }
+      toast.error(errorMessage, {
+        position: 'top-center',
+      });
       return;
     } finally {
       setIsLoading(false);
@@ -58,6 +81,8 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
 
     switch (result.nextStep.signUpStep) {
       case 'CONFIRM_SIGN_UP':
+        setEmail(data.email);
+        router.push('/sign-up-confirm');
         break;
       default:
         throw new Error('Unexpected signUpStep.');

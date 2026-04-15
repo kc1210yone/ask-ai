@@ -9,7 +9,7 @@ const { runWithAmplifyServerContext } = createServerRunner({
 });
 
 export const getUser = cache(async () => {
-  return runWithAmplifyServerContext({
+  const a = await runWithAmplifyServerContext({
     nextServerContext: {
       cookies,
     },
@@ -26,17 +26,5 @@ export const getUser = cache(async () => {
       };
     },
   });
-});
-
-export const getJsonWebToken = cache(async () => {
-  return runWithAmplifyServerContext({
-    nextServerContext: {
-      cookies,
-    },
-    operation: (contextSpec) => {
-      return fetchAuthSession(contextSpec).then((item) =>
-        item.tokens?.idToken?.toString(),
-      );
-    },
-  });
+  return a;
 });

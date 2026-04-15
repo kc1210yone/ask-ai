@@ -1,9 +1,14 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { autoSignIn, confirmSignUp } from 'aws-amplify/auth';
+import {
+  AuthError,
+  autoSignIn,
+  confirmSignUp,
+  resendSignUpCode,
+} from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import invariant from 'tiny-invariant';
@@ -11,6 +16,7 @@ import { z } from 'zod';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
+import { useAuth } from '#src/features/auth/providers/auth-provider';
 import { cn } from '#src/lib/utils';
 
 interface Props {
@@ -27,18 +33,14 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const { email } = useAuth();
+
+  const [resendButtonCountDown, setResendButtonCountDown] = useState(0);
+
   const autoSignInWrapper = async (): Promise<void> => {
     setIsLoading(true);
-    let result;
-    try {
-      result = await autoSignIn();
-    } catch (e) {
-      invariant(e instanceof Error);
-      toast.error(e.message);
-      return;
-    } finally {
-      setIsLoading(false);
-    }
+    const result = await autoSignIn();
+    setIsLoading(false);
 
     switch (result.nextStep.signInStep) {
       case 'DONE':
@@ -50,16 +52,32 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
   };
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
+    invariant(email);
+
     setIsLoading(true);
     let result;
     try {
       result = await confirmSignUp({
-        username: '', // TODO
+        username: email,
         confirmationCode: data.code,
       });
-    } catch (e) {
-      invariant(e instanceof Error);
-      toast.error(e.message);
+    } catch (error) {
+      invariant(error instanceof AuthError);
+      let errorMessage;
+      switch (error.name) {
+        case 'CodeMismatchException':
+          errorMessage = '確認コードが正しくありません。';
+          break;
+        case 'ExpiredCodeException':
+          errorMessage = '確認コードの有効期限が切れています。';
+          break;
+        default:
+          errorMessage = '確認コードの認証に失敗しました。';
+          break;
+      }
+      toast.error(errorMessage, {
+        position: 'top-center',
+      });
       return;
     } finally {
       setIsLoading(false);
@@ -67,7 +85,10 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
     switch (result.nextStep.signUpStep) {
       case 'DONE':
-        router.push('/');
+        router.push('/login');
+        toast.success('アカウントが作成されました。', {
+          position: 'top-center',
+        });
         break;
       case 'COMPLETE_AUTO_SIGN_IN':
         await autoSignInWrapper();
@@ -76,6 +97,21 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
         throw new Error('Unexpected signUpStep.');
     }
   };
+
+  const onResendButtonClick = async (): Promise<void> => {
+    invariant(email);
+    await resendSignUpCode({ username: email });
+    setResendButtonCountDown(30);
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setResendButtonCountDown((previous) => Math.max(previous - 1, 0));
+    }, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
@@ -89,9 +125,6 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
       onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
       className={cn('flex w-full flex-col gap-4', className)}
     >
-      <div className="rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-700">
-        <strong>{'TODO'}</strong> に確認コードを送信しました。
-      </div>
       <Controller
         name="code"
         control={form.control}
@@ -103,7 +136,6 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
               id={field.name}
               aria-invalid={fieldState.invalid}
               placeholder="123456"
-              autoComplete="one-time-code"
               inputMode="numeric"
               maxLength={6}
             />
@@ -112,7 +144,16 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
         )}
       />
       <Field>
-        <Button disabled={isLoading}>確認する</Button>
+        <Button disabled={isLoading || !email}>確認する</Button>
+        <Button
+          type="button"
+          disabled={isLoading || !email || resendButtonCountDown > 0}
+          variant="secondary"
+          onClick={() => void onResendButtonClick()}
+        >
+          確認コードを再送する
+          {resendButtonCountDown > 0 && <> ({resendButtonCountDown}秒)</>}
+        </Button>
       </Field>
     </form>
   );
