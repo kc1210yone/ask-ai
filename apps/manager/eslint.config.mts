@@ -2,19 +2,20 @@ import nextEslintPluginNext from '@next/eslint-plugin-next';
 import { defineConfig } from 'eslint/config';
 import eslintPluginReact from 'eslint-plugin-react';
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
-import rootConfig from '../../eslint.config.js';
+import rootConfig from '../../eslint.config.ts';
 
 export default defineConfig(
   rootConfig,
   {
-    ...eslintPluginReact.configs.flat.recommended,
+    ...eslintPluginReact.configs.flat['recommended'],
     settings: {
       react: {
         version: 'detect',
       },
     },
     rules: {
-      ...eslintPluginReact.configs.flat.recommended.rules,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ...eslintPluginReact.configs.flat['recommended']!.rules,
       'react/react-in-jsx-scope': 'off',
     },
   },
