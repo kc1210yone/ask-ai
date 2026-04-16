@@ -16,7 +16,7 @@ interface Props {
   children: ReactNode;
 }
 
-const RootLayout = ({ children }: Props): ReactNode => {
+const Layout = ({ children }: Props): ReactNode => {
   return (
     <html lang="ja" className={cn('font-sans', inter.variable)}>
       <AmplifyProvider>
@@ -29,4 +29,4 @@ const RootLayout = ({ children }: Props): ReactNode => {
   );
 };
 
-export default RootLayout;
+export default Layout;

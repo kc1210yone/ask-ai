@@ -1,12 +1,7 @@
-import { DashboardPage } from '#src/features/dashboard';
+import type { ReactNode } from 'react';
 
-interface Props {
-  searchParams: Promise<{ projectId?: string }>;
-}
-
-const Page = async ({ searchParams }: Props) => {
-  const { projectId } = await searchParams;
-  return <DashboardPage {...(projectId !== undefined ? { projectId } : {})} />;
+const Page = (): ReactNode => {
+  return <div>TOP</div>;
 };
 
 export default Page;

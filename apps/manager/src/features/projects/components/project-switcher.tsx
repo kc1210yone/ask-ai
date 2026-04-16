@@ -25,7 +25,7 @@ export const ProjectSwitcher = ({ projects }: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const handleValueChange = (value: string) => {
-    router.push(`/?projectId=${value}`);
+    router.push(`/projects/${value}`);
   };
 
   const handleDelete = () => {

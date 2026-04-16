@@ -12,7 +12,7 @@ interface Props {
   projectId?: string;
 }
 
-export const DashboardPage = async ({ projectId }: Props) => {
+export const ProjectPage = async ({ projectId }: Props) => {
   await getAuthUser().catch((error: unknown) => {
     console.error(error);
     redirect('/login');
@@ -39,7 +39,7 @@ export const DashboardPage = async ({ projectId }: Props) => {
   if (!selectedProjectId) redirect('/');
 
   if (!projectId) {
-    redirect(`/?projectId=${selectedProjectId}`);
+    redirect(`/projects/${selectedProjectId}`);
   }
 
   const project = await prisma.project.findFirst({
