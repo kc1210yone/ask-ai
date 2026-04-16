@@ -31,7 +31,7 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 - `npm run test:vitest -w @internal/manager`: Vitestによるテスト。
 - `npm run lint -w @internal/manager`: ESLint/Prettierによるチェック。
 - `npm run fix -w @internal/manager`: ESLint/Prettierによる自動Fix。
-- `npx shadcn@latest add <component> -c ./apps/manager`: shadcn/uiのコンポーネント追加。追加後、スタイルFixを実行する。
+- `npx shadcn@latest add <component> -c ./apps/manager`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
 
 ## アーキテクチャ
 
@@ -39,16 +39,13 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 
 - `#src` (`./src`): ソースディレクトリ。
 - `#src/app`: ルーティングのみで、機能の実装はできるだけfeaturesに置く。
-- `#src/(auth)`: 認証が必要なページ。
+- `#src/(private)`: 認証が必要なページ。
 - `#src/(public)`: 認証が不要なページ。
 - `#src/components`: 共通で使うコンポーネント。
-- `#src/components/layout`: 共通で使うレイアウト。
-- `#src/components/providers`: 共通で使うProvider。
 - `#src/components/ui`: 共通で使うUIパーツ。
 - `#src/features`: 各機能の実装。
 - `#src/hooks`: 共通で使うフック。
 - `#src/lib`: 共通で使うロジック。
-- `#src/providers`: 共通で使うProvider。
 - `#src/types`: 共通で使う型。
 
 ### features配下
