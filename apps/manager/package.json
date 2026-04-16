@@ -17,7 +17,8 @@
     "fix": "run-s fix:{eslint,prettier,prisma}",
     "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier --write --ignore-path ../../.prettierignore .",
-    "fix:prisma": "prisma format"
+    "fix:prisma": "prisma format",
+    "prisma-studio": "prisma studio"
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "1.7.2",
