@@ -2,8 +2,8 @@
 
 import { Authenticator } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import { amplifyConfig } from '#src/features/auth/lib/amplify-config';
 import type { ReactNode } from 'react';
+import { amplifyConfig } from '#src/features/auth/lib/amplify-config';
 
 Amplify.configure(amplifyConfig, { ssr: true });
 

@@ -2,8 +2,8 @@
 
 import { signOut } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
-import { Button } from '#src/components/ui/button';
 import type { ReactNode } from 'react';
+import { Button } from '#src/components/ui/button';
 
 export const LogoutButton = (): ReactNode => {
   const router = useRouter();

@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
-import { useAuth } from '#src/features/auth/providers/auth-provider';
 import { ConfirmForm } from './confirm-form';
+import { useAuth } from '#src/features/auth/providers/auth-provider';
 
 export const SignUpConfirmPage = (): ReactNode => {
   const router = useRouter();

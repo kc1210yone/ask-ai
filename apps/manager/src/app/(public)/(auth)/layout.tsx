@@ -1,5 +1,5 @@
-import { AuthProvider } from '#src/features/auth';
 import type { ReactNode } from 'react';
+import { AuthProvider } from '#src/features/auth';
 
 interface Props {
   children: ReactNode;

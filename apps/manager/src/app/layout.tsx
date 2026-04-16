@@ -1,10 +1,10 @@
 import '#src/app/globals.css';
 import { Inter } from 'next/font/google';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { Toaster } from '#src/components/ui/sonner';
 import { AmplifyProvider } from '#src/features/auth';
 import { cn } from '#src/lib/utils';
-import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
