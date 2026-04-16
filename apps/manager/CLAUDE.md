@@ -31,7 +31,8 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 - `npm run test:vitest -w @internal/manager`: Vitestによるテスト。
 - `npm run lint -w @internal/manager`: ESLint/Prettierによるチェック。
 - `npm run fix -w @internal/manager`: ESLint/Prettierによる自動Fix。
-- `npx shadcn@latest add <component> -c ./apps/manager`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
+- `npx -w @internal/manager shadcn add <component>`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
+- `npx -w @internal/manager prisma <command>`: Prismaのコマンドを実行
 
 ## アーキテクチャ
 

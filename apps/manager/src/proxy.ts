@@ -19,7 +19,8 @@ export const proxy = async (request: NextRequest): Promise<NextResponse> => {
   });
 
   const { pathname } = request.nextUrl;
-  if (pathname === '/' && !isAuthenticated) {
+  const isPrivateRoute = pathname === '/' || pathname.startsWith('/projects');
+  if (isPrivateRoute && !isAuthenticated) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
