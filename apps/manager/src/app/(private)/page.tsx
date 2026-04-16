@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
+import { ProjectPage } from '#src/features/projects';
 
 const Page = (): ReactNode => {
-  return <div>TOP</div>;
+  return <ProjectPage />;
 };
 
 export default Page;

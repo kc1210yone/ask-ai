@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { deleteProject } from '../actions';
 import type { Project } from '#src/generated/prisma/client';
@@ -20,8 +20,9 @@ interface Props {
 
 export const ProjectSwitcher = ({ projects }: Props) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentProjectId = searchParams.get('projectId') ?? projects[0]?.id;
+  const pathname = usePathname();
+  const pathProjectId = /^\/projects\/([^/]+)/.exec(pathname)?.[1];
+  const currentProjectId = pathProjectId ?? projects[0]?.id;
   const [isPending, startTransition] = useTransition();
 
   const handleValueChange = (value: string) => {
