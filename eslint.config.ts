@@ -30,7 +30,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,mts,cts,tsx}'],
     extends: [
       ...typescriptEslint.configs.strictTypeChecked,
       ...typescriptEslint.configs.stylisticTypeChecked,
@@ -63,13 +63,6 @@ export default defineConfig(
             'index',
             'object',
             'type',
-          ],
-          pathGroups: [
-            {
-              pattern: '#src/**',
-              group: 'internal',
-              position: 'before',
-            },
           ],
           'newlines-between': 'never',
           alphabetize: {
