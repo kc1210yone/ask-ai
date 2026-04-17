@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { FaqNewPage } from '#src/features/faqs';
+import { DocumentCreatePage } from '#src/features/documents';
 
 interface Props {
   params: Promise<{ projectId: string }>;
@@ -7,7 +7,7 @@ interface Props {
 
 const Page = async ({ params }: Props): Promise<ReactNode> => {
   const { projectId } = await params;
-  return <FaqNewPage projectId={projectId} />;
+  return <DocumentCreatePage projectId={projectId} />;
 };
 
 export default Page;

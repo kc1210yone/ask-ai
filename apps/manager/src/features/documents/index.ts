@@ -1,3 +1,3 @@
 export { DocumentList } from './components/document-list';
-export { DocumentNewPage } from './components/document-new-page';
-export { DocumentEditPage } from './components/document-edit-page';
+export { DocumentCreatePage } from './components/document-create-page';
+export { DocumentUpdatePage } from './components/document-update-page';

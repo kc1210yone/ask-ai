@@ -1,28 +1,28 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { updateFaq } from '../actions';
-import { getFaq } from '../lib/queries';
-import { FaqForm } from './faq-form';
+import { updateDocument } from '../actions/update-document';
+import { getDocument } from '../lib/queries';
 import { Button } from '#src/components/ui/button';
 import { prisma } from '#src/lib/prisma';
 import { findOrCreateCurrentUser } from '#src/lib/user';
 
 interface Props {
   projectId: string;
-  faqId: string;
+  documentId: string;
 }
 
-export const FaqEditPage = async ({ projectId, faqId }: Props) => {
+export const DocumentUpdatePage = async ({ projectId, documentId }: Props) => {
   const user = await findOrCreateCurrentUser();
   const project = await prisma.project.findFirst({
     where: { id: projectId, userId: user.id },
   });
   if (!project) notFound();
 
-  const faq = await getFaq(faqId, projectId);
-  if (!faq) notFound();
+  const document = await getDocument(documentId, projectId);
+  if (!document) notFound();
 
-  const boundAction = updateFaq.bind(null, projectId, faqId);
+  const boundAction = updateDocument.bind(null, projectId, documentId);
+  console.log(boundAction);
 
   return (
     <div className="flex flex-col gap-6">
@@ -30,13 +30,8 @@ export const FaqEditPage = async ({ projectId, faqId }: Props) => {
         <Button variant="ghost" size="sm" asChild>
           <Link href={`/?projectId=${projectId}`}>← 戻る</Link>
         </Button>
-        <h2 className="text-xl font-semibold">FAQ編集</h2>
+        <h2 className="text-xl font-semibold">Document編集</h2>
       </div>
-      <FaqForm
-        action={boundAction}
-        defaultValues={{ question: faq.question, answer: faq.answer }}
-        cancelHref={`/?projectId=${projectId}`}
-      />
     </div>
   );
 };

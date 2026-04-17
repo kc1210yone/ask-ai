@@ -1,3 +1,3 @@
 export { FaqList } from './components/faq-list';
-export { FaqNewPage } from './components/faq-new-page';
-export { FaqEditPage } from './components/faq-edit-page';
+export { FaqCreatePage } from './components/faq-create-page';
+export { FaqUpdatePage } from './components/faq-update-page';

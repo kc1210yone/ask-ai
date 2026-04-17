@@ -13,7 +13,7 @@ export const ProjectList = async () => {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">プロジェクト一覧</h2>
         <Button asChild>
-          <Link href="/projects/new">+ 新規作成</Link>
+          <Link href="/projects/create">+ 新規作成</Link>
         </Button>
       </div>
       {projects.length === 0 ? (

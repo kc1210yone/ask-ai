@@ -7,7 +7,7 @@ interface Props {
   projectId: string;
 }
 
-export const FaqNewPage = ({ projectId }: Props) => {
+export const FaqCreatePage = ({ projectId }: Props) => {
   const boundAction = createFaq.bind(null, projectId);
 
   return (

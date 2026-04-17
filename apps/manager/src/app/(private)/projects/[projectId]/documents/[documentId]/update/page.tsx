@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { DocumentEditPage } from '#src/features/documents';
+import { DocumentUpdatePage } from '#src/features/documents';
 
 interface Props {
   params: Promise<{ projectId: string; documentId: string }>;
@@ -7,7 +7,7 @@ interface Props {
 
 const Page = async ({ params }: Props): Promise<ReactNode> => {
   const { projectId, documentId } = await params;
-  return <DocumentEditPage projectId={projectId} documentId={documentId} />;
+  return <DocumentUpdatePage projectId={projectId} documentId={documentId} />;
 };
 
 export default Page;

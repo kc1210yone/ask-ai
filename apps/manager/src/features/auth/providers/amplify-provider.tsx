@@ -12,5 +12,5 @@ interface Props {
 }
 
 export const AmplifyProvider = ({ children }: Props): ReactNode => {
-  return <Authenticator.Provider>{children}</Authenticator.Provider>;
+  return <Authenticator>{children}</Authenticator>;
 };

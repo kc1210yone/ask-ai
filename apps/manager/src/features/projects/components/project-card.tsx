@@ -34,7 +34,7 @@ export const ProjectCard = ({ project }: Props) => {
           <Link href={`/projects/${project.id}`}>詳細</Link>
         </Button>
         <Button variant="outline" size="sm" asChild>
-          <Link href={`/projects/${project.id}/edit`}>編集</Link>
+          <Link href={`/projects/${project.id}/update`}>編集</Link>
         </Button>
         <DeleteProjectButton projectId={project.id} />
       </CardFooter>

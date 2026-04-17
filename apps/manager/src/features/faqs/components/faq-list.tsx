@@ -14,7 +14,7 @@ export const FaqList = ({ projectId, faqs }: Props) => {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">FAQ</h3>
         <Button size="sm" asChild>
-          <Link href={`/projects/${projectId}/faqs/new`}>+ 追加</Link>
+          <Link href={`/projects/${projectId}/faqs/create`}>+ 追加</Link>
         </Button>
       </div>
       {faqs.length === 0 ? (
@@ -29,7 +29,7 @@ export const FaqList = ({ projectId, faqs }: Props) => {
               <span className="text-sm font-medium">{faq.question}</span>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/projects/${projectId}/faqs/${faq.id}/edit`}>
+                  <Link href={`/projects/${projectId}/faqs/${faq.id}/update`}>
                     編集
                   </Link>
                 </Button>

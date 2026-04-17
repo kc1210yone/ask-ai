@@ -10,7 +10,7 @@ interface Props {
   projectId: string;
 }
 
-export const ProjectEditPage = async ({ projectId }: Props) => {
+export const ProjectUpdatePage = async ({ projectId }: Props) => {
   const user = await findOrCreateCurrentUser();
   const project = await getProject(projectId, user.id);
   if (!project) notFound();

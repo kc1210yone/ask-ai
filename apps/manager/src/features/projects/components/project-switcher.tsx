@@ -50,7 +50,7 @@ export const ProjectSwitcher = ({ projects }: Props) => {
           プロジェクトがありません
         </p>
         <Button size="sm" asChild>
-          <Link href="/projects/new">+ 新規作成</Link>
+          <Link href="/projects/create">+ 新規作成</Link>
         </Button>
       </div>
     );
@@ -74,12 +74,12 @@ export const ProjectSwitcher = ({ projects }: Props) => {
         </SelectContent>
       </Select>
       <Button size="sm" asChild>
-        <Link href="/projects/new">+ 追加</Link>
+        <Link href="/projects/create">+ 追加</Link>
       </Button>
       {currentProjectId && (
         <>
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/projects/${currentProjectId}/edit`}>編集</Link>
+            <Link href={`/projects/${currentProjectId}/update`}>編集</Link>
           </Button>
           <Button
             variant="destructive"

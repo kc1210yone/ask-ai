@@ -1,4 +1,4 @@
 export { ProjectList } from './components/project-list';
-export { ProjectNewPage } from './components/project-new-page';
-export { ProjectEditPage } from './components/project-edit-page';
+export { ProjectCreatePage } from './components/project-create-page';
+export { ProjectUpdatePage } from './components/project-update-page';
 export { ProjectPage } from './components/project-page';

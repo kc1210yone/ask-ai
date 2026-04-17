@@ -19,12 +19,12 @@ interface Props {
 const Layout = ({ children }: Props): ReactNode => {
   return (
     <html lang="ja" className={cn('font-sans', inter.variable)}>
-      <AmplifyProvider>
-        <body>
+      <body>
+        <AmplifyProvider>
           {children}
           <Toaster />
-        </body>
-      </AmplifyProvider>
+        </AmplifyProvider>
+      </body>
     </html>
   );
 };

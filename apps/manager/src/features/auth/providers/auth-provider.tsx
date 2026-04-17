@@ -16,15 +16,11 @@ interface Props {
 
 export const AuthProvider = ({ children }: Props): ReactNode => {
   const [email, setEmail] = useState<string | null>(null);
-  return (
-    <AuthContext.Provider value={{ email, setEmail }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext value={{ email, setEmail }}>{children}</AuthContext>;
 };
 
 export const useAuth = (): ContextValue => {
   const contextValue = useContext(AuthContext);
-  invariant(contextValue, 'AuthContext.Provider required.');
+  invariant(contextValue, 'AuthContext required.');
   return contextValue;
 };

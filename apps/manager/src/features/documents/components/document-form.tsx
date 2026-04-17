@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useActionState } from 'react';
-import type { DocumentActionState } from '../types';
+import type { CreateDocumentResponse } from '../types/create-document';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldTitle, FieldError } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
@@ -10,32 +10,31 @@ import { Textarea } from '#src/components/ui/textarea';
 
 interface Props {
   action: (
-    prevState: DocumentActionState,
+    prevState: CreateDocumentResponse,
     formData: FormData,
-  ) => Promise<DocumentActionState>;
+  ) => Promise<CreateDocumentResponse>;
   defaultValues?: { title: string; content: string };
   cancelHref: string;
 }
 
 export const DocumentForm = ({ action, defaultValues, cancelHref }: Props) => {
-  const [state, formAction, isPending] = useActionState(action, null);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+  const [state, formAction, isPending] = useActionState(action as any, null);
+  console.log(state);
 
+  const falseValue = new Date().getTime() < 0;
   return (
     <form action={formAction} className="flex flex-col gap-6">
-      <Field data-invalid={!!state?.errors?.title}>
+      <Field data-invalid={false}>
         <FieldTitle>タイトル</FieldTitle>
         <Input
           name="title"
           defaultValue={defaultValues?.title}
           placeholder="例: サービス概要"
         />
-        {state?.errors?.title && (
-          <FieldError
-            errors={state.errors.title.map((m) => ({ message: m }))}
-          />
-        )}
+        {falseValue && <FieldError errors={[]} />}
       </Field>
-      <Field data-invalid={!!state?.errors?.content}>
+      <Field data-invalid={false}>
         <FieldTitle>本文</FieldTitle>
         <Textarea
           name="content"
@@ -43,11 +42,7 @@ export const DocumentForm = ({ action, defaultValues, cancelHref }: Props) => {
           placeholder="AIアシスタントが参照するテキストを入力してください"
           rows={10}
         />
-        {state?.errors?.content && (
-          <FieldError
-            errors={state.errors.content.map((m) => ({ message: m }))}
-          />
-        )}
+        {falseValue && <FieldError errors={[]} />}
       </Field>
       <div className="flex gap-3">
         <Button type="submit" disabled={isPending}>

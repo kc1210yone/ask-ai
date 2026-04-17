@@ -14,7 +14,7 @@ export const DocumentList = ({ projectId, documents }: Props) => {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Document</h3>
         <Button size="sm" asChild>
-          <Link href={`/projects/${projectId}/documents/new`}>+ 追加</Link>
+          <Link href={`/projects/${projectId}/documents/create`}>+ 追加</Link>
         </Button>
       </div>
       {documents.length === 0 ? (
@@ -30,7 +30,7 @@ export const DocumentList = ({ projectId, documents }: Props) => {
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
                   <Link
-                    href={`/projects/${projectId}/documents/${doc.id}/edit`}
+                    href={`/projects/${projectId}/documents/${doc.id}/update`}
                   >
                     編集
                   </Link>

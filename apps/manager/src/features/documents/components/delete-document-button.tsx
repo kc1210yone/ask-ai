@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { deleteDocument } from '../actions';
+import { deleteDocument } from '../actions/delete-document';
 import { Button } from '#src/components/ui/button';
 
 interface Props {

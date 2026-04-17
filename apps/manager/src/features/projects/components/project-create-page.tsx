@@ -3,7 +3,7 @@ import { createProject } from '../actions';
 import { ProjectForm } from './project-form';
 import { Button } from '#src/components/ui/button';
 
-export const ProjectNewPage = () => {
+export const ProjectCreatePage = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
