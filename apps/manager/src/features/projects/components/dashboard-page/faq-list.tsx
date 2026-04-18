@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DeleteFaqButton } from './delete-faq-button';
+import { DeleteFaqButton } from '../../../faqs/components/delete-faq-button';
 import type { Faq } from '#src/generated/prisma/client';
 import { Button } from '#src/components/ui/button';
 

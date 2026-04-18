@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createDocument } from '../actions/create-document';
+import { CreateForm } from './create-form';
 import { Button } from '#src/components/ui/button';
 
 interface Props {
@@ -7,9 +7,6 @@ interface Props {
 }
 
 export const DocumentCreatePage = ({ projectId }: Props) => {
-  const boundAction = createDocument.bind(null, projectId);
-  console.log(boundAction);
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
@@ -17,6 +14,7 @@ export const DocumentCreatePage = ({ projectId }: Props) => {
           <Link href={`/?projectId=${projectId}`}>← 戻る</Link>
         </Button>
         <h2 className="text-xl font-semibold">Document作成</h2>
+        <CreateForm className="" />
       </div>
     </div>
   );
