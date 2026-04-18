@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { updateProject } from '../actions';
-import { getProject } from '../lib/queries';
-import { ProjectForm } from './project-form';
+import { updateProject } from '../../actions';
+import { getProject } from '../../lib/queries';
+import { ProjectForm } from '../project-form';
 import { Button } from '#src/components/ui/button';
 import { findOrCreateCurrentUser } from '#src/lib/user';
 

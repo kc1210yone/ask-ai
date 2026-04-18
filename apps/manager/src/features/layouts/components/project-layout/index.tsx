@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const PrivateLayout = ({ projectId, children }: Props): ReactNode => {
+export const ProjectLayout = ({ projectId, children }: Props): ReactNode => {
   return (
     <div className="bg-background min-h-screen">
       <header className="border-b">

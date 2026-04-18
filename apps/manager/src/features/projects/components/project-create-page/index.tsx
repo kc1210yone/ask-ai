@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { createProject } from '../actions';
-import { ProjectForm } from './project-form';
+import { createProject } from '../../actions';
+import { ProjectForm } from '../project-form';
 import { Button } from '#src/components/ui/button';
 
 export const ProjectCreatePage = () => {
