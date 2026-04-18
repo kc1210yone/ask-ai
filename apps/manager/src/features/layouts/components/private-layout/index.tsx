@@ -2,11 +2,11 @@ import { LogoutButton } from './logout-button';
 import type { ReactNode } from 'react';
 
 interface Props {
-  projectId: string;
+  projectId: string | null;
   children: ReactNode;
 }
 
-export const ProjectLayout = ({ projectId, children }: Props): ReactNode => {
+export const PrivateLayout = ({ projectId, children }: Props): ReactNode => {
   return (
     <div className="bg-background min-h-screen">
       <header className="border-b">

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ProjectLayout } from '#src/features/layouts';
+import { PrivateLayout } from '#src/features/layouts';
 
 interface Props {
   params: Promise<{ projectId: string }>;
@@ -8,7 +8,7 @@ interface Props {
 
 const Layout = async ({ params, children }: Props): Promise<ReactNode> => {
   const { projectId } = await params;
-  return <ProjectLayout projectId={projectId}>{children}</ProjectLayout>;
+  return <PrivateLayout projectId={projectId}>{children}</PrivateLayout>;
 };
 
 export default Layout;
