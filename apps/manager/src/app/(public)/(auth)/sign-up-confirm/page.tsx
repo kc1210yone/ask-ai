@@ -1,3 +1,8 @@
+import type { ReactNode } from 'react';
 import { SignUpConfirmPage } from '#src/features/auth';
 
-export default SignUpConfirmPage;
+const Page = (): ReactNode => {
+  return <SignUpConfirmPage />;
+};
+
+export default Page;

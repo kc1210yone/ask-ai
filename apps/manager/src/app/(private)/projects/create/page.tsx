@@ -1,3 +1,8 @@
+import type { ReactNode } from 'react';
 import { ProjectCreatePage } from '#src/features/projects';
 
-export default ProjectCreatePage;
+const Page = (): ReactNode => {
+  return <ProjectCreatePage />;
+};
+
+export default Page;
