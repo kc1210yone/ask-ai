@@ -44,7 +44,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
     switch (result.nextStep.signInStep) {
       case 'DONE':
-        router.push('/users/create');
+        router.push('/');
         break;
       default:
         throw new Error('Unexpected signInStep.');

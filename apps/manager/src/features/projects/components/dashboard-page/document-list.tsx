@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { DeleteDocumentButton } from './delete-document-button';
 import type { Document } from '#src/generated/prisma/client';
 import { Button } from '#src/components/ui/button';
+import { DeleteDocumentButton } from '#src/features/documents/components/delete-document-button';
 
 interface Props {
   projectId: string;
