@@ -19,9 +19,13 @@ export const proxy = async (request: NextRequest): Promise<NextResponse> => {
   });
 
   const { pathname } = request.nextUrl;
-  const isPrivateRoute = pathname === '/' || pathname.startsWith('/projects');
-  if (isPrivateRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  const isPrivatePage =
+    pathname === '/' ||
+    pathname.startsWith('/projects/') ||
+    pathname.startsWith('/users/');
+
+  if (isPrivatePage && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 
   return response;

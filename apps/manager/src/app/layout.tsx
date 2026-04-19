@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Toaster } from '#src/components/ui/sonner';
-import { AmplifyProvider } from '#src/features/auth';
+import { ConfigureAmplifyClientSide } from '#src/features/auth';
 import { cn } from '#src/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -20,10 +20,9 @@ const Layout = ({ children }: Props): ReactNode => {
   return (
     <html lang="ja" className={cn('font-sans', inter.variable)}>
       <body>
-        <AmplifyProvider>
-          {children}
-          <Toaster />
-        </AmplifyProvider>
+        <ConfigureAmplifyClientSide />
+        {children}
+        <Toaster />
       </body>
     </html>
   );

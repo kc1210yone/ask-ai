@@ -3,7 +3,7 @@ import { getCurrentUser } from 'aws-amplify/auth/server';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 import type { AuthUser } from '../types/auth-user';
-import { amplifyConfig } from '#src/features/auth/lib/amplify-config';
+import { amplifyConfig } from '#src/features/auth/lib/amplify';
 
 const { runWithAmplifyServerContext } = createServerRunner({
   config: amplifyConfig,

@@ -10,7 +10,7 @@ export const LogoutButton = (): ReactNode => {
 
   const onClick = async (): Promise<void> => {
     await signOut();
-    router.push('/login');
+    router.push('/auth/login');
   };
 
   return (

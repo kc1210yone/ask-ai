@@ -12,7 +12,7 @@ export const SignUpConfirmPage = (): ReactNode => {
 
   useEffect(() => {
     if (!email) {
-      router.push('/login');
+      router.push('/auth/login');
     }
   }, [email, router]);
 

@@ -44,7 +44,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
     switch (result.nextStep.signInStep) {
       case 'DONE':
-        router.push('/');
+        router.push('/users/create');
         break;
       default:
         throw new Error('Unexpected signInStep.');
@@ -85,7 +85,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
     switch (result.nextStep.signUpStep) {
       case 'DONE':
-        router.push('/login');
+        router.push('/auth/login');
         toast.success('アカウントが作成されました。', {
           position: 'top-center',
         });

@@ -72,7 +72,7 @@ export const LoginForm = ({ className }: Props): ReactNode => {
         break;
       case 'CONFIRM_SIGN_UP':
         setEmail(data.email);
-        router.push('/sign-up-confirm');
+        router.push('/auth/sign-up-confirm');
         break;
       default:
         throw new Error('Unexpected signInStep.');
