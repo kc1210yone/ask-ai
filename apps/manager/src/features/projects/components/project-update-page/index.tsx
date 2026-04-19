@@ -4,14 +4,16 @@ import { updateProject } from '../../actions';
 import { getProject } from '../../lib/queries';
 import { ProjectForm } from '../project-form';
 import { Button } from '#src/components/ui/button';
-import { findOrCreateCurrentUser } from '#src/lib/user';
+import { getAuthUserOrRedirect } from '#src/features/auth';
+import { findUserOrRedirect } from '#src/features/users';
 
 interface Props {
   projectId: string;
 }
 
 export const ProjectUpdatePage = async ({ projectId }: Props) => {
-  const user = await findOrCreateCurrentUser();
+  const authUser = await getAuthUserOrRedirect();
+  const user = await findUserOrRedirect(authUser.userId);
   const project = await getProject(projectId, user.id);
   if (!project) notFound();
 

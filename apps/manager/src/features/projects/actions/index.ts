@@ -4,8 +4,9 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { ProjectFormSchema, type ProjectActionState } from '../types';
+import { getAuthUserOrRedirect } from '#src/features/auth';
+import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
-import { findOrCreateCurrentUser } from '#src/lib/user';
 
 export const createProject = async (
   _prevState: ProjectActionState,
@@ -19,7 +20,8 @@ export const createProject = async (
     return { errors: z.flattenError(parsed.error).fieldErrors };
   }
 
-  const user = await findOrCreateCurrentUser();
+  const authUser = await getAuthUserOrRedirect();
+  const user = await findUserOrRedirect(authUser.userId);
   await prisma.project.create({
     data: { name: parsed.data.name, userId: user.id },
   });
