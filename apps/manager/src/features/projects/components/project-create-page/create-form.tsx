@@ -2,8 +2,12 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { toast } from 'sonner';
+import invariant from 'tiny-invariant';
+import { formAction } from './actions';
+import { FormSchema, type FormSchemaType } from './types';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
@@ -13,12 +17,9 @@ interface Props {
   className?: string | undefined;
 }
 
-const FormSchema = z.object({
-  name: z.string().min(1, 'プロジェクト名を入力してください。'),
-});
-type FormSchemaType = z.infer<typeof FormSchema>;
-
 export const CreateForm = ({ className }: Props) => {
+  const router = useRouter();
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -27,8 +28,13 @@ export const CreateForm = ({ className }: Props) => {
   });
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(data);
+    const response = await formAction(data);
+    if (response.status === 'error') {
+      toast.error('プロジェクトの作成に失敗しました。');
+      return;
+    }
+    invariant(response.projectId);
+    router.push(`/projects/${response.projectId}/dashboard`);
   };
 
   return (
@@ -53,7 +59,7 @@ export const CreateForm = ({ className }: Props) => {
         )}
       />
       <Field orientation="horizontal">
-        <Button disabled={false}>ログイン</Button>
+        <Button disabled={false}>作成</Button>
         <Button variant="secondary" asChild disabled={false}>
           <Link href="/">キャンセル</Link>
         </Button>

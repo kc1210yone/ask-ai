@@ -37,6 +37,13 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
   const [resendButtonCountDown, setResendButtonCountDown] = useState(0);
 
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      code: '',
+    },
+  });
+
   const autoSignInWrapper = async (): Promise<void> => {
     setIsLoading(true);
     const result = await autoSignIn();
@@ -112,13 +119,6 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
       clearInterval(intervalId);
     };
   }, []);
-
-  const form = useForm<FormSchemaType>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      code: '',
-    },
-  });
 
   return (
     <form
