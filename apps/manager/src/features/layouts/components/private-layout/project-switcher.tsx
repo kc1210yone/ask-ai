@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import { deleteProject } from '../actions';
+import { deleteProject } from '../../../projects/actions';
 import type { Project } from '#src/generated/prisma/client';
 import { Button } from '#src/components/ui/button';
 import {
