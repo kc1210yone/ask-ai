@@ -15,7 +15,7 @@ export const getUserProjects = async (
 ): Promise<ProjectWithCounts[]> => {
   return prisma.project.findMany({
     where: { userId },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: 'asc' },
     include: { _count: { select: { documents: true, faqs: true } } },
   });
 };

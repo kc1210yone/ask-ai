@@ -13,6 +13,7 @@ export const RootPage = async (): Promise<ReactNode> => {
 
   const projects = await prisma.project.findMany({
     where: { userId: user.id },
+    orderBy: { createdAt: 'asc' },
   });
 
   if (projects.length === 0) {
