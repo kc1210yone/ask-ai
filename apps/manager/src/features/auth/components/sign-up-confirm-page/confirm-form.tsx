@@ -138,6 +138,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
               placeholder="123456"
               inputMode="numeric"
               maxLength={6}
+              autoComplete="one-time-code"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>

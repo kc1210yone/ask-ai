@@ -1,18 +1,11 @@
-import Link from 'next/link';
-import { createProject } from '../../actions';
-import { ProjectForm } from '../project-form';
-import { Button } from '#src/components/ui/button';
+import { CreateForm } from './create-form';
 
 export const ProjectCreatePage = () => {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/">← 戻る</Link>
-        </Button>
-        <h2 className="text-xl font-semibold">プロジェクト作成</h2>
-      </div>
-      <ProjectForm action={createProject} cancelHref="/" />
-    </div>
+    <>
+      <h2 className="text-xl font-semibold">プロジェクト作成</h2>
+      <p className="mt-4">新規作成するプロジェクトの情報を入力してください。</p>
+      <CreateForm className="mt-8" />
+    </>
   );
 };

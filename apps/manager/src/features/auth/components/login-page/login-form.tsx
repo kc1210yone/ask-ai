@@ -95,6 +95,8 @@ export const LoginForm = ({ className }: Props): ReactNode => {
               id={field.name}
               aria-invalid={fieldState.invalid}
               placeholder="email@example.com"
+              type="email"
+              autoComplete="email"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
@@ -112,6 +114,7 @@ export const LoginForm = ({ className }: Props): ReactNode => {
               aria-invalid={fieldState.invalid}
               placeholder="••••••••"
               type="password"
+              autoComplete="current-password"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
