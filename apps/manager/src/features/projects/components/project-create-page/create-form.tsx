@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import invariant from 'tiny-invariant';
@@ -20,6 +21,8 @@ interface Props {
 export const CreateForm = ({ className }: Props) => {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -28,7 +31,9 @@ export const CreateForm = ({ className }: Props) => {
   });
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
+    setIsLoading(true);
     const response = await formAction(data);
+    setIsLoading(false);
     if (response.status === 'error') {
       toast.error('プロジェクトの作成に失敗しました。');
       return;
@@ -59,8 +64,8 @@ export const CreateForm = ({ className }: Props) => {
         )}
       />
       <Field orientation="horizontal">
-        <Button disabled={false}>作成</Button>
-        <Button variant="secondary" asChild disabled={false}>
+        <Button disabled={isLoading}>作成</Button>
+        <Button variant="secondary" asChild>
           <Link href="/">キャンセル</Link>
         </Button>
       </Field>
