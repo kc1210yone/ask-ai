@@ -1,23 +1,27 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import type { DeleteDocumentResponse } from '../types/delete-document';
+import { getAuthUserOrRedirect } from '#src/features/auth';
+import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
-import { findOrCreateCurrentUser } from '#src/lib/user';
+
+interface ActionResponse {
+  status: 'ok' | 'error';
+}
 
 export const deleteDocument = async (
-  projectId: string,
   documentId: string,
-): Promise<DeleteDocumentResponse> => {
-  const user = await findOrCreateCurrentUser();
-  const project = await prisma.project.findFirst({
-    where: { id: projectId, userId: user.id },
+): Promise<ActionResponse> => {
+  const authUser = await getAuthUserOrRedirect();
+  const user = await findUserOrRedirect(authUser.userId);
+  const document = await prisma.document.findUnique({
+    where: { id: documentId },
+    include: { project: true },
   });
-  if (!project) redirect('/');
-
+  if (document?.project.userId !== user.id) {
+    return { status: 'error' };
+  }
   await prisma.document.delete({ where: { id: documentId } });
-
-  revalidatePath(`/projects/${projectId}`);
-  redirect(`/?projectId=${projectId}`);
+  revalidatePath(`/projects/${document.projectId}/dashboard`);
+  return { status: 'ok' };
 };

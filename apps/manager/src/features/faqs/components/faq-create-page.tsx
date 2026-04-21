@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { createFaq } from '../actions';
-import { FaqForm } from './faq-form';
 import { Button } from '#src/components/ui/button';
 
 interface Props {
@@ -8,8 +6,6 @@ interface Props {
 }
 
 export const FaqCreatePage = ({ projectId }: Props) => {
-  const boundAction = createFaq.bind(null, projectId);
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
@@ -18,7 +14,6 @@ export const FaqCreatePage = ({ projectId }: Props) => {
         </Button>
         <h2 className="text-xl font-semibold">FAQ作成</h2>
       </div>
-      <FaqForm action={boundAction} cancelHref={`/?projectId=${projectId}`} />
     </div>
   );
 };

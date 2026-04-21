@@ -6,14 +6,14 @@ import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
 
-interface FormActionResponse {
+interface ActionResponse {
   status: 'ok' | 'error';
   projectId: string | null;
 }
 
 export const formAction = async (
   formData: FormSchemaType,
-): Promise<FormActionResponse> => {
+): Promise<ActionResponse> => {
   const authUser = await getAuthUserOrRedirect();
   const user = await findUserOrRedirect(authUser.userId);
   if (!FormSchema.safeParse(formData).success) {

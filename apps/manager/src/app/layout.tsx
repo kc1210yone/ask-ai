@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Toaster } from '#src/components/ui/sonner';
+import { TooltipProvider } from '#src/components/ui/tooltip';
 import { ConfigureAmplifyClientSide } from '#src/features/auth';
 import { cn } from '#src/lib/utils';
 
@@ -21,7 +22,7 @@ const Layout = ({ children }: Props): ReactNode => {
     <html lang="ja" className={cn('font-sans', inter.variable)}>
       <body>
         <ConfigureAmplifyClientSide />
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
       </body>
     </html>

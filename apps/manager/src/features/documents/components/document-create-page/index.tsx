@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { CreateForm } from './create-form';
 import { Button } from '#src/components/ui/button';
 
 interface Props {
@@ -14,7 +13,6 @@ export const DocumentCreatePage = ({ projectId }: Props) => {
           <Link href={`/?projectId=${projectId}`}>← 戻る</Link>
         </Button>
         <h2 className="text-xl font-semibold">Document作成</h2>
-        <CreateForm className="" />
       </div>
     </div>
   );
