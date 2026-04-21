@@ -37,6 +37,13 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
   const [resendButtonCountDown, setResendButtonCountDown] = useState(0);
 
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      code: '',
+    },
+  });
+
   const autoSignInWrapper = async (): Promise<void> => {
     setIsLoading(true);
     const result = await autoSignIn();
@@ -85,7 +92,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
 
     switch (result.nextStep.signUpStep) {
       case 'DONE':
-        router.push('/login');
+        router.push('/auth/login');
         toast.success('アカウントが作成されました。', {
           position: 'top-center',
         });
@@ -113,13 +120,6 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
     };
   }, []);
 
-  const form = useForm<FormSchemaType>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      code: '',
-    },
-  });
-
   return (
     <form
       onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
@@ -138,6 +138,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
               placeholder="123456"
               inputMode="numeric"
               maxLength={6}
+              autoComplete="one-time-code"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>

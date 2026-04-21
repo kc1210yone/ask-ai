@@ -3,7 +3,8 @@ import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Toaster } from '#src/components/ui/sonner';
-import { AmplifyProvider } from '#src/features/auth';
+import { TooltipProvider } from '#src/components/ui/tooltip';
+import { ConfigureAmplifyClientSide } from '#src/features/auth';
 import { cn } from '#src/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -16,17 +17,16 @@ interface Props {
   children: ReactNode;
 }
 
-const RootLayout = ({ children }: Props): ReactNode => {
+const Layout = ({ children }: Props): ReactNode => {
   return (
     <html lang="ja" className={cn('font-sans', inter.variable)}>
-      <AmplifyProvider>
-        <body>
-          {children}
-          <Toaster />
-        </body>
-      </AmplifyProvider>
+      <body>
+        <ConfigureAmplifyClientSide />
+        <TooltipProvider>{children}</TooltipProvider>
+        <Toaster />
+      </body>
     </html>
   );
 };
 
-export default RootLayout;
+export default Layout;

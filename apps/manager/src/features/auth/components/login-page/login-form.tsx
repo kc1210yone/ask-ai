@@ -72,7 +72,7 @@ export const LoginForm = ({ className }: Props): ReactNode => {
         break;
       case 'CONFIRM_SIGN_UP':
         setEmail(data.email);
-        router.push('/sign-up-confirm');
+        router.push('/auth/sign-up-confirm');
         break;
       default:
         throw new Error('Unexpected signInStep.');
@@ -95,6 +95,8 @@ export const LoginForm = ({ className }: Props): ReactNode => {
               id={field.name}
               aria-invalid={fieldState.invalid}
               placeholder="email@example.com"
+              type="email"
+              autoComplete="email"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
@@ -112,6 +114,7 @@ export const LoginForm = ({ className }: Props): ReactNode => {
               aria-invalid={fieldState.invalid}
               placeholder="••••••••"
               type="password"
+              autoComplete="current-password"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>

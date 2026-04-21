@@ -14,7 +14,7 @@ export const LoginPage = (): ReactNode => {
         <p className="mt-8 text-sm text-gray-500">
           アカウントをお持ちでない方は
           <Link
-            href="/sign-up"
+            href="/auth/sign-up"
             className="font-medium text-blue-600 hover:text-blue-500"
           >
             新規登録

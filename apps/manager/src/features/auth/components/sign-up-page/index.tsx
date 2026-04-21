@@ -16,7 +16,7 @@ export const SignUpPage = (): ReactNode => {
         <p className="mt-8 text-sm text-gray-500">
           すでにアカウントをお持ちの方は
           <Link
-            href="/login"
+            href="/auth/login"
             className="font-medium text-blue-600 hover:text-blue-500"
           >
             ログイン
