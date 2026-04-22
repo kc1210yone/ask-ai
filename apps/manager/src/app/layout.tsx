@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { Toaster } from '#src/components/ui/sonner';
 import { TooltipProvider } from '#src/components/ui/tooltip';
 import { ConfigureAmplifyClientSide } from '#src/features/auth';
+import { ThemeProvider } from '#src/features/theme';
 import { cn } from '#src/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -19,11 +20,17 @@ interface Props {
 
 const Layout = ({ children }: Props): ReactNode => {
   return (
-    <html lang="ja" className={cn('font-sans', inter.variable)}>
+    <html
+      lang="ja"
+      className={cn('font-sans', inter.variable)}
+      suppressHydrationWarning
+    >
       <body>
         <ConfigureAmplifyClientSide />
-        <TooltipProvider>{children}</TooltipProvider>
-        <Toaster />
+        <ThemeProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

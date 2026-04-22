@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '#src/components/ui/sidebar';
+import { ThemeSelector } from '#src/features/theme';
 
 interface Props {
   projectId: string | null;
@@ -20,6 +21,8 @@ export const AppSidebar = ({ projectId }: Props): ReactNode => {
   return (
     <Sidebar>
       <SidebarHeader />
+      {/* TODO */}
+      <ThemeSelector />
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
