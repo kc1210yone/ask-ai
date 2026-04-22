@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import invariant from 'tiny-invariant';
+import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import {
   Card,
@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from '#src/components/ui/card';
+import { getAuthUserOrRedirect } from '#src/features/auth';
+import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
 
 interface Props {
@@ -18,10 +20,16 @@ interface Props {
 export const DashboardPage = async ({
   projectId,
 }: Props): Promise<ReactNode> => {
+  const authUser = await getAuthUserOrRedirect();
+  const user = await findUserOrRedirect(authUser.userId);
+
   const project = await prisma.project.findUnique({
     where: { id: projectId },
   });
-  invariant(project);
+  // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+  if (!project || project.userId !== user.id) {
+    redirect('/');
+  }
 
   const documentCount = await prisma.document.count({
     where: {

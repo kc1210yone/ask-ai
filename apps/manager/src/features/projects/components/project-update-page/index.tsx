@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getProject } from '../../lib/queries';
 import { Button } from '#src/components/ui/button';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
@@ -12,8 +10,7 @@ interface Props {
 export const ProjectUpdatePage = async ({ projectId }: Props) => {
   const authUser = await getAuthUserOrRedirect();
   const user = await findUserOrRedirect(authUser.userId);
-  const project = await getProject(projectId, user.id);
-  if (!project) notFound();
+  console.log(user);
 
   return (
     <div className="flex flex-col gap-6">

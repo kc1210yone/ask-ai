@@ -1,6 +1,7 @@
 import { CreateForm } from './create-form';
+import type { ReactNode } from 'react';
 
-export const ProjectCreatePage = () => {
+export const ProjectCreatePage = (): ReactNode => {
   return (
     <>
       <h2 className="text-xl font-semibold">プロジェクト作成</h2>
