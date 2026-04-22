@@ -8,5 +8,15 @@ export interface Props {
 }
 
 export const ThemeProvider = ({ children }: Props): ReactNode => {
-  return <NextThemesProvider attribute="class">{children}</NextThemesProvider>;
+  return (
+    <NextThemesProvider
+      attribute="class"
+      // https://github.com/pacocoursey/next-themes/issues/387
+      scriptProps={
+        typeof window === 'undefined' ? {} : { type: 'application/json' }
+      }
+    >
+      {children}
+    </NextThemesProvider>
+  );
 };
