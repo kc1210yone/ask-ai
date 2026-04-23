@@ -1,6 +1,8 @@
-import { ChevronDownIcon } from 'lucide-react';
+'use client';
+
+import { ChevronDownIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
-import { type ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import type { Project } from '#src/generated/prisma/client';
 import {
   DropdownMenu,
@@ -14,6 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '#src/components/ui/sidebar';
+import { useParams, useRouter } from 'next/navigation';
 
 interface Props {
   project: Project | null;
@@ -21,6 +24,15 @@ interface Props {
 }
 
 export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
+  const router = useRouter();
+
+  const params = useParams<{ projectId?: string }>();
+  const projectId = params.projectId ?? null;
+
+  useEffect(() => {
+    router.refresh();
+  }, [projectId]);
+
   return (
     <SidebarHeader>
       <Link href="/">
@@ -45,6 +57,12 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
                   </Link>
                 </DropdownMenuItem>
               ))}
+              <DropdownMenuItem key="@create" asChild>
+                <Link href={`/projects/create`}>
+                  <PlusIcon />
+                  新規作成
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

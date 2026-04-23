@@ -22,10 +22,9 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
   return (
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
+        <SidebarGroupLabel>プロジェクト</SidebarGroupLabel>
         <SidebarGroupAction>
           <PlusIcon />
-          <span className="sr-only">Add Project</span>
         </SidebarGroupAction>
         <SidebarGroupContent>content</SidebarGroupContent>
       </SidebarGroup>
