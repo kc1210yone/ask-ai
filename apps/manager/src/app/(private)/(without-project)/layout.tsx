@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Layout = ({ children }: Props): ReactNode => {
-  return <PrivateLayout>{children}</PrivateLayout>;
+  return <PrivateLayout projectId={null}>{children}</PrivateLayout>;
 };
 
 export default Layout;
