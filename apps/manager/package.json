@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "1.7.2",
-    "@aws-amplify/ui-react": "6.15.2",
+    "@aws-amplify/ui-react": "6.15.3",
     "@hookform/resolvers": "5.2.2",
     "@prisma/adapter-mariadb": "7.7.0",
     "@prisma/client": "7.7.0",
-    "aws-amplify": "6.16.3",
+    "aws-amplify": "6.16.4",
     "class-variance-authority": "0.7.1",
     "client-only": "0.0.1",
     "clsx": "2.1.1",
