@@ -1,4 +1,5 @@
 import { UserIcon } from 'lucide-react';
+import { LogoutButton } from './logout-button';
 import type { ReactNode } from 'react';
 import {
   SidebarFooter,
@@ -10,6 +11,7 @@ import {
 export const AppSidebarFooter = (): ReactNode => {
   return (
     <SidebarFooter>
+      <LogoutButton />
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton>

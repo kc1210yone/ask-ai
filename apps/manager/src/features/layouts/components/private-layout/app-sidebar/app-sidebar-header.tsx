@@ -1,7 +1,8 @@
 'use client';
 
-import { ChevronDownIcon, PlusIcon } from 'lucide-react';
+import { ChevronDownIcon, FolderIcon, FolderPlusIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
 import type { Project } from '#src/generated/prisma/client';
 import {
@@ -16,7 +17,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '#src/components/ui/sidebar';
-import { useParams, useRouter } from 'next/navigation';
 
 interface Props {
   project: Project | null;
@@ -31,12 +31,12 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
 
   useEffect(() => {
     router.refresh();
-  }, [projectId]);
+  }, [projectId, router]);
 
   return (
     <SidebarHeader>
       <Link href="/">
-        <h1 className="flex justify-center py-4 text-xl font-semibold">
+        <h1 className="flex justify-center border-b py-4 text-xl font-semibold">
           Ask AI 管理画面
         </h1>
       </Link>
@@ -45,6 +45,7 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton>
+                <FolderIcon />
                 {project ? project.name : 'プロジェクトを選択'}
                 <ChevronDownIcon className="ml-auto" />
               </SidebarMenuButton>
@@ -53,13 +54,14 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
               {projects.map((project) => (
                 <DropdownMenuItem key={project.id} asChild>
                   <Link href={`/projects/${project.id}/dashboard`}>
+                    <FolderIcon />
                     {project.name}
                   </Link>
                 </DropdownMenuItem>
               ))}
               <DropdownMenuItem key="@create" asChild>
                 <Link href={`/projects/create`}>
-                  <PlusIcon />
+                  <FolderPlusIcon />
                   新規作成
                 </Link>
               </DropdownMenuItem>
