@@ -12,11 +12,10 @@ import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { useAuth } from '#src/features/auth/providers/auth-provider';
-import { cn } from '#src/lib/utils';
 
 const FormSchema = z
   .object({
-    email: z.email('有効なメールアドレスを入力してください。'),
+    username: z.email('有効なメールアドレスを入力してください。'),
     password: z.string().min(8, 'パスワードは8文字以上で入力してください。'),
     confirmPassword: z.string().min(1, '確認用パスワードを入力してください。'),
   })
@@ -26,21 +25,17 @@ const FormSchema = z
   });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-interface Props {
-  className?: string | undefined;
-}
-
-export const SignUpForm = ({ className }: Props): ReactNode => {
+export const SignUpForm = (): ReactNode => {
   const router = useRouter();
 
-  const { setEmail } = useAuth();
+  const { setUsername } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
       confirmPassword: '',
     },
@@ -51,11 +46,11 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
     let result;
     try {
       result = await signUp({
-        username: data.email,
+        username: data.username,
         password: data.password,
         options: {
           userAttributes: {
-            email: data.email,
+            email: data.username,
           },
           autoSignIn: true,
         },
@@ -65,7 +60,7 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
       let errorMessage;
       switch (error.name) {
         case 'UsernameExistsException':
-          errorMessage = 'このメールアドレスは既に使用されています。';
+          errorMessage = 'このユーザー名は既に使用されています。';
           break;
         default:
           errorMessage = 'アカウント作成に失敗しました。';
@@ -74,14 +69,13 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
       toast.error(errorMessage, {
         position: 'top-center',
       });
-      return;
-    } finally {
       setIsLoading(false);
+      return;
     }
 
     switch (result.nextStep.signUpStep) {
       case 'CONFIRM_SIGN_UP':
-        setEmail(data.email);
+        setUsername(data.username);
         router.push('/auth/sign-up-confirm');
         break;
       default:
@@ -92,14 +86,16 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
   return (
     <form
       onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
-      className={cn('flex w-full flex-col gap-4', className)}
+      className="flex flex-col gap-4"
     >
       <Controller
-        name="email"
+        name="username"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>メールアドレス</FieldLabel>
+            <FieldLabel htmlFor={field.name}>
+              ユーザー名（メールアドレス）
+            </FieldLabel>
             <Input
               {...field}
               id={field.name}
@@ -122,7 +118,6 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
-              placeholder="••••••••"
               type="password"
               autoComplete="new-password"
             />
@@ -140,7 +135,6 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
-              placeholder="••••••••"
               type="password"
               autoComplete="new-password"
             />
@@ -149,7 +143,7 @@ export const SignUpForm = ({ className }: Props): ReactNode => {
         )}
       />
       <Field>
-        <Button disabled={isLoading}>アカウントを作成</Button>
+        <Button disabled={isLoading}>アカウント作成</Button>
       </Field>
     </form>
   );

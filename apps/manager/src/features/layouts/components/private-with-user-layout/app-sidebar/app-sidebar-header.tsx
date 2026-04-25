@@ -43,13 +43,13 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarMenuButton>
+            <SidebarMenuButton asChild>
+              <DropdownMenuTrigger>
                 <FolderIcon />
                 {project ? project.name : 'プロジェクトを選択'}
                 <ChevronDownIcon className="ml-auto" />
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
+              </DropdownMenuTrigger>
+            </SidebarMenuButton>
             <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
               {projects.map((project) => (
                 <DropdownMenuItem key={project.id} asChild>

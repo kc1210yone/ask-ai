@@ -33,9 +33,9 @@ export const CreateForm = ({ className }: Props) => {
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
     const response = await formAction(data);
-    setIsLoading(false);
     if (response.status === 'error') {
       toast.error('プロジェクトの作成に失敗しました。');
+      setIsLoading(false);
       return;
     }
     invariant(response.projectId);

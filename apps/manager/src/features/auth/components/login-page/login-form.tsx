@@ -12,29 +12,24 @@ import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { useAuth } from '#src/features/auth/providers/auth-provider';
-import { cn } from '#src/lib/utils';
 
 const FormSchema = z.object({
-  email: z.email('有効なメールアドレスを入力してください。'),
+  username: z.email('有効なメールアドレスを入力してください。'),
   password: z.string().min(1, 'パスワードを入力してください。'),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-interface Props {
-  className?: string | undefined;
-}
-
-export const LoginForm = ({ className }: Props): ReactNode => {
+export const LoginForm = (): ReactNode => {
   const router = useRouter();
 
-  const { setEmail } = useAuth();
+  const { setUsername } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
     },
   });
@@ -44,7 +39,7 @@ export const LoginForm = ({ className }: Props): ReactNode => {
     let result;
     try {
       result = await signIn({
-        username: data.email,
+        username: data.username,
         password: data.password,
       });
     } catch (error) {
@@ -61,9 +56,8 @@ export const LoginForm = ({ className }: Props): ReactNode => {
       toast.error(errorMessage, {
         position: 'top-center',
       });
-      return;
-    } finally {
       setIsLoading(false);
+      return;
     }
 
     switch (result.nextStep.signInStep) {
@@ -71,7 +65,7 @@ export const LoginForm = ({ className }: Props): ReactNode => {
         router.push('/');
         break;
       case 'CONFIRM_SIGN_UP':
-        setEmail(data.email);
+        setUsername(data.username);
         router.push('/auth/sign-up-confirm');
         break;
       default:
@@ -82,14 +76,16 @@ export const LoginForm = ({ className }: Props): ReactNode => {
   return (
     <form
       onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
-      className={cn('flex w-full flex-col gap-4', className)}
+      className="flex flex-col gap-4"
     >
       <Controller
-        name="email"
+        name="username"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>メールアドレス</FieldLabel>
+            <FieldLabel htmlFor={field.name}>
+              ユーザー名（メールアドレス）
+            </FieldLabel>
             <Input
               {...field}
               id={field.name}
@@ -112,7 +108,6 @@ export const LoginForm = ({ className }: Props): ReactNode => {
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
-              placeholder="••••••••"
               type="password"
               autoComplete="current-password"
             />

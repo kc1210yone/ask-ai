@@ -1,1 +1,1 @@
-export { PrivateLayout } from './components/private-layout';
+export { PrivateWithUserLayout } from './components/private-with-user-layout';

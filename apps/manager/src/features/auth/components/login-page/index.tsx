@@ -1,26 +1,36 @@
 import Link from 'next/link';
 import { LoginForm } from './login-form';
 import type { ReactNode } from 'react';
+import { Button } from '#src/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '#src/components/ui/card';
 
 export const LoginPage = (): ReactNode => {
   return (
-    <main className="flex h-screen items-center justify-center">
-      <div className="flex w-100 flex-col items-center">
-        <h1 className="text-2xl font-bold">ログイン</h1>
-        <p className="mt-2 text-sm text-gray-500">
-          管理画面にログインしてください。
-        </p>
-        <LoginForm className="mt-8" />
-        <p className="mt-8 text-sm text-gray-500">
+    <Card className="w-md">
+      <CardHeader>
+        <CardTitle>
+          <h2>ログイン</h2>
+        </CardTitle>
+        <CardDescription>管理画面にログインしてください。</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <LoginForm />
+      </CardContent>
+      <CardFooter>
+        <p>
           アカウントをお持ちでない方は
-          <Link
-            href="/auth/sign-up"
-            className="font-medium text-blue-600 hover:text-blue-500"
-          >
-            新規登録
-          </Link>
+          <Button variant="link" asChild className="text-card-foreground">
+            <Link href="/auth/sign-up">新規登録</Link>
+          </Button>
         </p>
-      </div>
-    </main>
+      </CardFooter>
+    </Card>
   );
 };

@@ -21,7 +21,6 @@ export const CreateForm = ({ className }: Props) => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: '',
       password: '',
     },
   });

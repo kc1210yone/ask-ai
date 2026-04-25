@@ -1,6 +1,6 @@
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
 import { AuthError } from 'aws-amplify/auth';
-import { getCurrentUser } from 'aws-amplify/auth/server';
+import { fetchUserAttributes, getCurrentUser } from 'aws-amplify/auth/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
@@ -26,9 +26,13 @@ export const getAuthUser = cache(async (): Promise<AuthUser | null> => {
       cookies,
     },
     operation: async (contextSpec): Promise<AuthUser | null> => {
-      let user;
+      let currentUser;
+      let userAttributes;
       try {
-        user = await getCurrentUser(contextSpec);
+        [currentUser, userAttributes] = await Promise.all([
+          getCurrentUser(contextSpec),
+          fetchUserAttributes(contextSpec),
+        ]);
       } catch (e) {
         invariant(e instanceof AuthError);
         if (e.name === 'UserUnAuthenticatedException') {
@@ -36,8 +40,10 @@ export const getAuthUser = cache(async (): Promise<AuthUser | null> => {
         }
         throw e;
       }
+      invariant(userAttributes.email);
       return {
-        userId: user.userId,
+        userId: currentUser.userId,
+        username: userAttributes.email,
       };
     },
   });

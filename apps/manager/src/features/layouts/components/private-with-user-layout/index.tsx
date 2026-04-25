@@ -3,7 +3,7 @@ import { AppSidebar } from './app-sidebar';
 import type { ReactNode } from 'react';
 import { SidebarProvider, SidebarTrigger } from '#src/components/ui/sidebar';
 import { getAuthUserOrRedirect } from '#src/features/auth';
-import { findUser } from '#src/features/users';
+import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
 
 interface Props {
@@ -11,16 +11,12 @@ interface Props {
   children: ReactNode;
 }
 
-export const PrivateLayout = async ({
+export const PrivateWithUserLayout = async ({
   projectId,
   children,
 }: Props): Promise<ReactNode> => {
   const authUser = await getAuthUserOrRedirect();
-  const user = await findUser(authUser.userId);
-  if (!user) {
-    // /users/createの時
-    return children;
-  }
+  const user = await findUserOrRedirect(authUser.userId);
 
   let project = null;
   if (projectId) {
@@ -40,7 +36,7 @@ export const PrivateLayout = async ({
 
   return (
     <SidebarProvider>
-      <AppSidebar project={project} projects={projects} />
+      <AppSidebar project={project} projects={projects} authUser={authUser} />
       <div className="relative flex-1">
         <SidebarTrigger className="absolute top-0 left-0" />
         <main className="mx-auto max-w-4xl px-4 py-8">{children}</main>

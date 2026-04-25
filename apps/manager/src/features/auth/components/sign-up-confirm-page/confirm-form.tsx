@@ -17,25 +17,26 @@ import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { useAuth } from '#src/features/auth/providers/auth-provider';
-import { cn } from '#src/lib/utils';
-
-interface Props {
-  className?: string | undefined;
-}
 
 const FormSchema = z.object({
   code: z.string().length(6, '確認コードは6桁です'),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-export const ConfirmForm = ({ className }: Props): ReactNode => {
+export const ConfirmForm = (): ReactNode => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { email } = useAuth();
+  const { username } = useAuth();
 
   const [resendButtonCountDown, setResendButtonCountDown] = useState(0);
+
+  useEffect(() => {
+    if (!username) {
+      router.push('/auth/login');
+    }
+  }, [username, router]);
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
@@ -45,9 +46,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
   });
 
   const autoSignInWrapper = async (): Promise<void> => {
-    setIsLoading(true);
     const result = await autoSignIn();
-    setIsLoading(false);
 
     switch (result.nextStep.signInStep) {
       case 'DONE':
@@ -59,13 +58,13 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
   };
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
-    invariant(email);
+    invariant(username);
 
     setIsLoading(true);
     let result;
     try {
       result = await confirmSignUp({
-        username: email,
+        username,
         confirmationCode: data.code,
       });
     } catch (error) {
@@ -85,9 +84,8 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
       toast.error(errorMessage, {
         position: 'top-center',
       });
-      return;
-    } finally {
       setIsLoading(false);
+      return;
     }
 
     switch (result.nextStep.signUpStep) {
@@ -106,8 +104,8 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
   };
 
   const onResendButtonClick = async (): Promise<void> => {
-    invariant(email);
-    await resendSignUpCode({ username: email });
+    invariant(username);
+    await resendSignUpCode({ username });
     setResendButtonCountDown(30);
   };
 
@@ -123,7 +121,7 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
   return (
     <form
       onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
-      className={cn('flex w-full flex-col gap-4', className)}
+      className="flex flex-col gap-4"
     >
       <Controller
         name="code"
@@ -145,15 +143,17 @@ export const ConfirmForm = ({ className }: Props): ReactNode => {
         )}
       />
       <Field>
-        <Button disabled={isLoading || !email}>確認する</Button>
+        <Button disabled={isLoading || !username}>確認する</Button>
         <Button
           type="button"
-          disabled={isLoading || !email || resendButtonCountDown > 0}
+          disabled={isLoading || !username || resendButtonCountDown > 0}
           variant="secondary"
           onClick={() => void onResendButtonClick()}
         >
           確認コードを再送する
-          {resendButtonCountDown > 0 && <> ({resendButtonCountDown}秒)</>}
+          {resendButtonCountDown > 0
+            ? `（${resendButtonCountDown.toString()}秒）`
+            : ''}
         </Button>
       </Field>
     </form>

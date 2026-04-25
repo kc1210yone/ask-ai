@@ -1,28 +1,38 @@
-'use client';
-
 import Link from 'next/link';
 import { type ReactNode } from 'react';
 import { SignUpForm } from './sign-up-form';
+import { Button } from '#src/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '#src/components/ui/card';
 
 export const SignUpPage = (): ReactNode => {
   return (
-    <main className="flex h-screen items-center justify-center">
-      <div className="flex w-100 flex-col items-center">
-        <h1 className="text-2xl font-bold">アカウントを作成</h1>
-        <p className="mt-2 text-sm text-gray-500">
+    <Card className="w-md">
+      <CardHeader>
+        <CardTitle>
+          <h2>アカウント作成</h2>
+        </CardTitle>
+        <CardDescription>
           管理画面の新規アカウントを作成します。
-        </p>
-        <SignUpForm className="mt-8" />
-        <p className="mt-8 text-sm text-gray-500">
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <SignUpForm />
+      </CardContent>
+      <CardFooter>
+        <p>
           すでにアカウントをお持ちの方は
-          <Link
-            href="/auth/login"
-            className="font-medium text-blue-600 hover:text-blue-500"
-          >
-            ログイン
-          </Link>
+          <Button variant="link" asChild className="text-card-foreground">
+            <Link href="/auth/login">ログイン</Link>
+          </Button>
         </p>
-      </div>
-    </main>
+      </CardFooter>
+    </Card>
   );
 };

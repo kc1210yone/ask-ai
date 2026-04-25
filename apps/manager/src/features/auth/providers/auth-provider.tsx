@@ -4,8 +4,8 @@ import { createContext, useContext, useState, type ReactNode } from 'react';
 import invariant from 'tiny-invariant';
 
 interface ContextValue {
-  email: string | null;
-  setEmail: (email: string | null) => void;
+  username: string | null;
+  setUsername: (username: string | null) => void;
 }
 
 const AuthContext = createContext<ContextValue | null>(null);
@@ -15,8 +15,10 @@ interface Props {
 }
 
 export const AuthProvider = ({ children }: Props): ReactNode => {
-  const [email, setEmail] = useState<string | null>(null);
-  return <AuthContext value={{ email, setEmail }}>{children}</AuthContext>;
+  const [username, setUsername] = useState<string | null>(null);
+  return (
+    <AuthContext value={{ username, setUsername }}>{children}</AuthContext>
+  );
 };
 
 export const useAuth = (): ContextValue => {

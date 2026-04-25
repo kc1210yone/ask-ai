@@ -1,12 +1,14 @@
 import type { ReactNode } from 'react';
-import { PrivateLayout } from '#src/features/layouts';
+import { PrivateWithUserLayout } from '#src/features/layouts';
 
 interface Props {
   children: ReactNode;
 }
 
 const Layout = ({ children }: Props): ReactNode => {
-  return <PrivateLayout projectId={null}>{children}</PrivateLayout>;
+  return (
+    <PrivateWithUserLayout projectId={null}>{children}</PrivateWithUserLayout>
+  );
 };
 
 export default Layout;
