@@ -10,3 +10,5 @@ export default {
     'npx -w @internal/manager prettier --write --ignore-unknown',
   ],
 } satisfies Configuration;
+
+//
