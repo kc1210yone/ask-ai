@@ -14,7 +14,7 @@ model User {
   cognitoUserId String    @unique @map("cognito_user_id")
   projects      Project[]
 
-  @@map("user")
+  @@map("users")
 }
 
 model Project {
@@ -27,7 +27,7 @@ model Project {
   documents Document[]
   faqs      Faq[]
 
-  @@map("project")
+  @@map("projects")
 }
 
 model Document {
@@ -39,7 +39,7 @@ model Document {
   title     String
   content   String   @db.Text
 
-  @@map("document")
+  @@map("documents")
 }
 
 model Faq {
@@ -51,5 +51,5 @@ model Faq {
   question  String
   answer    String   @db.Text
 
-  @@map("faq")
+  @@map("faqs")
 }
