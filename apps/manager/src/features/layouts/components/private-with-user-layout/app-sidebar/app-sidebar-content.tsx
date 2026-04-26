@@ -4,6 +4,7 @@ import {
   FileIcon,
   FileQuestionMarkIcon,
   FolderCogIcon,
+  LayoutDashboardIcon,
   PlusIcon,
   SunIcon,
 } from 'lucide-react';
@@ -50,6 +51,14 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
         {projectId && (
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={`/projects/${projectId}/dashboard`}>
+                    <LayoutDashboardIcon />
+                    <span>ダッシュボード</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link href={`/projects/${projectId}/documents`}>

@@ -45,7 +45,7 @@ export const CreateForm = ({ className }: Props) => {
   return (
     <form
       onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
-      className={cn('flex w-full flex-col gap-4', className)}
+      className={cn('flex flex-col gap-4', className)}
     >
       <Controller
         name="name"

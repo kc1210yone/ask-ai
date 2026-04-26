@@ -1,25 +1,33 @@
-import Link from 'next/link';
-import { Button } from '#src/components/ui/button';
+import { redirect } from 'next/navigation';
+import { UpdateForm } from './update-form';
+import type { ReactNode } from 'react';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { prisma } from '#src/lib/prisma';
 
 interface Props {
   projectId: string;
 }
 
-export const ProjectUpdatePage = async ({ projectId }: Props) => {
+export const ProjectUpdatePage = async ({
+  projectId,
+}: Props): Promise<ReactNode> => {
   const authUser = await getAuthUserOrRedirect();
   const user = await findUserOrRedirect(authUser.userId);
-  console.log(user);
+
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+  });
+  // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+  if (!project || project.userId !== user.id) {
+    redirect('/');
+  }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/?projectId=${projectId}`}>← 戻る</Link>
-        </Button>
-        <h2 className="text-xl font-semibold">プロジェクト編集</h2>
-      </div>
-    </div>
+    <>
+      <h2 className="text-xl font-semibold">プロジェクト設定</h2>
+      <p className="mt-4">プロジェクトの設定を変更してください。</p>
+      <UpdateForm project={project} className="mt-8" />
+    </>
   );
 };

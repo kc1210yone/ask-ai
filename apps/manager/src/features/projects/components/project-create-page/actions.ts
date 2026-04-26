@@ -14,18 +14,22 @@ interface ActionResponse {
 export const formAction = async (
   formData: FormSchemaType,
 ): Promise<ActionResponse> => {
-  const authUser = await getAuthUserOrRedirect();
-  const user = await findUserOrRedirect(authUser.userId);
   if (!FormSchema.safeParse(formData).success) {
     return {
       status: 'error',
       projectId: null,
     };
   }
+
+  const authUser = await getAuthUserOrRedirect();
+  const user = await findUserOrRedirect(authUser.userId);
+
   const project = await prisma.project.create({
     data: { userId: user.id, name: formData.name },
   });
+
   revalidatePath('/');
+
   return {
     status: 'ok',
     projectId: project.id,

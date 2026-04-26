@@ -63,9 +63,7 @@ export const DashboardPage = async ({
           <CardHeader>
             <CardTitle>FAQ</CardTitle>
             <CardDescription>
-              <p>
-                FAQは、AIアシスタントが参照する質問と回答のペアです。ユーザーからの質問に対して、AIアシスタントが適切な回答を返すために使用されます。
-              </p>
+              <p>FAQは、AIアシスタントが参照する質問と回答のペアです。</p>
             </CardDescription>
             <CardAction>詳細を見る</CardAction>
           </CardHeader>
