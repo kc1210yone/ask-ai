@@ -23,9 +23,10 @@ export const DocumentsPage = async ({
   }
 
   const documents = await prisma.document.findMany({
-    select: {},
+    select: { id: true, title: true, content: true },
     where: { projectId: project.id },
   });
+  console.log(documents);
 
   return <div>Documents Page {projectId}</div>;
 };
