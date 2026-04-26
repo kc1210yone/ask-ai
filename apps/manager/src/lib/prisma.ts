@@ -1,12 +1,15 @@
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import invariant from 'tiny-invariant';
 import { PrismaClient } from '#src/generated/prisma/client';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const createPrismaClient = () => {
-  const adapter = new PrismaMariaDb(process.env['DATABASE_URL'] ?? '');
+const createPrismaClient = (): PrismaClient => {
+  const databaseUrl = process.env['DATABASE_URL'];
+  invariant(databaseUrl);
+  const adapter = new PrismaMariaDb(databaseUrl);
   return new PrismaClient({ adapter });
 };
 
