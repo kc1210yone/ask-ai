@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { Item } from './item';
 import type { ReactNode } from 'react';
 import { Button } from '#src/components/ui/button';
 import { getAuthUserOrRedirect } from '#src/features/auth';
@@ -38,9 +39,7 @@ export const DocumentsPage = async ({
       </Button>
       <div>
         {documents.map((document) => (
-          <div key={document.id}>
-            {document.title}, {document.content}
-          </div>
+          <Item key={document.id} projectId={projectId} document={document} />
         ))}
       </div>
     </div>
