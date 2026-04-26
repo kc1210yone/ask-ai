@@ -5,8 +5,13 @@ export default {
     'eslint --fix --no-warn-ignored',
     'prettier --write --ignore-unknown',
   ],
-  'apps/manager/**/*': [
-    'npx -w @internal/manager eslint --fix --no-warn-ignored',
-    'npx -w @internal/manager prettier --write --ignore-unknown',
-  ],
+  ...Object.fromEntries(
+    ['apps/manager'].map((workspace) => [
+      `${workspace}/**/*`,
+      [
+        `npx -w ./${workspace} eslint --fix --no-warn-ignored`,
+        `npx -w ./${workspace} prettier --write --ignore-unknown`,
+      ],
+    ]),
+  ),
 } satisfies Configuration;
