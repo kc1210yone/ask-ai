@@ -10,7 +10,7 @@ export default {
       `${workspace}/**/*`,
       [
         `npx -w ./${workspace} eslint --fix --no-warn-ignored`,
-        `npx -w ./${workspace} prettier --write --ignore-path ../../.prettierignorea --ignore-unknown`,
+        `npx -w ./${workspace} prettier --write --ignore-path ../../.prettierignore --ignore-unknown`,
       ],
     ]),
   ),
