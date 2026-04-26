@@ -40,6 +40,7 @@ export const CreateForm = ({ className }: Props) => {
     }
     invariant(response.projectId);
     router.push(`/projects/${response.projectId}/dashboard`);
+    toast.success('プロジェクトを作成しました。');
   };
 
   return (

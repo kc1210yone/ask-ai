@@ -1,19 +1,18 @@
-import Link from 'next/link';
-import { Button } from '#src/components/ui/button';
+import { CreateForm } from './create-form';
+import type { ReactNode } from 'react';
 
 interface Props {
   projectId: string;
 }
 
-export const DocumentCreatePage = ({ projectId }: Props) => {
+export const DocumentCreatePage = ({ projectId }: Props): ReactNode => {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/?projectId=${projectId}`}>← 戻る</Link>
-        </Button>
-        <h2 className="text-xl font-semibold">Document作成</h2>
-      </div>
-    </div>
+    <>
+      <h2 className="text-xl font-semibold">ドキュメント作成</h2>
+      <p className="mt-4">
+        ドキュメントは、AIアシスタントが参照する単体の情報です。
+      </p>
+      <CreateForm projectId={projectId} className="mt-8" />
+    </>
   );
 };
