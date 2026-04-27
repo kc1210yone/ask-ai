@@ -94,10 +94,10 @@ export const CreateForm = ({ projectId, className }: Props) => {
         )}
       />
       <Field orientation="horizontal">
-        <Button disabled={isLoading}>作成</Button>
         <Button variant="secondary" asChild>
           <Link href={`/projects/${projectId}/documents`}>キャンセル</Link>
         </Button>
+        <Button disabled={isLoading}>作成</Button>
       </Field>
     </form>
   );

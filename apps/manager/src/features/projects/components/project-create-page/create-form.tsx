@@ -65,10 +65,10 @@ export const CreateForm = ({ className }: Props) => {
         )}
       />
       <Field orientation="horizontal">
-        <Button disabled={isLoading}>作成</Button>
         <Button variant="secondary" asChild>
           <Link href="/">キャンセル</Link>
         </Button>
+        <Button disabled={isLoading}>作成</Button>
       </Field>
     </form>
   );

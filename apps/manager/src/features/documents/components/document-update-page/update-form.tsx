@@ -111,7 +111,6 @@ export const UpdateForm = ({ projectId, document, className }: Props) => {
         )}
       />
       <Field orientation="horizontal">
-        <Button disabled={isLoading}>更新</Button>
         <Button variant="secondary" asChild>
           <Link href={`/projects/${projectId}/documents`}>キャンセル</Link>
         </Button>
@@ -125,6 +124,7 @@ export const UpdateForm = ({ projectId, document, className }: Props) => {
             削除
           </Button>
         </DeleteButtonWrapper>
+        <Button disabled={isLoading}>更新</Button>
       </Field>
     </form>
   );

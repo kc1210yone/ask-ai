@@ -65,10 +65,10 @@ export const UpdateForm = ({ project, className }: Props) => {
         )}
       />
       <Field orientation="horizontal">
-        <Button disabled={isLoading}>変更</Button>
         <Button variant="secondary" asChild>
           <Link href={`/projects/${project.id}/dashboard`}>キャンセル</Link>
         </Button>
+        <Button disabled={isLoading}>変更</Button>
       </Field>
     </form>
   );
