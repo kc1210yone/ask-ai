@@ -17,7 +17,7 @@ export const deleteDocument = async (
   const user = await findUserOrRedirect(authUser.userId);
 
   const project = await prisma.project.findUnique({
-    where: { id: projectId },
+    where: { id: projectId, deletedAt: null },
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
@@ -25,15 +25,18 @@ export const deleteDocument = async (
   }
 
   const document = await prisma.document.findUnique({
-    where: { id: documentId },
+    where: { id: documentId, deletedAt: null },
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!document || document.projectId !== projectId) {
     return { status: 'error' };
   }
 
-  // TODO: 論理削除にする
-  await prisma.document.delete({ where: { id: documentId } });
+  // TODO
+  await prisma.document.update({
+    where: { id: documentId },
+    data: { deletedAt: new Date() },
+  });
 
   revalidatePath(`/projects/${projectId}/documents`);
 

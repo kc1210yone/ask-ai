@@ -12,7 +12,7 @@ export const RootPage = async (): Promise<ReactNode> => {
   const user = await findUserOrRedirect(authUser.userId);
 
   const projects = await prisma.project.findMany({
-    where: { userId: user.id },
+    where: { userId: user.id, deletedAt: null },
     orderBy: { createdAt: 'asc' },
   });
 

@@ -15,6 +15,8 @@ export const findUserOrRedirect = async (
 
 export const findUser = cache(
   async (cognitoUserId: string): Promise<User | null> => {
-    return await prisma.user.findUnique({ where: { cognitoUserId } });
+    return await prisma.user.findUnique({
+      where: { cognitoUserId, deletedAt: null },
+    });
   },
 );

@@ -24,7 +24,7 @@ export const DashboardPage = async ({
   const user = await findUserOrRedirect(authUser.userId);
 
   const project = await prisma.project.findUnique({
-    where: { id: projectId },
+    where: { id: projectId, deletedAt: null },
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
@@ -34,11 +34,13 @@ export const DashboardPage = async ({
   const documentCount = await prisma.document.count({
     where: {
       projectId: project.id,
+      deletedAt: null,
     },
   });
   const faqCount = await prisma.faq.count({
     where: {
       projectId: project.id,
+      deletedAt: null,
     },
   });
 

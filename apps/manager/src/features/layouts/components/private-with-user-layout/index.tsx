@@ -21,7 +21,7 @@ export const PrivateWithUserLayout = async ({
   let project = null;
   if (projectId) {
     project = await prisma.project.findUnique({
-      where: { id: projectId },
+      where: { id: projectId, deletedAt: null },
     });
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!project || project.userId !== user.id) {
@@ -30,7 +30,7 @@ export const PrivateWithUserLayout = async ({
   }
 
   const projects = await prisma.project.findMany({
-    where: { userId: user.id },
+    where: { userId: user.id, deletedAt: null },
     orderBy: { createdAt: 'asc' },
   });
 

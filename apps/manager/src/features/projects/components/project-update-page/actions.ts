@@ -24,7 +24,7 @@ export const formAction = async (
   const user = await findUserOrRedirect(authUser.userId);
 
   const project = await prisma.project.findUnique({
-    where: { id: projectId },
+    where: { id: projectId, deletedAt: null },
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {

@@ -18,7 +18,7 @@ export const DocumentUpdatePage = async ({
   const user = await findUserOrRedirect(authUser.userId);
 
   const project = await prisma.project.findUnique({
-    where: { id: projectId },
+    where: { id: projectId, deletedAt: null },
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
@@ -26,7 +26,7 @@ export const DocumentUpdatePage = async ({
   }
 
   const document = await prisma.document.findUnique({
-    where: { id: documentId },
+    where: { id: documentId, deletedAt: null },
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!document || document.projectId !== projectId) {
