@@ -37,9 +37,11 @@ export const PrivateWithUserLayout = async ({
   return (
     <SidebarProvider>
       <AppSidebar project={project} projects={projects} authUser={authUser} />
-      <div className="relative flex-1">
-        <SidebarTrigger className="absolute top-0 left-0" />
-        <main className="container mx-auto px-4 py-8">{children}</main>
+      <div className="min-w-0 flex-1">
+        <div className="bg-background sticky top-0 flex h-18 items-center border-b">
+          <SidebarTrigger />
+        </div>
+        <main className="container mx-auto p-8">{children}</main>
       </div>
     </SidebarProvider>
   );

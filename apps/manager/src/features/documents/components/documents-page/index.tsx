@@ -1,8 +1,10 @@
+import { PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Item } from './item';
+import { DocumentItem } from './document-item';
 import type { ReactNode } from 'react';
 import { Button } from '#src/components/ui/button';
+import { ItemGroup } from '#src/components/ui/item';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
@@ -31,16 +33,25 @@ export const DocumentsPage = async ({
   });
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold">ドキュメント</h2>
-      <Button asChild>
-        <Link href={`/projects/${projectId}/documents/create`}>新規作成</Link>
-      </Button>
-      <div>
-        {documents.map((document) => (
-          <Item key={document.id} projectId={projectId} document={document} />
-        ))}
+    <>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold">ドキュメント</h2>
+        <Button asChild>
+          <Link href={`/projects/${projectId}/documents/create`}>
+            <PencilIcon />
+            作成
+          </Link>
+        </Button>
       </div>
-    </div>
+      <ItemGroup className="mt-8">
+        {documents.map((document) => (
+          <DocumentItem
+            key={document.id}
+            projectId={projectId}
+            document={document}
+          />
+        ))}
+      </ItemGroup>
+    </>
   );
 };

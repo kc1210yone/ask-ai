@@ -36,7 +36,7 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
   return (
     <SidebarHeader>
       <Link href="/">
-        <h1 className="flex justify-center border-b py-4 text-xl font-semibold">
+        <h1 className="flex h-16 items-center justify-center border-b text-xl font-semibold">
           Ask AI 管理画面
         </h1>
       </Link>
