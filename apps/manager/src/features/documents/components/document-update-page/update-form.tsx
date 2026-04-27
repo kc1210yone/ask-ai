@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { deleteDocument } from '../../actions';
+import { DeleteButtonWrapper } from '../delete-button-wrapper';
 import { formAction } from './actions';
 import { FormSchema, type FormSchemaType } from './types';
 import type { Document } from '#src/generated/prisma/client';
@@ -52,9 +52,16 @@ export const UpdateForm = ({ projectId, document, className }: Props) => {
     toast.success('ドキュメントを更新しました。');
   };
 
-  const onDeleteClick = async (): Promise<void> => {
+  const preDelete = (): void => {
     setIsLoading(true);
-    await deleteDocument(projectId, document.id);
+  };
+
+  const postDelete = (status: 'ok' | 'error'): void => {
+    if (status === 'error') {
+      toast.error('ドキュメントの削除に失敗しました。');
+      setIsLoading(false);
+      return;
+    }
     router.push(`/projects/${projectId}/documents`);
     toast.success('ドキュメントを削除しました。');
   };
@@ -108,14 +115,16 @@ export const UpdateForm = ({ projectId, document, className }: Props) => {
         <Button variant="secondary" asChild>
           <Link href={`/projects/${projectId}/documents`}>キャンセル</Link>
         </Button>
-        <Button
-          disabled={isLoading}
-          type="button"
-          variant="destructive"
-          onClick={() => void onDeleteClick()}
+        <DeleteButtonWrapper
+          projectId={projectId}
+          documentId={document.id}
+          preDelete={preDelete}
+          postDelete={postDelete}
         >
-          削除
-        </Button>
+          <Button disabled={isLoading} type="button" variant="destructive">
+            削除
+          </Button>
+        </DeleteButtonWrapper>
       </Field>
     </form>
   );

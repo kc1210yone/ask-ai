@@ -32,6 +32,7 @@ export const deleteDocument = async (
     return { status: 'error' };
   }
 
+  // TODO: 論理削除にする
   await prisma.document.delete({ where: { id: documentId } });
 
   revalidatePath(`/projects/${projectId}/documents`);
