@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { formAction } from './actions';
 import { FormSchema, type FormSchemaType } from './types';
+import type { Document } from '#src/generated/prisma/client';
 import { Button } from '#src/components/ui/button';
 import {
   Field,
@@ -21,11 +22,11 @@ import { cn } from '#src/lib/utils';
 
 interface Props {
   projectId: string;
-  documentId: string;
+  document: Document;
   className?: string | undefined;
 }
 
-export const UpdateForm = ({ projectId, documentId, className }: Props) => {
+export const UpdateForm = ({ projectId, document, className }: Props) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -33,21 +34,21 @@ export const UpdateForm = ({ projectId, documentId, className }: Props) => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: '',
-      content: '',
+      title: document.title,
+      content: document.content,
     },
   });
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
-    const response = await formAction(projectId, documentId, data);
+    const response = await formAction(projectId, document.id, data);
     if (response.status === 'error') {
-      toast.error('ドキュメントの作成に失敗しました。');
+      toast.error('ドキュメントの更新に失敗しました。');
       setIsLoading(false);
       return;
     }
     router.push(`/projects/${projectId}/documents`);
-    toast.success('ドキュメントを作成しました。');
+    toast.success('ドキュメントを更新しました。');
   };
 
   return (
@@ -95,12 +96,17 @@ export const UpdateForm = ({ projectId, documentId, className }: Props) => {
         )}
       />
       <Field orientation="horizontal">
-        <Button disabled={isLoading}>作成</Button>
+        <Button disabled={isLoading}>更新</Button>
         <Button variant="secondary" asChild>
           <Link href={`/projects/${projectId}/documents`}>キャンセル</Link>
         </Button>
         <Button variant="destructive" asChild>
-          <Link href={`/projects/${projectId}/documents`}>削除</Link>
+          <Link
+            // TODO
+            href={`/projects/${projectId}/documents`}
+          >
+            削除
+          </Link>
         </Button>
       </Field>
     </form>

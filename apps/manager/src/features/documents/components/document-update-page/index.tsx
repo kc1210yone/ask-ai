@@ -1,26 +1,45 @@
+import { redirect } from 'next/navigation';
 import { UpdateForm } from './update-form';
 import type { ReactNode } from 'react';
+import { getAuthUserOrRedirect } from '#src/features/auth';
+import { findUserOrRedirect } from '#src/features/users';
+import { prisma } from '#src/lib/prisma';
 
 interface Props {
   projectId: string;
   documentId: string;
 }
 
-export const DocumentUpdatePage = ({
+export const DocumentUpdatePage = async ({
   projectId,
   documentId,
-}: Props): ReactNode => {
+}: Props): Promise<ReactNode> => {
+  const authUser = await getAuthUserOrRedirect();
+  const user = await findUserOrRedirect(authUser.userId);
+
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+  });
+  // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+  if (!project || project.userId !== user.id) {
+    redirect('/');
+  }
+
+  const document = await prisma.document.findUnique({
+    where: { id: documentId },
+  });
+  // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+  if (!document || document.projectId !== projectId) {
+    redirect(`/projects/${projectId}/documents`);
+  }
+
   return (
     <>
-      <h2 className="text-xl font-semibold">ドキュメント作成</h2>
+      <h2 className="text-xl font-semibold">ドキュメント編集</h2>
       <p className="mt-4">
         ドキュメントは、AIアシスタントが参照する単体の情報です。
       </p>
-      <UpdateForm
-        projectId={projectId}
-        documentId={documentId}
-        className="mt-8"
-      />
+      <UpdateForm projectId={projectId} document={document} className="mt-8" />
     </>
   );
 };

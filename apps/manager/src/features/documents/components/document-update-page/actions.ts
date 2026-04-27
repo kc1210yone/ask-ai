@@ -38,7 +38,7 @@ export const formAction = async (
     where: { id: documentId },
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-  if (!document || document.projectId !== project.id) {
+  if (!document || document.projectId !== projectId) {
     return {
       status: 'error',
     };
@@ -53,6 +53,7 @@ export const formAction = async (
   });
 
   revalidatePath(`/projects/${projectId}/documents`);
+  revalidatePath(`/projects/${projectId}/documents/${documentId}/update`);
 
   return {
     status: 'ok',
