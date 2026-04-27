@@ -32,7 +32,6 @@ export const deleteDocument = async (
     return { status: 'error' };
   }
 
-  // TODO
   await prisma.document.update({
     where: { id: documentId },
     data: { deletedAt: new Date() },

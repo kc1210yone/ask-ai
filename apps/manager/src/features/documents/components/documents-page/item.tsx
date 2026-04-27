@@ -3,13 +3,13 @@ import type { Document } from '#src/generated/prisma/client';
 
 interface Props {
   projectId: string;
-  document: Pick<Document, 'id' | 'title' | 'content'>;
+  document: Document;
 }
 
 export const Item = ({ projectId, document }: Props) => {
   return (
-    <div key={document.id}>
-      {document.title}, {document.content}
+    <div>
+      {document.title}
       <Link href={`/projects/${projectId}/documents/${document.id}/update`}>
         編集
       </Link>

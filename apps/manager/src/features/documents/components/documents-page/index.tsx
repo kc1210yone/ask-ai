@@ -26,7 +26,6 @@ export const DocumentsPage = async ({
   }
 
   const documents = await prisma.document.findMany({
-    select: { id: true, title: true, content: true },
     where: { projectId: project.id, deletedAt: null },
     orderBy: { createdAt: 'desc' },
   });
