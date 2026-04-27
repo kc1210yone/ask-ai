@@ -4,6 +4,7 @@ import { CheckIcon, MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { ReactNode } from 'react';
 import { Button } from '#src/components/ui/button';
+import { ButtonGroup } from '#src/components/ui/button-group';
 import {
   Dialog,
   DialogClose,
@@ -30,9 +31,9 @@ export const ThemeButtonWrapper = ({ children }: Props): ReactNode => {
           <DialogTitle>テーマ設定</DialogTitle>
           <DialogDescription>テーマを選択してください。</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-4">
+        <ButtonGroup orientation="vertical" className="w-full">
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => {
               setTheme('light');
             }}
@@ -42,7 +43,7 @@ export const ThemeButtonWrapper = ({ children }: Props): ReactNode => {
             {theme === 'light' && <CheckIcon />}
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => {
               setTheme('dark');
             }}
@@ -52,7 +53,7 @@ export const ThemeButtonWrapper = ({ children }: Props): ReactNode => {
             {theme === 'dark' && <CheckIcon />}
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => {
               setTheme('system');
             }}
@@ -61,7 +62,7 @@ export const ThemeButtonWrapper = ({ children }: Props): ReactNode => {
             システム
             {theme === 'system' && <CheckIcon />}
           </Button>
-        </div>
+        </ButtonGroup>
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button">OK</Button>
