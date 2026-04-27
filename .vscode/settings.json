@@ -15,4 +15,7 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "main"
+  ],
 }

@@ -6,7 +6,7 @@ interface Props {
   faqId: string;
 }
 
-export const FaqUpdatePage = async ({ projectId, faqId }: Props) => {
+export const FaqUpdatePage = ({ projectId, faqId }: Props) => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
