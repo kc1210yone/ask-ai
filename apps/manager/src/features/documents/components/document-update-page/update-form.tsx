@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { deleteDocument } from '../../actions';
 import { formAction } from './actions';
 import { FormSchema, type FormSchemaType } from './types';
 import type { Document } from '#src/generated/prisma/client';
@@ -49,6 +50,13 @@ export const UpdateForm = ({ projectId, document, className }: Props) => {
     }
     router.push(`/projects/${projectId}/documents`);
     toast.success('ドキュメントを更新しました。');
+  };
+
+  const onDeleteClick = async (): Promise<void> => {
+    setIsLoading(true);
+    await deleteDocument(projectId, document.id);
+    router.push(`/projects/${projectId}/documents`);
+    toast.success('ドキュメントを削除しました。');
   };
 
   return (
@@ -100,13 +108,13 @@ export const UpdateForm = ({ projectId, document, className }: Props) => {
         <Button variant="secondary" asChild>
           <Link href={`/projects/${projectId}/documents`}>キャンセル</Link>
         </Button>
-        <Button variant="destructive" asChild>
-          <Link
-            // TODO
-            href={`/projects/${projectId}/documents`}
-          >
-            削除
-          </Link>
+        <Button
+          disabled={isLoading}
+          type="button"
+          variant="destructive"
+          onClick={() => void onDeleteClick()}
+        >
+          削除
         </Button>
       </Field>
     </form>
