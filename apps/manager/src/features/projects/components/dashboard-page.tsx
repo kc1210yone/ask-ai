@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import {
   Card,
@@ -28,7 +28,7 @@ export const DashboardPage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
-    redirect('/');
+    notFound();
   }
 
   const documentCount = await prisma.document.count({

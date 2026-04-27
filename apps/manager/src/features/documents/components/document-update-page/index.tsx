@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { UpdateForm } from './update-form';
 import type { ReactNode } from 'react';
 import { getAuthUserOrRedirect } from '#src/features/auth';
@@ -22,7 +22,7 @@ export const DocumentUpdatePage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
-    redirect('/');
+    notFound();
   }
 
   const document = await prisma.document.findUnique({
@@ -30,7 +30,7 @@ export const DocumentUpdatePage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!document || document.projectId !== projectId) {
-    redirect(`/projects/${projectId}/documents`);
+    notFound();
   }
 
   return (

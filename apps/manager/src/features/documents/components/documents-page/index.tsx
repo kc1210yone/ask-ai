@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { Item } from './item';
 import type { ReactNode } from 'react';
 import { Button } from '#src/components/ui/button';
@@ -22,7 +22,7 @@ export const DocumentsPage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
-    redirect('/');
+    notFound();
   }
 
   const documents = await prisma.document.findMany({

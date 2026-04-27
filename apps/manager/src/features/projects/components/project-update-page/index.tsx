@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { UpdateForm } from './update-form';
 import type { ReactNode } from 'react';
 import { getAuthUserOrRedirect } from '#src/features/auth';
@@ -20,7 +20,7 @@ export const ProjectUpdatePage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
-    redirect('/');
+    notFound();
   }
 
   return (

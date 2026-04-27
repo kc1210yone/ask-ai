@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { AppSidebar } from './app-sidebar';
 import type { ReactNode } from 'react';
 import { SidebarProvider, SidebarTrigger } from '#src/components/ui/sidebar';
@@ -25,7 +25,7 @@ export const PrivateWithUserLayout = async ({
     });
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!project || project.userId !== user.id) {
-      redirect('/');
+      notFound();
     }
   }
 
