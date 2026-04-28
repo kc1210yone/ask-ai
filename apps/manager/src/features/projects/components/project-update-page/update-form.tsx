@@ -8,10 +8,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { formAction } from './actions';
 import { FormSchema, type FormSchemaType } from './types';
-import type { Project } from '#src/generated/prisma/client';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
+import type { Project } from '#src/generated/prisma/client';
 import { cn } from '#src/lib/utils';
 
 interface Props {

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import invariant from 'tiny-invariant';
 import type { ReactNode } from 'react';
+import invariant from 'tiny-invariant';
 import { Button } from '#src/components/ui/button';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';

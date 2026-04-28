@@ -4,7 +4,6 @@ import { ChevronDownIcon, FolderIcon, FolderPlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
-import type { Project } from '#src/generated/prisma/client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '#src/components/ui/sidebar';
+import type { Project } from '#src/generated/prisma/client';
 
 interface Props {
   project: Project | null;

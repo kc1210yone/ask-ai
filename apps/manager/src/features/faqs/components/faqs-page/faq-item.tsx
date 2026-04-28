@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useState, type ReactNode } from 'react';
 import { toast } from 'sonner';
 import { DeleteButtonWrapper } from '../delete-button-wrapper';
-import type { Faq } from '#src/generated/prisma/client';
 import { Button } from '#src/components/ui/button';
 import { ButtonGroup } from '#src/components/ui/button-group';
 import {
@@ -15,6 +14,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from '#src/components/ui/item';
+import type { Faq } from '#src/generated/prisma/client';
 import { cn } from '#src/lib/utils';
 
 interface Props {

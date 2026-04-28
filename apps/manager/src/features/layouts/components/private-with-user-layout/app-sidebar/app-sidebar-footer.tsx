@@ -4,7 +4,6 @@ import { signOut } from 'aws-amplify/auth';
 import { LogOutIcon, UserCogIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import type { AuthUser } from '#src/features/auth';
 import type { ReactNode } from 'react';
 import {
   DropdownMenu,
@@ -18,6 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '#src/components/ui/sidebar';
+import type { AuthUser } from '#src/features/auth';
 
 interface Props {
   authUser: AuthUser;

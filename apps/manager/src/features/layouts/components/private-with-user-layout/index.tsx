@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { AppSidebar } from './app-sidebar';
 import type { ReactNode } from 'react';
+import { AppSidebar } from './app-sidebar';
 import { SidebarProvider, SidebarTrigger } from '#src/components/ui/sidebar';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';

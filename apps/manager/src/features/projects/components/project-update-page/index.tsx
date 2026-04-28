@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { UpdateForm } from './update-form';
 import type { ReactNode } from 'react';
+import { UpdateForm } from './update-form';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';

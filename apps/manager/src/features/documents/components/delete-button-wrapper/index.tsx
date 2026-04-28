@@ -1,7 +1,7 @@
 'use client';
 
-import { deleteDocument } from './actions';
 import type { ReactNode } from 'react';
+import { deleteDocument } from './actions';
 import {
   AlertDialog,
   AlertDialogAction,

@@ -1,7 +1,7 @@
 'use client';
 
-import { deleteFaq } from './actions';
 import type { ReactNode } from 'react';
+import { deleteFaq } from './actions';
 import {
   AlertDialog,
   AlertDialogAction,

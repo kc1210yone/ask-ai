@@ -1,8 +1,8 @@
 import { PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { DocumentItem } from './document-item';
 import type { ReactNode } from 'react';
+import { DocumentItem } from './document-item';
 import { Button } from '#src/components/ui/button';
 import { ItemGroup } from '#src/components/ui/item';
 import { getAuthUserOrRedirect } from '#src/features/auth';

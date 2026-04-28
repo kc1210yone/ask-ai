@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 import { DeleteButtonWrapper } from '../delete-button-wrapper';
 import { formAction } from './actions';
 import { FormSchema, type FormSchemaType } from './types';
-import type { Document } from '#src/generated/prisma/client';
 import { Button } from '#src/components/ui/button';
 import {
   Field,
@@ -19,6 +18,7 @@ import {
 } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { Textarea } from '#src/components/ui/textarea';
+import type { Document } from '#src/generated/prisma/client';
 import { cn } from '#src/lib/utils';
 
 interface Props {
