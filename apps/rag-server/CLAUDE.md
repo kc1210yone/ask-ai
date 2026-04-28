@@ -13,15 +13,15 @@ AIアシスタントが回答する時に参照するデータをベクトル化
 
 ## コードスタイル
 
-- Ruff (全ルールON)でチェック。
-- mypy (strict)でチェック。
-- ただし、現状ソースコードはない。
+lintやfixのコマンドを用いてコードのスタイリングを行うこと。
 
 ## コマンド
 
 Workspaceのディレクトリではなくプロジェクトルートのディレクトリから実行。
 
 - `make -C ./apps/rag-server start`: RAGサーバ（Chroma）起動。Chromaの不具合でシグナル送信で終了しないため、終了したい場合は人間に依頼すること。
+- `make -C ./apps/rag-server lint`: Ruff check, Ruff format, mypyによるチェックを行う。コードの変更はしない。
+- `make -C ./apps/rag-server fix`: Ruff check, Ruff formatによるコードの自動修正を行う。
 
 ## アーキテクチャ
 
