@@ -1,11 +1,12 @@
 import nextEslintPluginNext from '@next/eslint-plugin-next';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import eslintPluginReact from 'eslint-plugin-react';
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
 import rootConfig from '../../eslint.config.ts';
 
 export default defineConfig(
   rootConfig,
+  globalIgnores(['src/components/ui/']),
   {
     ...eslintPluginReact.configs.flat['recommended'],
     settings: {
