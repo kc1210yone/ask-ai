@@ -8,24 +8,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(cuid()) @db.VarChar(25)
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
   deletedAt     DateTime? @map("deleted_at")
-  cognitoUserId String    @unique @map("cognito_user_id")
+  cognitoUserId String    @unique @map("cognito_user_id") @db.VarChar(36)
   projects      Project[]
 
   @@map("users")
 }
 
 model Project {
-  id        String     @id @default(cuid())
+  id        String     @id @default(cuid()) @db.VarChar(25)
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
   deletedAt DateTime?  @map("deleted_at")
-  userId    String     @map("user_id")
+  userId    String     @map("user_id") @db.VarChar(25)
   user      User       @relation(fields: [userId], references: [id])
-  name      String
+  name      String     @db.VarChar(255)
   documents Document[]
   faqs      Faq[]
 
@@ -33,26 +33,26 @@ model Project {
 }
 
 model Document {
-  id        String    @id @default(cuid())
+  id        String    @id @default(cuid()) @db.VarChar(25)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
-  projectId String    @map("project_id")
+  projectId String    @map("project_id") @db.VarChar(25)
   project   Project   @relation(fields: [projectId], references: [id])
-  title     String
+  title     String    @db.VarChar(255)
   content   String    @db.Text
 
   @@map("documents")
 }
 
 model Faq {
-  id        String    @id @default(cuid())
+  id        String    @id @default(cuid()) @db.VarChar(25)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
-  projectId String    @map("project_id")
+  projectId String    @map("project_id") @db.VarChar(25)
   project   Project   @relation(fields: [projectId], references: [id])
-  question  String
+  question  String    @db.VarChar(255)
   answer    String    @db.Text
 
   @@map("faqs")
