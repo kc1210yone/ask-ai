@@ -1,10 +1,18 @@
 import 'server-only';
-import { PencilIcon } from 'lucide-react';
+import { FileQuestionMarkIcon, PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { FaqItem } from './faq-item';
 import { Button } from '#src/components/ui/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '#src/components/ui/empty';
 import { ItemGroup } from '#src/components/ui/item';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
@@ -35,18 +43,42 @@ export const FaqsPage = async ({ projectId }: Props): Promise<ReactNode> => {
     <>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">FAQ</h2>
-        <Button asChild>
-          <Link href={`/projects/${projectId}/faqs/create`}>
-            <PencilIcon />
-            作成
-          </Link>
-        </Button>
+        {faqs.length > 0 && (
+          <Button asChild>
+            <Link href={`/projects/${projectId}/faqs/create`}>
+              <PencilIcon />
+              作成
+            </Link>
+          </Button>
+        )}
       </div>
-      <ItemGroup className="mt-8">
-        {faqs.map((faq) => (
-          <FaqItem key={faq.id} projectId={projectId} faq={faq} />
-        ))}
-      </ItemGroup>
+      {faqs.length === 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <FileQuestionMarkIcon />
+            </EmptyMedia>
+            <EmptyTitle>FAQがまだ作成されていません</EmptyTitle>
+            <EmptyDescription>
+              FAQは、AIアシスタントが参照する質問と回答のペアです。
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button asChild>
+              <Link href={`/projects/${projectId}/faqs/create`}>
+                <PencilIcon />
+                作成
+              </Link>
+            </Button>
+          </EmptyContent>
+        </Empty>
+      ) : (
+        <ItemGroup className="mt-8">
+          {faqs.map((faq) => (
+            <FaqItem key={faq.id} projectId={projectId} faq={faq} />
+          ))}
+        </ItemGroup>
+      )}
     </>
   );
 };

@@ -1,10 +1,18 @@
 import 'server-only';
-import { PencilIcon } from 'lucide-react';
+import { FileIcon, PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { DocumentItem } from './document-item';
 import { Button } from '#src/components/ui/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '#src/components/ui/empty';
 import { ItemGroup } from '#src/components/ui/item';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
@@ -37,22 +45,46 @@ export const DocumentsPage = async ({
     <>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">ドキュメント</h2>
-        <Button asChild>
-          <Link href={`/projects/${projectId}/documents/create`}>
-            <PencilIcon />
-            作成
-          </Link>
-        </Button>
+        {documents.length > 0 && (
+          <Button asChild>
+            <Link href={`/projects/${projectId}/documents/create`}>
+              <PencilIcon />
+              作成
+            </Link>
+          </Button>
+        )}
       </div>
-      <ItemGroup className="mt-8">
-        {documents.map((document) => (
-          <DocumentItem
-            key={document.id}
-            projectId={projectId}
-            document={document}
-          />
-        ))}
-      </ItemGroup>
+      {documents.length === 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <FileIcon />
+            </EmptyMedia>
+            <EmptyTitle>ドキュメントがまだ作成されていません</EmptyTitle>
+            <EmptyDescription>
+              ドキュメントは、AIアシスタントが参照する単体の情報です。
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button asChild>
+              <Link href={`/projects/${projectId}/documents/create`}>
+                <PencilIcon />
+                作成
+              </Link>
+            </Button>
+          </EmptyContent>
+        </Empty>
+      ) : (
+        <ItemGroup className="mt-8">
+          {documents.map((document) => (
+            <DocumentItem
+              key={document.id}
+              projectId={projectId}
+              document={document}
+            />
+          ))}
+        </ItemGroup>
+      )}
     </>
   );
 };
