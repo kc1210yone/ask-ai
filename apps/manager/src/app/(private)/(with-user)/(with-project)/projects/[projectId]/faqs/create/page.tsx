@@ -1,3 +1,4 @@
+import 'server-only';
 import type { ReactNode } from 'react';
 import { FaqCreatePage } from '#src/features/faqs';
 

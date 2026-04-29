@@ -1,3 +1,4 @@
+import 'server-only';
 import type { ReactNode } from 'react';
 import { PrivateWithUserLayout } from '#src/features/layouts';
 

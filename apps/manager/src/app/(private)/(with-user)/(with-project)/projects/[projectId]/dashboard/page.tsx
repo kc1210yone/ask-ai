@@ -1,3 +1,4 @@
+import 'server-only';
 import type { ReactNode } from 'react';
 import { DashboardPage } from '#src/features/projects';
 
