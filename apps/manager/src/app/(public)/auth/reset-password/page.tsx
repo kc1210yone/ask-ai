@@ -1,7 +1,9 @@
+import 'server-only';
 import type { ReactNode } from 'react';
+import { ResetPasswordPage } from '#src/features/auth';
 
 const Page = (): ReactNode => {
-  return null;
+  return <ResetPasswordPage />;
 };
 
 export default Page;

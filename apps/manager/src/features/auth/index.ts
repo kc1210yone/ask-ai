@@ -4,5 +4,7 @@ export { AuthLayout } from './components/auth-layout';
 export { LoginPage } from './components/login-page';
 export { SignUpPage } from './components/sign-up-page';
 export { SignUpConfirmPage } from './components/sign-up-confirm-page';
+export { ResetPasswordPage } from './components/reset-password-page';
+export { ResetPasswordConfirmPage } from './components/reset-password-confirm-page';
 export { getAuthUserOrRedirect, getAuthUser } from './server';
 export type { AuthUser } from './types/auth-user';
