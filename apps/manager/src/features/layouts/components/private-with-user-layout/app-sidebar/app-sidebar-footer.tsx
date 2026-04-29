@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import { signOut } from 'aws-amplify/auth';
 import { LogOutIcon, UserCogIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';

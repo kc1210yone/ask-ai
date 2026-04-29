@@ -1,3 +1,4 @@
+import 'server-only';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';

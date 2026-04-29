@@ -1,3 +1,4 @@
+import 'server-only';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import invariant from 'tiny-invariant';
 import { PrismaClient } from '#src/generated/prisma/client';

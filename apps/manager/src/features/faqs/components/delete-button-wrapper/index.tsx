@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import type { ReactNode } from 'react';
 import { deleteFaq } from './actions';
 import {

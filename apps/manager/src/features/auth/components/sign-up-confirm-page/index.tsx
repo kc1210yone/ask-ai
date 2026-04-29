@@ -1,3 +1,4 @@
+import 'server-only';
 import { type ReactNode } from 'react';
 import { ConfirmForm } from './confirm-form';
 import {

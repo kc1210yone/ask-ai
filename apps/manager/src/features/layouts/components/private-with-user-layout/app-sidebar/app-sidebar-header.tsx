@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import { ChevronDownIcon, FolderIcon, FolderPlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';

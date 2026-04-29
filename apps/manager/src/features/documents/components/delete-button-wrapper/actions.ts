@@ -1,5 +1,6 @@
 'use server';
 
+import 'server-only';
 import { revalidatePath } from 'next/cache';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';

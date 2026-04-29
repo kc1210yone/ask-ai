@@ -1,3 +1,4 @@
+import 'server-only';
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
 import { AuthError } from 'aws-amplify/auth';
 import { fetchUserAttributes, getCurrentUser } from 'aws-amplify/auth/server';

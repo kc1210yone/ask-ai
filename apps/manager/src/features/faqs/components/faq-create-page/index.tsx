@@ -1,3 +1,4 @@
+import 'server-only';
 import type { ReactNode } from 'react';
 import { CreateForm } from './create-form';
 

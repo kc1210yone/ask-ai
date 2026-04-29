@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import { PencilIcon, TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type ReactNode } from 'react';

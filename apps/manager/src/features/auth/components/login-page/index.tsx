@@ -1,3 +1,4 @@
+import 'server-only';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { LoginForm } from './login-form';

@@ -1,5 +1,6 @@
 'use server';
 
+import 'server-only';
 import { revalidatePath } from 'next/cache';
 import { FormSchema, type FormSchemaType } from './types';
 import { getAuthUserOrRedirect } from '#src/features/auth';

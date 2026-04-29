@@ -1,3 +1,4 @@
+import 'server-only';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { AppSidebar } from './app-sidebar';

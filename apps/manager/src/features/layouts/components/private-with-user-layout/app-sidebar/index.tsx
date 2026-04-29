@@ -1,3 +1,4 @@
+import 'server-only';
 import { type ReactNode } from 'react';
 import { AppSidebarContent } from './app-sidebar-content';
 import { AppSidebarFooter } from './app-sidebar-footer';

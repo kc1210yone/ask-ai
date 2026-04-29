@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import invariant from 'tiny-invariant';
 

@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import type { ReactNode } from 'react';
 import { deleteDocument } from './actions';
 import {

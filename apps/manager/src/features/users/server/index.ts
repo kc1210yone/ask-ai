@@ -1,3 +1,4 @@
+import 'server-only';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import type { User } from '#src/generated/prisma/client';

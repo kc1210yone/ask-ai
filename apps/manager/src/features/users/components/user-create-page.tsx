@@ -1,3 +1,4 @@
+import 'server-only';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { getAuthUserOrRedirect } from '#src/features/auth';

@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import { CheckIcon, MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { ReactNode } from 'react';

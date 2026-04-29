@@ -1,5 +1,6 @@
 'use client';
 
+import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthError, signUp } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
