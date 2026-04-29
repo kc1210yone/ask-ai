@@ -15,8 +15,13 @@ import { Input } from '#src/components/ui/input';
 import { useAuth } from '#src/features/auth/providers/auth-provider';
 
 const FormSchema = z.object({
-  username: z.email('有効なメールアドレスを入力してください。'),
-  password: z.string().min(1, 'パスワードを入力してください。'),
+  username: z
+    .email('有効なメールアドレスを入力してください。')
+    .max(254, '254文字以内で入力してください。'),
+  password: z
+    .string()
+    .min(1, 'パスワードを入力してください。')
+    .max(128, '128文字以内で入力してください。'),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 

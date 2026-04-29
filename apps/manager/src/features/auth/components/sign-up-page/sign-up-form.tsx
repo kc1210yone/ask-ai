@@ -16,8 +16,13 @@ import { useAuth } from '#src/features/auth/providers/auth-provider';
 
 const FormSchema = z
   .object({
-    username: z.email('有効なメールアドレスを入力してください。'),
-    password: z.string().min(8, 'パスワードは8文字以上で入力してください。'),
+    username: z
+      .email('有効なメールアドレスを入力してください。')
+      .max(254, '254文字以内で入力してください。'),
+    password: z
+      .string()
+      .min(8, 'パスワードは8文字以上で入力してください。')
+      .max(128, '128文字以内で入力してください。'),
     confirmPassword: z.string().min(1, '確認用パスワードを入力してください。'),
   })
   .refine((data) => data.password === data.confirmPassword, {

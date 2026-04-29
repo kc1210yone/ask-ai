@@ -20,7 +20,7 @@ import { Input } from '#src/components/ui/input';
 import { useAuth } from '#src/features/auth/providers/auth-provider';
 
 const FormSchema = z.object({
-  code: z.string().length(6, '確認コードは6桁です'),
+  code: z.string().length(6, '確認コードは6桁です。'),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
