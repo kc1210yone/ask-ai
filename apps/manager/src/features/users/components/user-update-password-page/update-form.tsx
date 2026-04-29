@@ -17,7 +17,7 @@ import { cn } from '#src/lib/utils';
 
 const FormSchema = z
   .object({
-    currentPassword: z
+    oldPassword: z
       .string()
       .min(1, '現在のパスワードを入力してください。')
       .max(128, '128文字以内で入力してください。'),
@@ -25,11 +25,13 @@ const FormSchema = z
       .string()
       .min(8, 'パスワードは8文字以上で入力してください。')
       .max(128, '128文字以内で入力してください。'),
-    confirmPassword: z.string().min(1, '確認用パスワードを入力してください。'),
+    confirmNewPassword: z
+      .string()
+      .min(1, '確認用パスワードを入力してください。'),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: 'パスワードが一致しません。',
-    path: ['confirmPassword'],
+    path: ['confirmNewPassword'],
   });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
@@ -45,9 +47,9 @@ export const UpdateForm = ({ className }: Props): ReactNode => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      currentPassword: '',
+      oldPassword: '',
       newPassword: '',
-      confirmPassword: '',
+      confirmNewPassword: '',
     },
   });
 
@@ -55,7 +57,7 @@ export const UpdateForm = ({ className }: Props): ReactNode => {
     setIsLoading(true);
     try {
       await updatePassword({
-        oldPassword: data.currentPassword,
+        oldPassword: data.oldPassword,
         newPassword: data.newPassword,
       });
     } catch (error) {
@@ -88,7 +90,7 @@ export const UpdateForm = ({ className }: Props): ReactNode => {
       className={cn('flex flex-col gap-4', className)}
     >
       <Controller
-        name="currentPassword"
+        name="oldPassword"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
@@ -122,7 +124,7 @@ export const UpdateForm = ({ className }: Props): ReactNode => {
         )}
       />
       <Controller
-        name="confirmPassword"
+        name="confirmNewPassword"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
