@@ -54,6 +54,9 @@ export const DocumentsPage = async ({
           </Button>
         )}
       </div>
+      <p className="text-muted-foreground mt-4">
+        ドキュメントは、AIアシスタントが参照する単体の情報です。
+      </p>
       {documents.length === 0 ? (
         <Empty>
           <EmptyHeader>

@@ -52,6 +52,9 @@ export const FaqsPage = async ({ projectId }: Props): Promise<ReactNode> => {
           </Button>
         )}
       </div>
+      <p className="text-muted-foreground mt-4">
+        FAQは、AIアシスタントが参照する質問と回答のペアです。
+      </p>
       {faqs.length === 0 ? (
         <Empty>
           <EmptyHeader>

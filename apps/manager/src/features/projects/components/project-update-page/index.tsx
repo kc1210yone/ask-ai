@@ -27,7 +27,9 @@ export const ProjectUpdatePage = async ({
   return (
     <>
       <h2 className="text-xl font-semibold">プロジェクト設定</h2>
-      <p className="mt-4">プロジェクトの設定を変更してください。</p>
+      <p className="text-muted-foreground mt-4">
+        プロジェクトの設定を変更してください。
+      </p>
       <UpdateForm project={project} className="mt-8" />
     </>
   );

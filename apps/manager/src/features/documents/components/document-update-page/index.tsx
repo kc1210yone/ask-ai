@@ -37,7 +37,7 @@ export const DocumentUpdatePage = async ({
   return (
     <>
       <h2 className="text-xl font-semibold">ドキュメント編集</h2>
-      <p className="mt-4">
+      <p className="text-muted-foreground mt-4">
         ドキュメントは、AIアシスタントが参照する単体の情報です。
       </p>
       <UpdateForm projectId={projectId} document={document} className="mt-8" />

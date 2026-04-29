@@ -1,9 +1,9 @@
 import 'server-only';
 import type { ReactNode } from 'react';
-import { UserUpdatePage } from '#src/features/users';
+import { UserUpdatePasswordPage } from '#src/features/users';
 
 const Page = (): ReactNode => {
-  return <UserUpdatePage />;
+  return <UserUpdatePasswordPage />;
 };
 
 export default Page;

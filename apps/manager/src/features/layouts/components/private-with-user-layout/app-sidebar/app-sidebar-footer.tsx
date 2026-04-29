@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { signOut } from 'aws-amplify/auth';
-import { LogOutIcon, UserCogIcon, UserIcon } from 'lucide-react';
+import { KeyIcon, LogOutIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -45,9 +45,9 @@ export const AppSidebarFooter = ({ authUser }: Props): ReactNode => {
             </SidebarMenuButton>
             <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
               <DropdownMenuItem asChild>
-                <Link href="/users/update">
-                  <UserCogIcon />
-                  アカウント設定
+                <Link href="/users/update-password">
+                  <KeyIcon />
+                  パスワード変更
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => void logout()}>

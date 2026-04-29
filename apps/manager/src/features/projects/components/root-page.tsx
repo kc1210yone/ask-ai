@@ -30,7 +30,9 @@ export const RootPage = async (): Promise<ReactNode> => {
   return (
     <div className="flex flex-col gap-6">
       <h2 className="text-xl font-semibold">プロジェクトを選択</h2>
-      <p>これから操作するプロジェクトを選択してください。</p>
+      <p className="text-muted-foreground">
+        これから操作するプロジェクトを選択してください。
+      </p>
       <div className="grid gap-4">
         {projects.map((project) => (
           <Button key={project.id} variant={'outline'} asChild>

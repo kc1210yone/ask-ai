@@ -53,7 +53,7 @@ export const LoginForm = (): ReactNode => {
       let errorMessage;
       switch (error.name) {
         case 'NotAuthorizedException':
-          errorMessage = 'ユーザー名かパスワードが間違っています。';
+          errorMessage = 'ユーザー名かパスワードが正しくありません。';
           break;
         default:
           errorMessage = 'ログインに失敗しました。';
