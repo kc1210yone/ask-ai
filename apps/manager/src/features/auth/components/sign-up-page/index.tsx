@@ -1,7 +1,7 @@
 import 'server-only';
 import Link from 'next/link';
 import { type ReactNode } from 'react';
-import { SignUpForm } from './sign-up-form';
+import { ComponentForm } from './component-form';
 import { Button } from '#src/components/ui/button';
 import {
   Card,
@@ -24,7 +24,7 @@ export const SignUpPage = (): ReactNode => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <SignUpForm />
+        <ComponentForm />
       </CardContent>
       <CardFooter>
         <p>

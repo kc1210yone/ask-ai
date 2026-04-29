@@ -1,7 +1,7 @@
 import 'server-only';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { UpdateForm } from './update-form';
+import { ComponentForm } from './component-form';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
@@ -40,7 +40,11 @@ export const DocumentUpdatePage = async ({
       <p className="text-muted-foreground mt-4">
         ドキュメントは、AIアシスタントが参照する単体の情報です。
       </p>
-      <UpdateForm projectId={projectId} document={document} className="mt-8" />
+      <ComponentForm
+        projectId={projectId}
+        document={document}
+        className="mt-8"
+      />
     </>
   );
 };

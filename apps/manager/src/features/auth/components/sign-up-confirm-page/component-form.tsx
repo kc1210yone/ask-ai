@@ -24,7 +24,7 @@ const FormSchema = z.object({
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-export const ConfirmForm = (): ReactNode => {
+export const ComponentForm = (): ReactNode => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);

@@ -25,7 +25,7 @@ interface Props {
   className?: string | undefined;
 }
 
-export const CreateForm = ({ projectId, className }: Props) => {
+export const ComponentForm = ({ projectId, className }: Props) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +33,8 @@ export const CreateForm = ({ projectId, className }: Props) => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      question: '',
-      answer: '',
+      title: '',
+      content: '',
     },
   });
 
@@ -42,12 +42,12 @@ export const CreateForm = ({ projectId, className }: Props) => {
     setIsLoading(true);
     const response = await formAction(projectId, data);
     if (response.status === 'error') {
-      toast.error('FAQの作成に失敗しました。');
+      toast.error('ドキュメントの作成に失敗しました。');
       setIsLoading(false);
       return;
     }
-    router.push(`/projects/${projectId}/faqs`);
-    toast.success('FAQを作成しました。');
+    router.push(`/projects/${projectId}/documents`);
+    toast.success('ドキュメントを作成しました。');
   };
 
   return (
@@ -56,39 +56,39 @@ export const CreateForm = ({ projectId, className }: Props) => {
       className={cn('flex flex-col gap-4', className)}
     >
       <Controller
-        name="question"
+        name="title"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>質問</FieldLabel>
+            <FieldLabel htmlFor={field.name}>タイトル</FieldLabel>
             <Input
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
-              placeholder="AIアシスタントはどうやってサイトに設置しますか？"
+              placeholder="プロダクトの説明"
             />
             <FieldDescription>
-              AIアシスタントに認識させるQ&AのQの部分です。ユーザーからの想定質問を入力します。
+              ドキュメントを探しやすくするためのタイトルです。AIアシスタントはタイトルは参照しません。
             </FieldDescription>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
       />
       <Controller
-        name="answer"
+        name="content"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>回答</FieldLabel>
+            <FieldLabel htmlFor={field.name}>内容</FieldLabel>
             <Textarea
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
-              placeholder="管理画面から取得できる短いコードをサイトのソースコードに貼り付けるだけでAIアシスタントを設置できます。"
+              placeholder="このプロダクトは、誰でも簡単にウェブサイトにAIアシスタントを設置できるサービスです。"
               className="h-50"
             />
             <FieldDescription>
-              AIアシスタントに認識させるQ&AのAの部分です。ユーザーからの想定質問への回答を入力します。
+              AIアシスタントに読み込ませたい内容を入力してください。
             </FieldDescription>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
@@ -96,7 +96,7 @@ export const CreateForm = ({ projectId, className }: Props) => {
       />
       <Field orientation="horizontal">
         <Button variant="secondary" asChild>
-          <Link href={`/projects/${projectId}/faqs`}>キャンセル</Link>
+          <Link href={`/projects/${projectId}/documents`}>キャンセル</Link>
         </Button>
         <Button disabled={isLoading}>作成</Button>
       </Field>

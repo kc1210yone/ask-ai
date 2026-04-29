@@ -1,7 +1,7 @@
 import 'server-only';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { LoginForm } from './login-form';
+import { ComponentForm } from './component-form';
 import { Button } from '#src/components/ui/button';
 import {
   Card,
@@ -22,7 +22,7 @@ export const LoginPage = (): ReactNode => {
         <CardDescription>管理画面にログインしてください。</CardDescription>
       </CardHeader>
       <CardContent>
-        <LoginForm />
+        <ComponentForm />
       </CardContent>
       <CardFooter>
         <p>

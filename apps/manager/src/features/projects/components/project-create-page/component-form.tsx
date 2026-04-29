@@ -19,7 +19,7 @@ interface Props {
   className?: string | undefined;
 }
 
-export const CreateForm = ({ className }: Props) => {
+export const ComponentForm = ({ className }: Props) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);

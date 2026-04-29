@@ -39,7 +39,7 @@ interface Props {
   className?: string | undefined;
 }
 
-export const UpdateForm = ({ className }: Props): ReactNode => {
+export const ComponentForm = ({ className }: Props): ReactNode => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);

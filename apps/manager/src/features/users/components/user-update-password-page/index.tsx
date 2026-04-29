@@ -1,6 +1,6 @@
 import 'server-only';
 import type { ReactNode } from 'react';
-import { UpdateForm } from './update-form';
+import { ComponentForm } from './component-form';
 
 export const UserUpdatePasswordPage = (): ReactNode => {
   return (
@@ -9,7 +9,7 @@ export const UserUpdatePasswordPage = (): ReactNode => {
       <p className="text-muted-foreground mt-4">
         新しいパスワードを入力してください。
       </p>
-      <UpdateForm className="mt-8" />
+      <ComponentForm className="mt-8" />
     </>
   );
 };

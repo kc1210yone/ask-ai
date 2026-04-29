@@ -1,7 +1,7 @@
 import 'server-only';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { UpdateForm } from './update-form';
+import { ComponentForm } from './component-form';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
 import { prisma } from '#src/lib/prisma';
@@ -30,7 +30,7 @@ export const ProjectUpdatePage = async ({
       <p className="text-muted-foreground mt-4">
         プロジェクトの設定を変更してください。
       </p>
-      <UpdateForm project={project} className="mt-8" />
+      <ComponentForm project={project} className="mt-8" />
     </>
   );
 };

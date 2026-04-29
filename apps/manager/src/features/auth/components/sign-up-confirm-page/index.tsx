@@ -1,6 +1,6 @@
 import 'server-only';
 import { type ReactNode } from 'react';
-import { ConfirmForm } from './confirm-form';
+import { ComponentForm } from './component-form';
 import {
   Card,
   CardContent,
@@ -21,7 +21,7 @@ export const SignUpConfirmPage = (): ReactNode => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ConfirmForm />
+        <ComponentForm />
       </CardContent>
     </Card>
   );

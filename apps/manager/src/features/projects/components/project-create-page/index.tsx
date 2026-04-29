@@ -1,6 +1,6 @@
 import 'server-only';
 import type { ReactNode } from 'react';
-import { CreateForm } from './create-form';
+import { ComponentForm } from './component-form';
 
 export const ProjectCreatePage = (): ReactNode => {
   return (
@@ -9,7 +9,7 @@ export const ProjectCreatePage = (): ReactNode => {
       <p className="text-muted-foreground mt-4">
         新規作成するプロジェクトの情報を入力してください。
       </p>
-      <CreateForm className="mt-8" />
+      <ComponentForm className="mt-8" />
     </>
   );
 };

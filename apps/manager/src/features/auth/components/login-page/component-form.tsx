@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthError, signUp } from 'aws-amplify/auth';
+import { AuthError, signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -14,24 +14,18 @@ import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { useAuth } from '#src/features/auth/providers/auth-provider';
 
-const FormSchema = z
-  .object({
-    username: z
-      .email('有効なメールアドレスを入力してください。')
-      .max(254, '254文字以内で入力してください。'),
-    password: z
-      .string()
-      .min(8, 'パスワードは8文字以上で入力してください。')
-      .max(128, '128文字以内で入力してください。'),
-    confirmPassword: z.string().min(1, '確認用パスワードを入力してください。'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'パスワードが一致しません。',
-    path: ['confirmPassword'],
-  });
+const FormSchema = z.object({
+  username: z
+    .email('有効なメールアドレスを入力してください。')
+    .max(254, '254文字以内で入力してください。'),
+  password: z
+    .string()
+    .min(1, 'パスワードを入力してください。')
+    .max(128, '128文字以内で入力してください。'),
+});
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-export const SignUpForm = (): ReactNode => {
+export const ComponentForm = (): ReactNode => {
   const router = useRouter();
 
   const { setUsername } = useAuth();
@@ -43,7 +37,6 @@ export const SignUpForm = (): ReactNode => {
     defaultValues: {
       username: '',
       password: '',
-      confirmPassword: '',
     },
   });
 
@@ -51,25 +44,19 @@ export const SignUpForm = (): ReactNode => {
     setIsLoading(true);
     let result;
     try {
-      result = await signUp({
+      result = await signIn({
         username: data.username,
         password: data.password,
-        options: {
-          userAttributes: {
-            email: data.username,
-          },
-          autoSignIn: true,
-        },
       });
     } catch (error) {
       invariant(error instanceof AuthError);
       let errorMessage;
       switch (error.name) {
-        case 'UsernameExistsException':
-          errorMessage = 'このユーザー名は既に使用されています。';
+        case 'NotAuthorizedException':
+          errorMessage = 'ユーザー名かパスワードが正しくありません。';
           break;
         default:
-          errorMessage = 'アカウント作成に失敗しました。';
+          errorMessage = 'ログインに失敗しました。';
           break;
       }
       toast.error(errorMessage, {
@@ -79,13 +66,16 @@ export const SignUpForm = (): ReactNode => {
       return;
     }
 
-    switch (result.nextStep.signUpStep) {
+    switch (result.nextStep.signInStep) {
+      case 'DONE':
+        router.push('/');
+        break;
       case 'CONFIRM_SIGN_UP':
         setUsername(data.username);
         router.push('/auth/sign-up-confirm');
         break;
       default:
-        throw new Error('Unexpected signUpStep.');
+        throw new Error('Unexpected signInStep.');
     }
   };
 
@@ -125,31 +115,14 @@ export const SignUpForm = (): ReactNode => {
               id={field.name}
               aria-invalid={fieldState.invalid}
               type="password"
-              autoComplete="new-password"
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      <Controller
-        name="confirmPassword"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>パスワード（確認）</FieldLabel>
-            <Input
-              {...field}
-              id={field.name}
-              aria-invalid={fieldState.invalid}
-              type="password"
-              autoComplete="new-password"
+              autoComplete="current-password"
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
       />
       <Field>
-        <Button disabled={isLoading}>アカウント作成</Button>
+        <Button disabled={isLoading}>ログイン</Button>
       </Field>
     </form>
   );

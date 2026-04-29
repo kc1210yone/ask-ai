@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { DeleteButtonWrapper } from '../delete-button-wrapper';
 import { formAction } from './actions';
 import { FormSchema, type FormSchemaType } from './types';
 import { Button } from '#src/components/ui/button';
@@ -19,16 +18,14 @@ import {
 } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { Textarea } from '#src/components/ui/textarea';
-import type { Faq } from '#src/generated/prisma/client';
 import { cn } from '#src/lib/utils';
 
 interface Props {
   projectId: string;
-  faq: Faq;
   className?: string | undefined;
 }
 
-export const UpdateForm = ({ projectId, faq, className }: Props) => {
+export const ComponentForm = ({ projectId, className }: Props) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -36,35 +33,21 @@ export const UpdateForm = ({ projectId, faq, className }: Props) => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      question: faq.question,
-      answer: faq.answer,
+      question: '',
+      answer: '',
     },
   });
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
-    const response = await formAction(projectId, faq.id, data);
+    const response = await formAction(projectId, data);
     if (response.status === 'error') {
-      toast.error('FAQの更新に失敗しました。');
+      toast.error('FAQの作成に失敗しました。');
       setIsLoading(false);
       return;
     }
     router.push(`/projects/${projectId}/faqs`);
-    toast.success('FAQを更新しました。');
-  };
-
-  const preDelete = (): void => {
-    setIsLoading(true);
-  };
-
-  const postDelete = (status: 'ok' | 'error'): void => {
-    if (status === 'error') {
-      toast.error('FAQの削除に失敗しました。');
-      setIsLoading(false);
-      return;
-    }
-    router.push(`/projects/${projectId}/faqs`);
-    toast.success('FAQを削除しました。');
+    toast.success('FAQを作成しました。');
   };
 
   return (
@@ -115,17 +98,7 @@ export const UpdateForm = ({ projectId, faq, className }: Props) => {
         <Button variant="secondary" asChild>
           <Link href={`/projects/${projectId}/faqs`}>キャンセル</Link>
         </Button>
-        <DeleteButtonWrapper
-          projectId={projectId}
-          faqId={faq.id}
-          preDelete={preDelete}
-          postDelete={postDelete}
-        >
-          <Button disabled={isLoading} type="button" variant="destructive">
-            削除
-          </Button>
-        </DeleteButtonWrapper>
-        <Button disabled={isLoading}>更新</Button>
+        <Button disabled={isLoading}>作成</Button>
       </Field>
     </form>
   );
