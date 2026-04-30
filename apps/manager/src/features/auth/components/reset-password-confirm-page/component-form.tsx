@@ -68,6 +68,10 @@ export const ComponentForm = (): ReactNode => {
         case 'CodeMismatchException':
           errorMessage = '確認コードが正しくありません。';
           break;
+        case 'LimitExceededException':
+          errorMessage =
+            '試行回数が多すぎます。しばらくしてから再度お試しください。';
+          break;
         default:
           errorMessage = 'パスワードのリセットに失敗しました。';
           break;

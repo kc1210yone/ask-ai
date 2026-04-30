@@ -53,6 +53,7 @@ export const ComponentForm = (): ReactNode => {
       let errorMessage;
       switch (error.name) {
         case 'NotAuthorizedException':
+          // 試行回数が多すぎる場合もここに来る。
           errorMessage = 'ユーザー名かパスワードが正しくありません。';
           break;
         default:

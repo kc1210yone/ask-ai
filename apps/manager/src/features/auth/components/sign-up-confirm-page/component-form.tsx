@@ -73,6 +73,7 @@ export const ComponentForm = (): ReactNode => {
       let errorMessage;
       switch (error.name) {
         case 'CodeMismatchException':
+          // 試行回数が多すぎる場合もここに来る。
           errorMessage = '確認コードが正しくありません。';
           break;
         case 'ExpiredCodeException':

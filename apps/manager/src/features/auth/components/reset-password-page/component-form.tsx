@@ -45,7 +45,12 @@ export const ComponentForm = (): ReactNode => {
     } catch (error) {
       invariant(error instanceof AuthError);
       let errorMessage;
+      console.log(error.name, error.message); // TODO
       switch (error.name) {
+        case 'LimitExceededException':
+          // TODO: 試行回数が多い時にここに来るか確かめる。
+          errorMessage = 'しばらくしてから再度お試しください。';
+          break;
         default:
           errorMessage = 'パスワードのリセットに失敗しました。';
           break;
