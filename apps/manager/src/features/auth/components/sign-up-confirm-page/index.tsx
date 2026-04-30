@@ -1,5 +1,7 @@
 import 'server-only';
+import { redirect } from 'next/navigation';
 import { type ReactNode } from 'react';
+import { getAuthUser } from '../../server';
 import { ComponentForm } from './component-form';
 import {
   Card,
@@ -9,7 +11,12 @@ import {
   CardTitle,
 } from '#src/components/ui/card';
 
-export const SignUpConfirmPage = (): ReactNode => {
+export const SignUpConfirmPage = async (): Promise<ReactNode> => {
+  const authUser = await getAuthUser();
+  if (authUser) {
+    redirect('/');
+  }
+
   return (
     <Card className="w-md">
       <CardHeader>

@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthError, signIn } from 'aws-amplify/auth';
+import { AuthError, resetPassword } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -18,10 +18,6 @@ const FormSchema = z.object({
   username: z
     .email('有効なメールアドレスを入力してください。')
     .max(254, '254文字以内で入力してください。'),
-  password: z
-    .string()
-    .min(1, 'パスワードを入力してください。')
-    .max(128, '128文字以内で入力してください。'),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
@@ -36,7 +32,6 @@ export const ComponentForm = (): ReactNode => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       username: '',
-      password: '',
     },
   });
 
@@ -44,19 +39,15 @@ export const ComponentForm = (): ReactNode => {
     setIsLoading(true);
     let result;
     try {
-      result = await signIn({
+      result = await resetPassword({
         username: data.username,
-        password: data.password,
       });
     } catch (error) {
       invariant(error instanceof AuthError);
       let errorMessage;
       switch (error.name) {
-        case 'NotAuthorizedException':
-          errorMessage = 'ユーザー名かパスワードが正しくありません。';
-          break;
         default:
-          errorMessage = 'ログインに失敗しました。';
+          errorMessage = 'パスワードのリセットに失敗しました。';
           break;
       }
       toast.error(errorMessage, {
@@ -66,16 +57,13 @@ export const ComponentForm = (): ReactNode => {
       return;
     }
 
-    switch (result.nextStep.signInStep) {
-      case 'DONE':
-        router.push('/');
-        break;
-      case 'CONFIRM_SIGN_UP':
+    switch (result.nextStep.resetPasswordStep) {
+      case 'CONFIRM_RESET_PASSWORD_WITH_CODE':
         setUsername(data.username);
-        router.push('/auth/sign-up-confirm');
+        router.push('/auth/reset-password-confirm');
         break;
       default:
-        throw new Error('Unexpected signInStep.');
+        throw new Error('Unexpected resetPasswordStep.');
     }
   };
 
@@ -104,25 +92,8 @@ export const ComponentForm = (): ReactNode => {
           </Field>
         )}
       />
-      <Controller
-        name="password"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>パスワード</FieldLabel>
-            <Input
-              {...field}
-              id={field.name}
-              aria-invalid={fieldState.invalid}
-              type="password"
-              autoComplete="current-password"
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
       <Field>
-        <Button disabled={isLoading}>ログイン</Button>
+        <Button disabled={isLoading}>パスワードをリセット</Button>
       </Field>
     </form>
   );
