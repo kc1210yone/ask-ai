@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import assert from 'node:assert/strict';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '#db/generated/prisma/client.js';
