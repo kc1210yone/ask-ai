@@ -27,5 +27,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
+  "references": [{ "path": "../../packages/db" }],
   "include": ["src"]
 }
