@@ -1,4 +1,10 @@
 import 'dotenv/config';
-import { exampleFunction } from '#src/example-function/index.js';
+import type { Context } from 'aws-lambda';
 
-exampleFunction();
+export const handler = async (
+  event: unknown,
+  context: Context,
+): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  console.log(event, context);
+};
