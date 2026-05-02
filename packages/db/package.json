@@ -1,0 +1,35 @@
+{
+  "name": "@internal/db",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "imports": {
+    "#db/*": "./dist/src/*"
+  },
+  "exports": {
+    "./*": "./dist/src/*"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "run-s test:{typecheck,vitest}",
+    "test:typecheck": "tsc --noEmit",
+    "test:vitest": ":",
+    "lint": "run-s lint:{eslint,prettier,prisma}",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier --check --ignore-path ../../.prettierignore .",
+    "lint:prisma": "prisma validate",
+    "fix": "run-s fix:{eslint,prettier,prisma}",
+    "fix:eslint": "eslint --fix .",
+    "fix:prettier": "prettier --write --ignore-path ../../.prettierignore .",
+    "fix:prisma": "prisma format"
+  },
+  "dependencies": {
+    "@prisma/adapter-mariadb": "7.7.0",
+    "@prisma/client": "7.7.0",
+    "dotenv": "16.6.1"
+  },
+  "devDependencies": {
+    "prisma": "7.7.0"
+  }
+}

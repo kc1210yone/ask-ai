@@ -1,11 +1,11 @@
 import 'server-only';
+import { prisma } from '@internal/db/prisma.js';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { AppSidebar } from './app-sidebar';
 import { SidebarProvider, SidebarTrigger } from '#src/components/ui/sidebar';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
-import { prisma } from '#src/lib/prisma';
 
 interface Props {
   projectId: string | null;

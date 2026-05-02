@@ -1,10 +1,10 @@
 'use server';
 
 import 'server-only';
+import { prisma } from '@internal/db/prisma.js';
 import { revalidatePath } from 'next/cache';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
-import { prisma } from '#src/lib/prisma';
 
 interface ActionResponse {
   status: 'ok' | 'error';

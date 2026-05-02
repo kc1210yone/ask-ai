@@ -1,4 +1,5 @@
 import 'server-only';
+import { prisma } from '@internal/db/prisma.js';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -12,7 +13,6 @@ import {
 } from '#src/components/ui/card';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
-import { prisma } from '#src/lib/prisma';
 
 interface Props {
   projectId: string;

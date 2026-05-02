@@ -1,4 +1,5 @@
 import 'server-only';
+import { prisma } from '@internal/db/prisma.js';
 import { FileQuestionMarkIcon, PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -16,7 +17,6 @@ import {
 import { ItemGroup } from '#src/components/ui/item';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
-import { prisma } from '#src/lib/prisma';
 
 interface Props {
   projectId: string;

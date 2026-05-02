@@ -2,6 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Faq } from '@internal/db/generated/prisma/client.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -19,7 +20,6 @@ import {
 } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { Textarea } from '#src/components/ui/textarea';
-import type { Faq } from '#src/generated/prisma/client';
 import { cn } from '#src/lib/utils';
 
 interface Props {

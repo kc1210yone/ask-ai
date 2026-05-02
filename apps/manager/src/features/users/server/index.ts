@@ -1,8 +1,8 @@
 import 'server-only';
+import type { User } from '@internal/db/generated/prisma/client.js';
+import { prisma } from '@internal/db/prisma.js';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
-import type { User } from '#src/generated/prisma/client';
-import { prisma } from '#src/lib/prisma';
 
 export const findUserOrRedirect = async (
   cognitoUserId: string,

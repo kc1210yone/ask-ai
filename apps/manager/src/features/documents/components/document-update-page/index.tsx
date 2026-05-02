@@ -1,10 +1,10 @@
 import 'server-only';
+import { prisma } from '@internal/db/prisma.js';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { ComponentForm } from './component-form';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
-import { prisma } from '#src/lib/prisma';
 
 interface Props {
   projectId: string;

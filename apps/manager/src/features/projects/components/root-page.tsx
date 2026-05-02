@@ -1,4 +1,5 @@
 import 'server-only';
+import { prisma } from '@internal/db/prisma.js';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -6,7 +7,6 @@ import invariant from 'tiny-invariant';
 import { Button } from '#src/components/ui/button';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
-import { prisma } from '#src/lib/prisma';
 
 export const RootPage = async (): Promise<ReactNode> => {
   const authUser = await getAuthUserOrRedirect();

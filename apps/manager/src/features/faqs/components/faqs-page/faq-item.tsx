@@ -1,6 +1,7 @@
 'use client';
 
 import 'client-only';
+import type { Faq } from '@internal/db/generated/prisma/client.js';
 import { PencilIcon, TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type ReactNode } from 'react';
@@ -15,7 +16,6 @@ import {
   ItemDescription,
   ItemTitle,
 } from '#src/components/ui/item';
-import type { Faq } from '#src/generated/prisma/client';
 import { cn } from '#src/lib/utils';
 
 interface Props {
