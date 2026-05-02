@@ -1,5 +1,5 @@
 import 'server-only';
-import { prisma } from '@internal/db/prisma.js';
+import { prisma } from '@internal/db/index.js';
 import { FileQuestionMarkIcon, PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';

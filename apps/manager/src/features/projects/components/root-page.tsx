@@ -1,5 +1,5 @@
 import 'server-only';
-import { prisma } from '@internal/db/prisma.js';
+import { prisma } from '@internal/db/index.js';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
