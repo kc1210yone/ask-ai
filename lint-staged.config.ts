@@ -6,7 +6,7 @@ export default {
     'prettier --write --ignore-unknown',
   ],
   ...Object.fromEntries(
-    ['apps/manager'].map((workspace) => [
+    ['apps/functions', 'apps/manager'].map((workspace) => [
       `${workspace}/**/*`,
       [
         `npx -w ./${workspace} eslint --fix --no-warn-ignored`,
