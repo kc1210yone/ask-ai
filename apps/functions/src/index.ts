@@ -3,9 +3,9 @@
  */
 
 import type { Context } from 'aws-lambda';
-import { handler as reflectToRagHandler } from './reflect-to-rag/index.js';
+import { handler as syncWithRagHandler } from './sync-with-rag/index.js';
 
-await reflectToRagHandler(
+await syncWithRagHandler(
   {
     projectId: 'cmomg4ait0002afqjw2ggflj4',
   },
