@@ -15,14 +15,14 @@
     "test": "run-s test:{typecheck,vitest}",
     "test:typecheck": "tsc --noEmit",
     "test:vitest": ":",
-    "lint": "run-s lint:{eslint,prettier,prisma}",
-    "lint:eslint": "eslint .",
-    "lint:prettier": "prettier --check --ignore-path ../../.prettierignore .",
-    "lint:prisma": "prisma validate",
-    "fix": "run-s fix:{eslint,prettier,prisma}",
-    "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier --write --ignore-path ../../.prettierignore .",
-    "fix:prisma": "prisma format"
+    "lint:check": "run-s lint:check:{eslint,prettier,prisma}",
+    "lint:check:eslint": "eslint .",
+    "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
+    "lint:check:prisma": "prisma validate",
+    "lint:fix": "run-s lint:fix:{eslint,prettier,prisma}",
+    "lint:fix:eslint": "eslint --fix .",
+    "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore .",
+    "lint:fix:prisma": "prisma format"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "7.7.0",

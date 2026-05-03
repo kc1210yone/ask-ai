@@ -7,8 +7,8 @@
   "scripts": {
     "prepare": "command -v husky >/dev/null 2>&1 && husky || true",
     "test": "npm run test --workspaces",
-    "lint": "npm run lint --workspaces",
-    "fix": "npm run fix --workspaces"
+    "lint:check": "npm run lint:check --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces"
   },
   "devDependencies": {
     "@commitlint/cli": "20.5.0",

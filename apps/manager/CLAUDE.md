@@ -22,7 +22,7 @@ AIアシスタントが回答するときに参照するデータを入稿する
 
 ## コードスタイル
 
-- test:typecheck, lint, fixのコマンドを用いてエラーや警告を消すこと。
+- test:typecheck, lint:check, lint:fixのコマンドを用いてエラーや警告を消すこと。
 - `function xxx() {}`ではなく`const xxx = () => {}`を使うこと。
   ただし、クラスのメソッドでは`xxx () {}`を使うこと。
 - 関数を定義する場合は戻り値の型を明記すること。
@@ -35,8 +35,8 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 - `npm run dev -w @internal/manager`: Next.jsのDevモード起動。
 - `npm run test:typecheck -w @internal/manager`: TypeScriptのタイプチェック。
 - `npm run test:vitest -w @internal/manager`: Vitestによるテスト。
-- `npm run lint -w @internal/manager`: ESLint/Prettierによるチェック。
-- `npm run fix -w @internal/manager`: ESLint/Prettierによる自動Fix。
+- `npm run lint:check -w @internal/manager`: ESLint/Prettierによるチェック。
+- `npm run lint:fix -w @internal/manager`: ESLint/Prettierによる自動Fix。
 - `npx -w @internal/manager shadcn add <component>`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
 - `npx -w @internal/manager prisma <command>`: Prismaのコマンドを実行。
 

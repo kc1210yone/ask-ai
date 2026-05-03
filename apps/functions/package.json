@@ -10,20 +10,22 @@
   "scripts": {
     "dev": "tsx watch ./src/index.ts",
     "build": "tsc -b",
-    "start": "node ./dist/src/index.js",
     "test": "run-s test:{typecheck,vitest}",
     "test:typecheck": "tsc --noEmit",
     "test:vitest": "vitest run",
-    "lint": "run-s lint:{eslint,prettier}",
-    "lint:eslint": "eslint .",
-    "lint:prettier": "prettier --check --ignore-path ../../.prettierignore .",
-    "fix": "run-s fix:{eslint,prettier}",
-    "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
+    "lint:check": "run-s lint:check:{eslint,prettier}",
+    "lint:check:eslint": "eslint .",
+    "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
+    "lint:fix": "run-s lint:fix:{eslint,prettier}",
+    "lint:fix:eslint": "eslint --fix .",
+    "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-agent-runtime": "3.1041.0",
+    "@aws-sdk/client-s3": "3.1041.0",
     "@internal/db": "*",
-    "dotenv": "17.4.2"
+    "dotenv": "17.4.2",
+    "zod": "4.4.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.161",
