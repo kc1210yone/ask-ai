@@ -6,6 +6,7 @@ import { KeyIcon, LogOutIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { toast } from 'sonner';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,8 +29,14 @@ export const AppSidebarFooter = ({ authUser }: Props): ReactNode => {
   const router = useRouter();
 
   const logout = async (): Promise<void> => {
-    await signOut();
+    try {
+      await signOut();
+    } catch {
+      toast.error('ログアウトに失敗しました。');
+      return;
+    }
     router.push('/auth/login');
+    toast.success('ログアウトしました。');
   };
 
   return (
