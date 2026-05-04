@@ -33,8 +33,13 @@ export const ComponentForm = ({ className }: Props) => {
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
-    const response = await formAction(data);
-    if (response.status === 'error') {
+    let response;
+    try {
+      response = await formAction(data);
+    } catch {
+      response = null;
+    }
+    if (!response || response.status === 'error') {
       toast.error('プロジェクトの作成に失敗しました。');
       setIsLoading(false);
       return;
