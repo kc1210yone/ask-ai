@@ -32,13 +32,13 @@ export const DeleteButtonWrapper = ({
 }: Props): ReactNode => {
   const onAction = async (): Promise<void> => {
     await preDelete?.();
-    let status: 'ok' | 'error';
+    let response;
     try {
-      const response = await deleteDocument(projectId, documentId);
-      status = response.status;
+      response = await deleteDocument(projectId, documentId);
     } catch {
-      status = 'error';
+      response = null;
     }
+    const status = response?.status === 'ok' ? 'ok' : 'error';
     await postDelete?.(status);
   };
 
