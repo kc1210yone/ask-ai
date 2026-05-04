@@ -1,5 +1,6 @@
+import assert from 'node:assert/strict';
 import {
-  DeleteObjectCommand,
+  DeleteObjectsCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
@@ -9,7 +10,8 @@ const BUCKET = 'ask-ai-knowledge-base-953334885917-ap-northeast-1-an';
 
 const s3 = new S3Client();
 
-interface ListObjectsItem {
+export interface ListObjectsItem {
+  key: string;
   lastModified: Date;
 }
 
@@ -24,18 +26,17 @@ export const listObjects = async (
         Bucket: BUCKET,
         Prefix: prefix,
         ContinuationToken: continuationToken,
-        // TODO
-        MaxKeys: 3,
       }),
     );
-    for (const obj of response.Contents ?? []) {
-      if (obj.Key && obj.LastModified) {
-        console.log(obj.Key);
-        result[obj.Key] = {
-          lastModified: obj.LastModified,
-        };
-      }
-    }
+    (response.Contents ?? []).reduce((accumulator, c) => {
+      assert(c.Key);
+      assert(c.LastModified);
+      accumulator[c.Key] = {
+        key: c.Key,
+        lastModified: c.LastModified,
+      };
+      return accumulator;
+    }, result);
     continuationToken = response.NextContinuationToken;
   } while (continuationToken);
   return result;
@@ -52,11 +53,17 @@ export const putObject = async (key: string, body: string): Promise<void> => {
   );
 };
 
-export const deleteObject = async (key: string): Promise<void> => {
-  await s3.send(
-    new DeleteObjectCommand({
-      Bucket: BUCKET,
-      Key: key,
-    }),
-  );
+export const deleteObjects = async (keys: string[]): Promise<void> => {
+  const chunkSize = 1000;
+  for (let i = 0; i < keys.length; i += chunkSize) {
+    const chunkedKeys = keys.slice(i, i + chunkSize);
+    await s3.send(
+      new DeleteObjectsCommand({
+        Bucket: BUCKET,
+        Delete: {
+          Objects: chunkedKeys.map((k) => ({ Key: k })),
+        },
+      }),
+    );
+  }
 };
