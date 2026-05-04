@@ -1,6 +1,5 @@
 import 'server-only';
 import { createServerRunner } from '@aws-amplify/adapter-nextjs';
-import { AuthError } from 'aws-amplify/auth';
 import { fetchUserAttributes, getCurrentUser } from 'aws-amplify/auth/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -35,7 +34,7 @@ export const getAuthUser = cache(async (): Promise<AuthUser | null> => {
           fetchUserAttributes(contextSpec),
         ]);
       } catch (e) {
-        invariant(e instanceof AuthError);
+        invariant(e instanceof Error);
         if (e.name === 'UserUnAuthenticatedException') {
           return null;
         }

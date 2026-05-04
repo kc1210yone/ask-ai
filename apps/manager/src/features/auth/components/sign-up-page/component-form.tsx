@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthError, signUp } from 'aws-amplify/auth';
+import { signUp } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -62,7 +62,7 @@ export const ComponentForm = (): ReactNode => {
         },
       });
     } catch (error) {
-      invariant(error instanceof AuthError);
+      invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {
         case 'UsernameExistsException':

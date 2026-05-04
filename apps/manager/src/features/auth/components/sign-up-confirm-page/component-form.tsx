@@ -2,12 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  AuthError,
-  autoSignIn,
-  confirmSignUp,
-  resendSignUpCode,
-} from 'aws-amplify/auth';
+import { autoSignIn, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -47,7 +42,16 @@ export const ComponentForm = (): ReactNode => {
   });
 
   const autoSignInWrapper = async (): Promise<void> => {
-    const result = await autoSignIn();
+    let result;
+    try {
+      result = await autoSignIn();
+    } catch {
+      router.push('/auth/login');
+      toast.error('ログインに失敗しました。', {
+        position: 'top-center',
+      });
+      return;
+    }
 
     switch (result.nextStep.signInStep) {
       case 'DONE':
@@ -69,7 +73,7 @@ export const ComponentForm = (): ReactNode => {
         confirmationCode: data.code,
       });
     } catch (error) {
-      invariant(error instanceof AuthError);
+      invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {
         case 'CodeMismatchException':
@@ -107,7 +111,17 @@ export const ComponentForm = (): ReactNode => {
 
   const onResendButtonClick = async (): Promise<void> => {
     invariant(username);
-    await resendSignUpCode({ username });
+    try {
+      await resendSignUpCode({ username });
+    } catch {
+      toast.error('確認コードの再送に失敗しました。', {
+        position: 'top-center',
+      });
+      return;
+    }
+    toast.success('確認コードを再送しました。', {
+      position: 'top-center',
+    });
     setResendButtonCountDown(30);
   };
 

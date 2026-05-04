@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthError, confirmResetPassword } from 'aws-amplify/auth';
+import { confirmResetPassword } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -62,7 +62,7 @@ export const ComponentForm = (): ReactNode => {
         confirmationCode: data.code,
       });
     } catch (error) {
-      invariant(error instanceof AuthError);
+      invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {
         case 'CodeMismatchException':
