@@ -43,14 +43,13 @@ export const ComponentForm = ({ projectId, document, className }: Props) => {
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
-    let status: 'ok' | 'error';
+    let response;
     try {
-      const response = await formAction(projectId, document.id, data);
-      status = response.status;
+      response = await formAction(projectId, document.id, data);
     } catch {
-      status = 'error';
+      response = null;
     }
-    if (status === 'error') {
+    if (!response || response.status === 'error') {
       toast.error('ドキュメントの更新に失敗しました。');
       setIsLoading(false);
       return;

@@ -40,14 +40,13 @@ export const ComponentForm = ({ projectId, className }: Props) => {
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
-    let status: 'ok' | 'error';
+    let response;
     try {
-      const response = await formAction(projectId, data);
-      status = response.status;
+      response = await formAction(projectId, data);
     } catch {
-      status = 'error';
+      response = null;
     }
-    if (status === 'error') {
+    if (!response || response.status === 'error') {
       toast.error('ドキュメントの作成に失敗しました。');
       setIsLoading(false);
       return;

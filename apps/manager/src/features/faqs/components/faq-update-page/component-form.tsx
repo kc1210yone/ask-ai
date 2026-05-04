@@ -43,14 +43,13 @@ export const ComponentForm = ({ projectId, faq, className }: Props) => {
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     setIsLoading(true);
-    let status: 'ok' | 'error';
+    let response;
     try {
-      const response = await formAction(projectId, faq.id, data);
-      status = response.status;
+      response = await formAction(projectId, faq.id, data);
     } catch {
-      status = 'error';
+      response = null;
     }
-    if (status === 'error') {
+    if (!response || response.status === 'error') {
       toast.error('FAQの更新に失敗しました。');
       setIsLoading(false);
       return;
