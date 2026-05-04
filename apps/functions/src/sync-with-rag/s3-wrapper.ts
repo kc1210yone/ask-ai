@@ -7,20 +7,17 @@ import {
 
 const BUCKET = 'ask-ai-knowledge-base-953334885917-ap-northeast-1-an';
 
-const s3 = new S3Client({
-  // TODO: なぜかなくてもアップロードできる
-  // credentials: {
-  //   accessKeyId: 'aaa',
-  //   secretAccessKey: 'aaa',
-  // },
-});
+const s3 = new S3Client();
+
+interface ListObjectsItem {
+  lastModified: Date;
+}
 
 export const listObjects = async (
   prefix: string,
-): Promise<Map<string, Date>> => {
-  const map = new Map<string, Date>();
+): Promise<Record<string, ListObjectsItem>> => {
+  const result: Record<string, ListObjectsItem> = {};
   let continuationToken: string | undefined;
-
   do {
     const response = await s3.send(
       new ListObjectsV2Command({
@@ -33,13 +30,15 @@ export const listObjects = async (
     );
     for (const obj of response.Contents ?? []) {
       if (obj.Key && obj.LastModified) {
-        map.set(obj.Key, obj.LastModified);
+        console.log(obj.Key);
+        result[obj.Key] = {
+          lastModified: obj.LastModified,
+        };
       }
     }
     continuationToken = response.NextContinuationToken;
   } while (continuationToken);
-
-  return map;
+  return result;
 };
 
 export const putObject = async (key: string, body: string): Promise<void> => {
