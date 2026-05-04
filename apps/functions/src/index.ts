@@ -7,7 +7,7 @@ import { handler as syncWithRagHandler } from './sync-with-rag/index.js';
 
 await syncWithRagHandler(
   {
-    projectId: 'cmomg4ait0002afqjw2ggflj4',
+    projectId: 'cmor7fsyt00025yqj23jbjqcq',
   },
   {} as Context,
 );

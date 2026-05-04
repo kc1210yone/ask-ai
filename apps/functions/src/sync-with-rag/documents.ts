@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import type { Document } from '@internal/db/generated/prisma/client.js';
 import { prisma } from '@internal/db/index.js';
 import {
@@ -48,6 +49,7 @@ const deleteDocumentObjects = async (
 ): Promise<void> => {
   const deletedKeys = Object.keys(s3Objects).filter((key) => {
     const keyDocumentId = key.split('/').at(-1)?.split('.').at(0);
+    assert(keyDocumentId);
     return !documents.some((d) => d.id === keyDocumentId);
   });
   await deleteObjects(deletedKeys);

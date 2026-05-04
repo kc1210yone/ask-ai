@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import type { Faq } from '@internal/db/generated/prisma/client.js';
 import { prisma } from '@internal/db/index.js';
 import {
@@ -41,6 +42,12 @@ ${faq.question}
 ${faq.answer}
 `.trim() + '\n';
     await putObject(s3Key, body);
+    const metadata = {
+      metadataAttributes: {
+        projectId,
+      },
+    };
+    await putObject(`${s3Key}.metadata.json`, JSON.stringify(metadata));
   }
 };
 
@@ -50,6 +57,7 @@ const deleteFaqObjects = async (
 ): Promise<void> => {
   const deletedKeys = Object.keys(s3Objects).filter((key) => {
     const keyFaqId = key.split('/').at(-1)?.split('.').at(0);
+    assert(keyFaqId);
     return !faqs.some((d) => d.id === keyFaqId);
   });
   await deleteObjects(deletedKeys);
