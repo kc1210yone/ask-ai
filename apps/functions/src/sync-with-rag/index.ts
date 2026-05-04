@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { prisma } from '@internal/db/index.js';
 import type { Context } from 'aws-lambda';
 import { z } from 'zod';
+import { startIngestion } from './bedrockWrapper.js';
 import { syncDocuments } from './documents.js';
 import { syncFaqs } from './faqs.js';
 
@@ -27,4 +28,6 @@ export const handler = async (
 
   await syncDocuments(project.id);
   await syncFaqs(project.id);
+
+  await startIngestion();
 };

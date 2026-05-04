@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthError, signIn } from 'aws-amplify/auth';
+import { signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -49,7 +49,7 @@ export const ComponentForm = (): ReactNode => {
         password: data.password,
       });
     } catch (error) {
-      invariant(error instanceof AuthError);
+      invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {
         case 'NotAuthorizedException':

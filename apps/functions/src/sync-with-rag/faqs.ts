@@ -25,7 +25,7 @@ const putFaqObjects = async (
   projectId: string,
   faqs: Faq[],
   s3Objects: Record<string, ListObjectsItem>,
-) => {
+): Promise<void> => {
   for (const faq of faqs) {
     const s3Key = `${projectId}/faqs/${faq.id}.txt`;
     const s3Object = s3Objects[s3Key];
@@ -47,7 +47,7 @@ ${faq.answer}
 const deleteFaqObjects = async (
   faqs: Faq[],
   s3Objects: Record<string, ListObjectsItem>,
-) => {
+): Promise<void> => {
   const deletedKeys = Object.keys(s3Objects).filter((key) => {
     const keyFaqId = key.split('/').at(-1)?.split('.').at(0);
     return !faqs.some((d) => d.id === keyFaqId);

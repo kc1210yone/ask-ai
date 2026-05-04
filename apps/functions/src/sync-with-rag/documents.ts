@@ -25,7 +25,7 @@ const putDocumentObjects = async (
   projectId: string,
   documents: Document[],
   s3Objects: Record<string, ListObjectsItem>,
-) => {
+): Promise<void> => {
   for (const document of documents) {
     const s3Key = `${projectId}/documents/${document.id}.txt`;
     const s3Object = s3Objects[s3Key];
@@ -33,13 +33,19 @@ const putDocumentObjects = async (
       continue;
     }
     await putObject(s3Key, document.content);
+    const metadata = {
+      metadataAttributes: {
+        projectId,
+      },
+    };
+    await putObject(`${s3Key}.metadata.json`, JSON.stringify(metadata));
   }
 };
 
 const deleteDocumentObjects = async (
   documents: Document[],
   s3Objects: Record<string, ListObjectsItem>,
-) => {
+): Promise<void> => {
   const deletedKeys = Object.keys(s3Objects).filter((key) => {
     const keyDocumentId = key.split('/').at(-1)?.split('.').at(0);
     return !documents.some((d) => d.id === keyDocumentId);
