@@ -7,7 +7,13 @@ import {
 
 const BUCKET = 'ask-ai-knowledge-base-953334885917-ap-northeast-1-an';
 
-const s3 = new S3Client();
+const s3 = new S3Client({
+  // TODO: なぜかなくてもアップロードできる
+  // credentials: {
+  //   accessKeyId: 'aaa',
+  //   secretAccessKey: 'aaa',
+  // },
+});
 
 export const listObjects = async (
   prefix: string,
@@ -21,6 +27,8 @@ export const listObjects = async (
         Bucket: BUCKET,
         Prefix: prefix,
         ContinuationToken: continuationToken,
+        // TODO
+        MaxKeys: 3,
       }),
     );
     for (const obj of response.Contents ?? []) {
@@ -46,5 +54,10 @@ export const putObject = async (key: string, body: string): Promise<void> => {
 };
 
 export const deleteObject = async (key: string): Promise<void> => {
-  await s3.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: key }));
+  await s3.send(
+    new DeleteObjectCommand({
+      Bucket: BUCKET,
+      Key: key,
+    }),
+  );
 };

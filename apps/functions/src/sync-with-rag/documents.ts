@@ -1,5 +1,5 @@
 import { prisma } from '@internal/db/index.js';
-import { listObjects } from './s3-wrapper.js';
+import { deleteObject, listObjects, putObject } from './s3-wrapper.js';
 
 export const syncDocuments = async (projectId: string): Promise<void> => {
   const documents = await prisma.document.findMany({
