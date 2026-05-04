@@ -19,4 +19,9 @@
     "main"
   ],
   "js/ts.tsdk.path": "./node_modules/typescript/lib",
+  "tailwindCSS.files.exclude": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "apps/manager/src/components/ui/*"
+  ],
 }
