@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import assert from 'node:assert/strict';
 import { prisma } from '@internal/db/index.js';
 import type { Context } from 'aws-lambda';
