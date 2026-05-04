@@ -29,10 +29,15 @@ const putFaqObjects = async (
 ): Promise<void> => {
   for (const faq of faqs) {
     const s3Key = `${projectId}/faqs/${faq.id}.txt`;
+    const s3MetadataKey = `${s3Key}.metadata.json`;
+
     const s3Object = s3Objects[s3Key];
-    if (s3Object && s3Object.lastModified > faq.updatedAt) {
+    const s3MetadataObject = s3Objects[s3MetadataKey];
+
+    if (s3Object && s3Object.lastModified > faq.updatedAt && s3MetadataObject) {
       continue;
     }
+
     const body =
       `
 --- Question ---
@@ -42,12 +47,13 @@ ${faq.question}
 ${faq.answer}
 `.trim() + '\n';
     await putObject(s3Key, body);
+
     const metadata = {
       metadataAttributes: {
         projectId,
       },
     };
-    await putObject(`${s3Key}.metadata.json`, JSON.stringify(metadata));
+    await putObject(s3MetadataKey, JSON.stringify(metadata));
   }
 };
 

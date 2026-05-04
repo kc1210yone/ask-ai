@@ -29,17 +29,27 @@ const putDocumentObjects = async (
 ): Promise<void> => {
   for (const document of documents) {
     const s3Key = `${projectId}/documents/${document.id}.txt`;
+    const s3MetadataKey = `${s3Key}.metadata.json`;
+
     const s3Object = s3Objects[s3Key];
-    if (s3Object && s3Object.lastModified > document.updatedAt) {
+    const s3MetadataObject = s3Objects[s3MetadataKey];
+
+    if (
+      s3Object &&
+      s3Object.lastModified > document.updatedAt &&
+      s3MetadataObject
+    ) {
       continue;
     }
+
     await putObject(s3Key, document.content);
+
     const metadata = {
       metadataAttributes: {
         projectId,
       },
     };
-    await putObject(`${s3Key}.metadata.json`, JSON.stringify(metadata));
+    await putObject(s3MetadataKey, JSON.stringify(metadata));
   }
 };
 
