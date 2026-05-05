@@ -6,7 +6,7 @@ import {
   listObjects,
   putObject,
   type ListObjectsItem,
-} from './s3-wrapper.js';
+} from './s3-client.js';
 
 export const syncDocuments = async (projectId: string): Promise<void> => {
   const documents = await prisma.document.findMany({

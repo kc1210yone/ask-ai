@@ -1,5 +1,5 @@
 import type { Context } from 'aws-lambda';
-import { startIngestion, waitForIngestionFinish } from './bedrockWrapper.js';
+import { startIngestion, waitForIngestionFinish } from './bedrock-client.js';
 
 export const handler = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

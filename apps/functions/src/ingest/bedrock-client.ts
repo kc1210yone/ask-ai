@@ -8,10 +8,10 @@ import {
 const KNOWLEDGE_BASE_ID = 'NOTTQ5JXC7';
 const DAT_SOURCE_ID = 'SWSWIA7F4D';
 
-const client = new BedrockAgentClient();
+const bedrockAgentClient = new BedrockAgentClient();
 
 export const startIngestion = async (): Promise<string> => {
-  const response = await client.send(
+  const response = await bedrockAgentClient.send(
     new StartIngestionJobCommand({
       knowledgeBaseId: KNOWLEDGE_BASE_ID,
       dataSourceId: DAT_SOURCE_ID,
@@ -28,7 +28,7 @@ export const waitForIngestionFinish = async (
   let shouldContinue = true;
   while (shouldContinue) {
     await new Promise((resolve) => setTimeout(resolve, 10_000));
-    const response = await client.send(
+    const response = await bedrockAgentClient.send(
       new GetIngestionJobCommand({
         knowledgeBaseId: KNOWLEDGE_BASE_ID,
         dataSourceId: DAT_SOURCE_ID,

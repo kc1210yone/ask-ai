@@ -8,7 +8,7 @@ import {
 
 const BUCKET = 'ask-ai-knowledge-base-953334885917-ap-northeast-1-an';
 
-const s3 = new S3Client();
+const s3Client = new S3Client();
 
 export interface ListObjectsItem {
   key: string;
@@ -21,7 +21,7 @@ export const listObjects = async (
   const result: Record<string, ListObjectsItem> = {};
   let continuationToken: string | undefined;
   do {
-    const response = await s3.send(
+    const response = await s3Client.send(
       new ListObjectsV2Command({
         Bucket: BUCKET,
         Prefix: prefix,
@@ -43,7 +43,7 @@ export const listObjects = async (
 };
 
 export const putObject = async (key: string, body: string): Promise<void> => {
-  await s3.send(
+  await s3Client.send(
     new PutObjectCommand({
       Bucket: BUCKET,
       Key: key,
@@ -57,7 +57,7 @@ export const deleteObjects = async (keys: string[]): Promise<void> => {
   const chunkSize = 1000;
   for (let i = 0; i < keys.length; i += chunkSize) {
     const chunkedKeys = keys.slice(i, i + chunkSize);
-    await s3.send(
+    await s3Client.send(
       new DeleteObjectsCommand({
         Bucket: BUCKET,
         Delete: {
