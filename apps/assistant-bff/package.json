@@ -22,10 +22,12 @@
     "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-agent-runtime": "3.1041.0",
     "@internal/db": "*",
     "dotenv": "17.4.2",
     "express": "5.2.1",
-    "neverthrow": "8.2.0"
+    "neverthrow": "8.2.0",
+    "zod": "4.4.2"
   },
   "devDependencies": {
     "@types/express": "5.0.6",
