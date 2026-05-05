@@ -6,7 +6,6 @@ import {
 } from '@aws-sdk/client-bedrock-agent-runtime';
 import { ResultAsync } from 'neverthrow';
 import { bedrockAgentRuntimeClient } from '#src/chat/bedrock-agent-client.js';
-import { config } from '#src/config.js';
 
 export interface InvokeAgentResult {
   sessionId: string;
@@ -20,8 +19,8 @@ export const invokeAgent = (
   const sessionId = existingSessionId ?? randomUUID();
 
   const input: InvokeAgentCommandInput = {
-    agentId: config.bedrockAgentId,
-    agentAliasId: config.bedrockAgentAliasId,
+    agentId: 'AFZV2506DY',
+    agentAliasId: '',
     sessionId,
     inputText,
   };
