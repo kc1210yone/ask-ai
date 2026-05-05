@@ -1,7 +1,7 @@
-import type { JSX } from 'react';
+import type { ReactNode } from 'react';
 import ChatWidget from '#src/components/ChatWidget';
 
-const App = (): JSX.Element => {
+const App = (): ReactNode => {
   const envUrl: unknown = import.meta.env['VITE_BFF_URL'];
   const bffUrl = typeof envUrl === 'string' ? envUrl : 'http://localhost:3000';
   return (
