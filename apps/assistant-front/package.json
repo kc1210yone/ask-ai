@@ -1,5 +1,5 @@
 {
-  "name": "@internal/vite-example",
+  "name": "@internal/assistant-front",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
@@ -35,7 +35,7 @@
     "@vitejs/plugin-react": "6.0.1",
     "babel-plugin-react-compiler": "1.0.0",
     "tailwindcss": "4.2.2",
-    "vite": "8.0.1",
-    "vitest": "4.1.0"
+    "vite": "8.0.10",
+    "vitest": "4.1.2"
   }
 }
