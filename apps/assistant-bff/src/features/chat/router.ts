@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { invokeAgent } from '#src/chat/invoke-agent.js';
+import { invokeAgent } from '#src/features/chat/invoke-agent.js';
 import {
   initializeSseResponse,
   sendSseDoneEvent,
   sendSseErrorEvent,
   sendSseTextEvent,
-} from '#src/chat/sse.js';
+} from '#src/features/chat/sse.js';
 
 export const chatRouter = Router();
 
@@ -39,13 +39,19 @@ chatRouter.post('/chat', async (request, response) => {
 
   initializeSseResponse(response);
 
+  let chunkCount = 0;
   try {
     for await (const chunk of textChunks) {
+      chunkCount++;
+      console.log(
+        `chunk #${chunkCount.toString()}: ${chunk.length.toString()} chars`,
+      );
       sendSseTextEvent(response, chunk);
     }
   } catch {
     sendSseErrorEvent(response, 'Stream interrupted');
   }
+  console.log(`total chunks: ${chunkCount.toString()}`);
 
   sendSseDoneEvent(response, resolvedSessionId);
   response.end();

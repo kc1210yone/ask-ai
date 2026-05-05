@@ -1,6 +1,7 @@
 import type { Response } from 'express';
 
 export const initializeSseResponse = (response: Response): void => {
+  response.socket?.setNoDelay(true);
   response.setHeader('Content-Type', 'text/event-stream');
   response.setHeader('Cache-Control', 'no-cache');
   response.setHeader('Connection', 'keep-alive');

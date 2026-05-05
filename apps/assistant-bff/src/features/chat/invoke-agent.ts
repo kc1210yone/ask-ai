@@ -5,7 +5,7 @@ import {
   type ResponseStream,
 } from '@aws-sdk/client-bedrock-agent-runtime';
 import { ResultAsync } from 'neverthrow';
-import { bedrockAgentRuntimeClient } from '#src/chat/bedrock-agent-client.js';
+import { bedrockAgentRuntimeClient } from '#src/features/chat/bedrock-agent-client.js';
 
 export interface InvokeAgentResult {
   sessionId: string;
@@ -20,7 +20,7 @@ export const invokeAgent = (
 
   const input: InvokeAgentCommandInput = {
     agentId: 'AFZV2506DY',
-    agentAliasId: '',
+    agentAliasId: 'JROKIVARG6',
     sessionId,
     inputText,
   };

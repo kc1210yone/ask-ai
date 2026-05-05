@@ -1,12 +1,13 @@
-import { cn } from 'tailwind-variants';
-import reactSvg from '#src/assets/react.svg';
+import type { JSX } from 'react';
+import ChatWidget from '#src/components/ChatWidget';
 
-const App = () => {
+const App = (): JSX.Element => {
+  const envUrl: unknown = import.meta.env['VITE_BFF_URL'];
+  const bffUrl = typeof envUrl === 'string' ? envUrl : 'http://localhost:3000';
   return (
-    <>
-      <h1 className={cn('text-3xl text-red-500')}>Example Page</h1>
-      <img src={reactSvg} width={100} height={100} />
-    </>
+    <div className="min-h-screen bg-white">
+      <ChatWidget bffUrl={bffUrl} />
+    </div>
   );
 };
 

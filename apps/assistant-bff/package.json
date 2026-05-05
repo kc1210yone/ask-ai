@@ -8,9 +8,9 @@
     "#src/*": "./dist/src/*"
   },
   "scripts": {
-    "dev": "tsx watch ./src/index.ts",
+    "dev": "tsx watch ./src/bootstrap/index.ts",
     "build": "tsc -b",
-    "start": "node ./dist/src/index.js",
+    "start": "node ./dist/src/bootstrap/index.js",
     "test": "run-s test:{typecheck,vitest}",
     "test:typecheck": "tsc --noEmit",
     "test:vitest": "vitest run",
@@ -24,12 +24,14 @@
   "dependencies": {
     "@aws-sdk/client-bedrock-agent-runtime": "3.1041.0",
     "@internal/db": "*",
+    "cors": "2.8.6",
     "dotenv": "17.4.2",
     "express": "5.2.1",
     "neverthrow": "8.2.0",
     "zod": "4.4.2"
   },
   "devDependencies": {
+    "@types/cors": "2.8.19",
     "@types/express": "5.0.6",
     "tsx": "4.21.0",
     "vitest": "4.1.2"
