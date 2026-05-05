@@ -6,51 +6,6 @@ interface Message {
   content: string;
 }
 
-type SseEvent =
-  | { type: 'text'; chunk: string }
-  | { type: 'done'; sessionId: string }
-  | { type: 'error'; error: string };
-
-const parseSseSegment = (segment: string): SseEvent | null => {
-  const lines = segment.split('\n');
-  let eventType = '';
-  let dataLine = '';
-
-  for (const line of lines) {
-    if (line.startsWith('event: ')) {
-      eventType = line.slice('event: '.length).trim();
-    } else if (line.startsWith('data: ')) {
-      dataLine = line.slice('data: '.length).trim();
-    }
-  }
-
-  if (!eventType || !dataLine) return null;
-
-  const parsed: unknown = JSON.parse(dataLine);
-  if (typeof parsed !== 'object' || parsed === null) return null;
-
-  if (eventType === 'text' && 'chunk' in parsed) {
-    return {
-      type: 'text',
-      chunk: String((parsed as { chunk: unknown }).chunk),
-    };
-  }
-  if (eventType === 'done' && 'sessionId' in parsed) {
-    return {
-      type: 'done',
-      sessionId: String((parsed as { sessionId: unknown }).sessionId),
-    };
-  }
-  if (eventType === 'error' && 'error' in parsed) {
-    return {
-      type: 'error',
-      error: String((parsed as { error: unknown }).error),
-    };
-  }
-
-  return null;
-};
-
 interface ChatWidgetProps {
   bffUrl: string;
 }
@@ -80,65 +35,110 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
     setIsStreaming(true);
 
     try {
-      const requestBody = {
-        message: trimmedInput,
-        ...(sessionId !== undefined ? { sessionId } : {}),
-      };
-
-      const response = await fetch(bffUrl + '/chat', {
+      const postResponse = await fetch(`${bffUrl}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          message: trimmedInput,
+          sessionId: sessionId ?? null,
+        }),
       });
 
-      if (!response.ok || !response.body) {
-        const errorBody = await response.text().catch(() => '');
+      if (!postResponse.ok) {
+        const errorBody = await postResponse.text().catch(() => '');
         setMessages((previous) => {
           const updated = [...previous];
           const last = updated[updated.length - 1];
           if (last)
-            last.content = `Error: ${response.status.toString()} ${errorBody}`;
+            last.content = `Error: ${postResponse.status.toString()} ${errorBody}`;
           return updated;
         });
+        setIsStreaming(false);
         return;
       }
 
-      const reader = response.body
-        .pipeThrough(new TextDecoderStream())
-        .getReader();
-      let buffer = '';
-
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += value;
-
-        const segments = buffer.split('\n\n');
-        buffer = segments.pop() ?? '';
-
-        for (const segment of segments) {
-          const sseEvent = parseSseSegment(segment.trim());
-          if (!sseEvent) continue;
-
-          if (sseEvent.type === 'text') {
-            setMessages((previous) => {
-              const updated = [...previous];
-              const last = updated[updated.length - 1];
-              if (last) last.content += sseEvent.chunk;
-              return updated;
-            });
-          } else if (sseEvent.type === 'done') {
-            setSessionId(sseEvent.sessionId);
-          } else {
-            setMessages((previous) => {
-              const updated = [...previous];
-              const last = updated[updated.length - 1];
-              if (last) last.content = `Error: ${sseEvent.error}`;
-              return updated;
-            });
-          }
-        }
+      const responseBody: unknown = await postResponse.json();
+      if (
+        typeof responseBody !== 'object' ||
+        responseBody === null ||
+        !('streamId' in responseBody)
+      ) {
+        setMessages((previous) => {
+          const updated = [...previous];
+          const last = updated[updated.length - 1];
+          if (last) last.content = 'Error: invalid server response';
+          return updated;
+        });
+        setIsStreaming(false);
+        return;
       }
+
+      const streamId = String((responseBody as { streamId: unknown }).streamId);
+      const eventSource = new EventSource(
+        `${bffUrl}/chat/stream?streamId=${streamId}`,
+      );
+
+      eventSource.addEventListener('text', (event) => {
+        const parsed: unknown = JSON.parse(event.data as string);
+        if (
+          typeof parsed === 'object' &&
+          parsed !== null &&
+          'chunk' in parsed
+        ) {
+          setMessages((previous) => {
+            const updated = [...previous];
+            const last = updated[updated.length - 1];
+            if (last)
+              last.content += String((parsed as { chunk: unknown }).chunk);
+            return updated;
+          });
+        }
+      });
+
+      eventSource.addEventListener('done', (event) => {
+        const parsed: unknown = JSON.parse(event.data as string);
+        if (
+          typeof parsed === 'object' &&
+          parsed !== null &&
+          'sessionId' in parsed
+        ) {
+          setSessionId(String((parsed as { sessionId: unknown }).sessionId));
+        }
+        eventSource.close();
+        setIsStreaming(false);
+      });
+
+      eventSource.addEventListener('error', (event) => {
+        const parsed: unknown = JSON.parse(
+          (event as MessageEvent).data as string,
+        );
+        setMessages((previous) => {
+          const updated = [...previous];
+          const last = updated[updated.length - 1];
+          if (last) {
+            last.content = `Error: ${
+              typeof parsed === 'object' && parsed !== null && 'error' in parsed
+                ? String((parsed as { error: unknown }).error)
+                : 'unknown error'
+            }`;
+          }
+          return updated;
+        });
+        eventSource.close();
+        setIsStreaming(false);
+      });
+
+      eventSource.onerror = () => {
+        if (eventSource.readyState === EventSource.CLOSED) return;
+        setMessages((previous) => {
+          const updated = [...previous];
+          const last = updated[updated.length - 1];
+          if (last) last.content = 'Error: connection failed';
+          return updated;
+        });
+        eventSource.close();
+        setIsStreaming(false);
+      };
     } catch {
       setMessages((previous) => {
         const updated = [...previous];
@@ -146,7 +146,6 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
         if (last) last.content = 'Error: connection failed';
         return updated;
       });
-    } finally {
       setIsStreaming(false);
     }
   };
