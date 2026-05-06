@@ -5,7 +5,7 @@ import { HttpError } from '#src/lib/errors/index.js';
 
 const ParamsSchema = z.object({
   sessionId: z.uuid(),
-  message: z.string().min(1),
+  inputMessage: z.string().min(1),
 });
 
 export const postChatHandler: RequestHandler = (request, response) => {
@@ -20,7 +20,7 @@ export const postChatHandler: RequestHandler = (request, response) => {
   const params = parseResult.data;
 
   eventEmitter.emit(`chat.post.${params.sessionId}`, {
-    message: params.message,
+    inputMessage: params.inputMessage,
   });
 
   response.json({ status: 'ok' });

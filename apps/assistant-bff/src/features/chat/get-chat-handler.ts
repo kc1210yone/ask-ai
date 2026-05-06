@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express';
+import { err, ok, Result } from 'neverthrow';
 import { z } from 'zod';
 import { invokeAgent } from './bedrock-client.js';
 import { eventEmitter } from './event.js';
@@ -21,44 +22,38 @@ export const getChatHandler: RequestHandler = async (request, response) => {
 
   sseResponse.sendEvent('ready', {});
 
-  // TODO
-  console.log('a');
-  let message;
-  try {
-    message = await waitForPost(params.sessionId);
-  } catch {
-    sseResponse.sendEvent('error', { error: 'post-timeout' });
+  const inputMessageResult = await waitForPost(params.sessionId);
+  if (inputMessageResult.isErr()) {
+    sseResponse.sendEvent('error', { error: 'input-message-error' });
     sseResponse.end();
     return;
   }
-  console.log('b');
-  console.log(message);
+  const inputMessage = inputMessageResult.value;
 
-  const textChunks = await invokeAgent(message, params.sessionId);
+  const outputMessageChunks = await invokeAgent(params.sessionId, inputMessage);
 
-  try {
-    for await (const chunk of textChunks) {
-      sseResponse.sendEvent('text', { chunk });
-    }
-  } catch {
-    sseResponse.sendEvent('error', { error: 'Error.' });
+  for await (const chunk of outputMessageChunks) {
+    sseResponse.sendEvent('output-message', { chunk });
   }
+
   sseResponse.sendEvent('done', {});
   sseResponse.end();
 };
 
-const waitForPost = async (sessionId: string): Promise<string> => {
-  return new Promise<string>((resolve, reject) => {
+const waitForPost = async (
+  sessionId: string,
+): Promise<Result<string, void>> => {
+  return new Promise((resolve) => {
     const eventName = `chat.post.${sessionId}`;
 
-    const handler = ({ message }: { message: string }): void => {
+    const handler = ({ inputMessage }: { inputMessage: string }): void => {
       clearTimeout(timeoutId);
-      resolve(message);
+      resolve(ok(inputMessage));
     };
 
     const timeoutId = setTimeout(() => {
       eventEmitter.removeListener(eventName, handler);
-      reject(new Error('Timeout'));
+      resolve(err());
     }, 5_000);
 
     eventEmitter.once(eventName, handler);

@@ -53,7 +53,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
         void fetch(`${bffUrl}/chat/${sessionId}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: trimmedInput }),
+          body: JSON.stringify({ inputMessage: trimmedInput }),
         }).catch(() => {
           closeWithError('Error: failed to send message');
         });
@@ -61,7 +61,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
       { once: true },
     );
 
-    eventSource.addEventListener('text', (event) => {
+    eventSource.addEventListener('output-message', (event) => {
       const parsed: unknown = JSON.parse(event.data as string);
       if (typeof parsed === 'object' && parsed !== null && 'chunk' in parsed) {
         setMessages((previous) => {

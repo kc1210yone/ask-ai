@@ -8,8 +8,8 @@ import {
 export const bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient();
 
 export const invokeAgent = async (
-  inputText: string,
   sessionId: string,
+  inputText: string,
 ): Promise<AsyncGenerator<string>> => {
   const response = await bedrockAgentRuntimeClient.send(
     new InvokeAgentCommand({
@@ -19,10 +19,10 @@ export const invokeAgent = async (
       inputText,
     }),
   );
-  return generateTextChunks(response);
+  return generateOutputTextChunks(response);
 };
 
-async function* generateTextChunks(
+async function* generateOutputTextChunks(
   response: InvokeAgentCommandOutput,
 ): AsyncGenerator<string> {
   assert(response.completion);

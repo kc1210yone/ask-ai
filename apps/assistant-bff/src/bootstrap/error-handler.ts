@@ -24,3 +24,5 @@ export const errorHandler: ErrorRequestHandler = (
     response.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// TODO: SSE送信中に例外が起こったら、errorイベントを送信する
