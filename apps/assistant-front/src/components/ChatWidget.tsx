@@ -15,7 +15,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
-  const [sessionId, setSessionId] = useState<string | undefined>(undefined);
+  const [sessionId, setSessionId] = useState<string>(() => crypto.randomUUID());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: trimmedInput,
-          sessionId: sessionId ?? null,
+          sessionId: sessionId,
         }),
       });
 
@@ -75,7 +75,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
 
       const streamId = String((responseBody as { streamId: unknown }).streamId);
       const eventSource = new EventSource(
-        `${bffUrl}/chat/stream?streamId=${streamId}`,
+        `${bffUrl}/chat?streamId=${streamId}`,
       );
 
       eventSource.addEventListener('text', (event) => {
@@ -96,34 +96,27 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
       });
 
       eventSource.addEventListener('done', (event) => {
-        const parsed: unknown = JSON.parse(event.data as string);
-        if (
-          typeof parsed === 'object' &&
-          parsed !== null &&
-          'sessionId' in parsed
-        ) {
-          setSessionId(String((parsed as { sessionId: unknown }).sessionId));
-        }
+        console.log('donedonedone');
+        console.log(event.data, typeof event.data, event.data === '');
         eventSource.close();
         setIsStreaming(false);
       });
 
       eventSource.addEventListener('error', (event) => {
-        const parsed: unknown = JSON.parse(
-          (event as MessageEvent).data as string,
-        );
-        setMessages((previous) => {
-          const updated = [...previous];
-          const last = updated[updated.length - 1];
-          if (last) {
-            last.content = `Error: ${
-              typeof parsed === 'object' && parsed !== null && 'error' in parsed
-                ? String((parsed as { error: unknown }).error)
-                : 'unknown error'
-            }`;
-          }
-          return updated;
-        });
+        console.log(event);
+        // console.log(event as MessageEvent).data as string);
+        // setMessages((previous) => {
+        //   const updated = [...previous];
+        //   const last = updated[updated.length - 1];
+        //   if (last) {
+        //     last.content = `Error: ${
+        //       typeof parsed === 'object' && parsed !== null && 'error' in parsed
+        //         ? String((parsed as { error: unknown }).error)
+        //         : 'unknown error'
+        //     }`;
+        //   }
+        //   return updated;
+        // });
         eventSource.close();
         setIsStreaming(false);
       });

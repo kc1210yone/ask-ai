@@ -1,13 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { Router } from 'express';
 import { z } from 'zod';
+import { SseResponse } from './sse.js';
 import { invokeAgent } from '#src/features/chat/bedrock-client.js';
-import {
-  initializeSseResponse,
-  sendSseDoneEvent,
-  sendSseErrorEvent,
-  sendSseTextEvent,
-} from '#src/features/chat/sse.js';
 
 export const chatRouter = Router();
 
@@ -45,7 +40,7 @@ chatRouter.post('/chat', (request, response) => {
   response.json({ streamId });
 });
 
-chatRouter.get('/chat/stream', async (request, response) => {
+chatRouter.get('/chat', async (request, response) => {
   const parsed = StreamQuerySchema.safeParse(request.query);
 
   if (!parsed.success) {
@@ -64,17 +59,17 @@ chatRouter.get('/chat/stream', async (request, response) => {
 
   const invokeResult = await invokeAgent(pending.message, pending.sessionId);
   const { sessionId: resolvedSessionId, textChunks } = invokeResult;
+  console.log(resolvedSessionId);
 
-  initializeSseResponse(response);
-
+  const sseResponse = new SseResponse(response);
+  sseResponse.initialize();
   try {
     for await (const chunk of textChunks) {
-      sendSseTextEvent(response, chunk);
+      sseResponse.sendTextEvent(chunk);
     }
   } catch {
-    sendSseErrorEvent(response, 'Stream interrupted');
+    sseResponse.sendErrorEvent('Stream interrupted');
   }
-
-  sendSseDoneEvent(response, resolvedSessionId);
-  response.end();
+  sseResponse.sendDoneEvent();
+  sseResponse.end();
 });

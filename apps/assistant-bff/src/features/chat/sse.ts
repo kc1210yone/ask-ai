@@ -1,24 +1,36 @@
+import assert from 'node:assert/strict';
 import type { Response } from 'express';
 
-export const initializeSseResponse = (response: Response): void => {
-  response.socket?.setNoDelay(true);
-  response.setHeader('Content-Type', 'text/event-stream');
-  response.setHeader('Cache-Control', 'no-cache');
-  response.setHeader('Connection', 'keep-alive');
-  response.flushHeaders();
-};
+export class SseResponse {
+  constructor(private response: Response) {}
 
-export const sendSseTextEvent = (response: Response, chunk: string): void => {
-  response.write(`event: text\ndata: ${JSON.stringify({ chunk })}\n\n`);
-};
+  initialize(): void {
+    assert(this.response.socket);
+    this.response.socket.setNoDelay(true);
 
-export const sendSseDoneEvent = (
-  response: Response,
-  sessionId: string,
-): void => {
-  response.write(`event: done\ndata: ${JSON.stringify({ sessionId })}\n\n`);
-};
+    this.response.setHeader('Content-Type', 'text/event-stream');
+    this.response.setHeader('Cache-Control', 'no-cache');
+    this.response.flushHeaders();
+  }
 
-export const sendSseErrorEvent = (response: Response, error: string): void => {
-  response.write(`event: error\ndata: ${JSON.stringify({ error })}\n\n`);
-};
+  sendTextEvent(chunk: string): void {
+    this.sendEvent('text', { chunk });
+  }
+
+  sendDoneEvent(): void {
+    this.sendEvent('done', {});
+  }
+
+  sendErrorEvent(error: string): void {
+    this.sendEvent('error', { error });
+  }
+
+  private sendEvent(event: string, data: unknown): void {
+    this.response.write(`event: ${event}\n`);
+    this.response.write(`data: ${JSON.stringify(data)}\n\n`);
+  }
+
+  end(): void {
+    this.response.end();
+  }
+}
