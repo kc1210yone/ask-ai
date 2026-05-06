@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
 import {
   BedrockAgentRuntimeClient,
   InvokeAgentCommand,
@@ -8,17 +7,10 @@ import {
 
 export const bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient();
 
-export interface InvokeAgentResult {
-  sessionId: string;
-  textChunks: AsyncGenerator<string>;
-}
-
 export const invokeAgent = async (
   inputText: string,
-  existingSessionId: string | null,
-): Promise<InvokeAgentResult> => {
-  const sessionId = existingSessionId ?? randomUUID();
-
+  sessionId: string,
+): Promise<AsyncGenerator<string>> => {
   const response = await bedrockAgentRuntimeClient.send(
     new InvokeAgentCommand({
       agentId: 'AFZV2506DY',
@@ -27,10 +19,7 @@ export const invokeAgent = async (
       inputText,
     }),
   );
-  return {
-    sessionId,
-    textChunks: generateTextChunks(response),
-  };
+  return generateTextChunks(response);
 };
 
 async function* generateTextChunks(

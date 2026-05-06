@@ -15,7 +15,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
-  const [sessionId, setSessionId] = useState<string>(() => crypto.randomUUID());
+  const [sessionId] = useState<string>(() => crypto.randomUUID());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,12 +35,11 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
     setIsStreaming(true);
 
     try {
-      const postResponse = await fetch(`${bffUrl}/chat`, {
+      const postResponse = await fetch(`${bffUrl}/chat/${sessionId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: trimmedInput,
-          sessionId: sessionId,
         }),
       });
 
@@ -58,11 +57,8 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
       }
 
       const responseBody: unknown = await postResponse.json();
-      if (
-        typeof responseBody !== 'object' ||
-        responseBody === null ||
-        !('streamId' in responseBody)
-      ) {
+      console.log(responseBody);
+      if (responseBody.status !== 'ok') {
         setMessages((previous) => {
           const updated = [...previous];
           const last = updated[updated.length - 1];
@@ -73,10 +69,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
         return;
       }
 
-      const streamId = String((responseBody as { streamId: unknown }).streamId);
-      const eventSource = new EventSource(
-        `${bffUrl}/chat?streamId=${streamId}`,
-      );
+      const eventSource = new EventSource(`${bffUrl}/chat/${sessionId}`);
 
       eventSource.addEventListener('text', (event) => {
         const parsed: unknown = JSON.parse(event.data as string);

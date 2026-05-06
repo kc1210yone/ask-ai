@@ -13,19 +13,7 @@ export class SseResponse {
     this.response.flushHeaders();
   }
 
-  sendTextEvent(chunk: string): void {
-    this.sendEvent('text', { chunk });
-  }
-
-  sendDoneEvent(): void {
-    this.sendEvent('done', {});
-  }
-
-  sendErrorEvent(error: string): void {
-    this.sendEvent('error', { error });
-  }
-
-  private sendEvent(event: string, data: unknown): void {
+  sendEvent(event: string, data: unknown): void {
     this.response.write(`event: ${event}\n`);
     this.response.write(`data: ${JSON.stringify(data)}\n\n`);
   }
