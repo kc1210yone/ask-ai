@@ -1,4 +1,4 @@
-import type { ErrorRequestHandler } from 'express';
+import type { ErrorRequestHandler, Response } from 'express';
 import { HttpError } from '#src/lib/errors/index.js';
 
 export const errorHandler: ErrorRequestHandler = (
@@ -10,12 +10,14 @@ export const errorHandler: ErrorRequestHandler = (
 ) => {
   console.error(error);
 
-  if (response.headersSent) {
-    console.error('Headers are already sent, so cannot send error response.');
-    response.end();
-    return;
+  if (!response.headersSent) {
+    whenHeadersNotSent(error, response);
+  } else {
+    whenHeadersSent(response);
   }
+};
 
+const whenHeadersNotSent = (error: unknown, response: Response): void => {
   if (error instanceof HttpError) {
     response.status(error.statusCode).json({
       error: error.message,
@@ -25,4 +27,10 @@ export const errorHandler: ErrorRequestHandler = (
   }
 };
 
-// TODO: SSE送信中に例外が起こったら、errorイベントを送信する
+const whenHeadersSent = (response: Response): void => {
+  if (response.get('Content-Type') === 'text/event-stream') {
+    response.write('event: error\n');
+    response.write('data: {}\n\n');
+  }
+  response.end();
+};
