@@ -22,7 +22,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async (): Promise<void> => {
+  const handleSend = (): void => {
     const trimmedInput = inputValue.trim();
     if (!trimmedInput || isStreaming) return;
 
@@ -34,106 +34,68 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
     ]);
     setIsStreaming(true);
 
-    try {
-      const postResponse = await fetch(`${bffUrl}/chat/${sessionId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: trimmedInput,
-        }),
-      });
+    const eventSource = new EventSource(`${bffUrl}/chat/${sessionId}`);
 
-      if (!postResponse.ok) {
-        const errorBody = await postResponse.text().catch(() => '');
+    const closeWithError = (message: string): void => {
+      setMessages((previous) => {
+        const updated = [...previous];
+        const last = updated[updated.length - 1];
+        if (last) last.content = message;
+        return updated;
+      });
+      eventSource.close();
+      setIsStreaming(false);
+    };
+
+    eventSource.addEventListener(
+      'ready',
+      () => {
+        void fetch(`${bffUrl}/chat/${sessionId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: trimmedInput }),
+        }).catch(() => {
+          closeWithError('Error: failed to send message');
+        });
+      },
+      { once: true },
+    );
+
+    eventSource.addEventListener('text', (event) => {
+      const parsed: unknown = JSON.parse(event.data as string);
+      if (typeof parsed === 'object' && parsed !== null && 'chunk' in parsed) {
         setMessages((previous) => {
           const updated = [...previous];
           const last = updated[updated.length - 1];
           if (last)
-            last.content = `Error: ${postResponse.status.toString()} ${errorBody}`;
+            last.content += String((parsed as { chunk: unknown }).chunk);
           return updated;
         });
-        setIsStreaming(false);
-        return;
       }
+    });
 
-      const responseBody: unknown = await postResponse.json();
-      console.log(responseBody);
-      if (responseBody.status !== 'ok') {
-        setMessages((previous) => {
-          const updated = [...previous];
-          const last = updated[updated.length - 1];
-          if (last) last.content = 'Error: invalid server response';
-          return updated;
-        });
-        setIsStreaming(false);
-        return;
-      }
-
-      const eventSource = new EventSource(`${bffUrl}/chat/${sessionId}`);
-
-      eventSource.addEventListener('text', (event) => {
-        const parsed: unknown = JSON.parse(event.data as string);
-        if (
-          typeof parsed === 'object' &&
-          parsed !== null &&
-          'chunk' in parsed
-        ) {
-          setMessages((previous) => {
-            const updated = [...previous];
-            const last = updated[updated.length - 1];
-            if (last)
-              last.content += String((parsed as { chunk: unknown }).chunk);
-            return updated;
-          });
-        }
-      });
-
-      eventSource.addEventListener('done', (event) => {
-        console.log('donedonedone');
-        console.log(event.data, typeof event.data, event.data === '');
-        eventSource.close();
-        setIsStreaming(false);
-      });
-
-      eventSource.addEventListener('error', (event) => {
-        console.log(event);
-        // console.log(event as MessageEvent).data as string);
-        // setMessages((previous) => {
-        //   const updated = [...previous];
-        //   const last = updated[updated.length - 1];
-        //   if (last) {
-        //     last.content = `Error: ${
-        //       typeof parsed === 'object' && parsed !== null && 'error' in parsed
-        //         ? String((parsed as { error: unknown }).error)
-        //         : 'unknown error'
-        //     }`;
-        //   }
-        //   return updated;
-        // });
-        eventSource.close();
-        setIsStreaming(false);
-      });
-
-      eventSource.onerror = () => {
-        if (eventSource.readyState === EventSource.CLOSED) return;
-        setMessages((previous) => {
-          const updated = [...previous];
-          const last = updated[updated.length - 1];
-          if (last) last.content = 'Error: connection failed';
-          return updated;
-        });
-        eventSource.close();
-        setIsStreaming(false);
-      };
-    } catch {
-      setMessages((previous) => {
-        const updated = [...previous];
-        const last = updated[updated.length - 1];
-        if (last) last.content = 'Error: connection failed';
-        return updated;
-      });
+    eventSource.addEventListener('done', () => {
+      eventSource.close();
       setIsStreaming(false);
-    }
+    });
+
+    eventSource.addEventListener('error', (event) => {
+      const parsed: unknown = JSON.parse(
+        (event as MessageEvent).data as string,
+      );
+      closeWithError(
+        `Error: ${
+          typeof parsed === 'object' && parsed !== null && 'error' in parsed
+            ? String((parsed as { error: unknown }).error)
+            : 'unknown error'
+        }`,
+      );
+    });
+
+    eventSource.onerror = () => {
+      if (eventSource.readyState === EventSource.CLOSED) return;
+      closeWithError('Error: connection failed');
+    };
   };
 
   return (
@@ -197,7 +159,7 @@ const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
               className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400 disabled:opacity-50"
             />
             <button
-              onClick={() => void handleSend()}
+              onClick={handleSend}
               disabled={isStreaming || !inputValue.trim()}
               className="rounded-lg bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
               aria-label="Send"

@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express';
 import { z } from 'zod';
 import { eventEmitter } from './event.js';
+import { HttpError } from '#src/lib/errors/index.js';
 
 const ParamsSchema = z.object({
   sessionId: z.uuid(),
@@ -14,8 +15,7 @@ export const postChatHandler: RequestHandler = (request, response) => {
     ...request.body,
   });
   if (!parseResult.success) {
-    response.status(400).json({ error: 'Bad Request' });
-    return;
+    throw new HttpError({ statusCode: 400, message: 'Bad Request' });
   }
   const params = parseResult.data;
 

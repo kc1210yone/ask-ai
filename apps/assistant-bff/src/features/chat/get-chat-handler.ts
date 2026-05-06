@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { invokeAgent } from './bedrock-client.js';
 import { eventEmitter } from './event.js';
 import { SseResponse } from './sse.js';
+import { HttpError } from '#src/lib/errors/index.js';
 
 const ParamsSchema = z.object({
   sessionId: z.uuid(),
@@ -11,20 +12,30 @@ const ParamsSchema = z.object({
 export const getChatHandler: RequestHandler = async (request, response) => {
   const parseResult = ParamsSchema.safeParse(request.params, request.query);
   if (!parseResult.success) {
-    response.status(400).json({ error: 'Bad Request' });
-    return;
+    throw new HttpError({ statusCode: 400, message: 'Bad Request' });
   }
   const params = parseResult.data;
 
   const sseResponse = new SseResponse(response);
+  sseResponse.initialize();
 
   sseResponse.sendEvent('ready', {});
 
-  const message = waitForMessage(params.sessionId);
+  // TODO
+  console.log('a');
+  let message;
+  try {
+    message = await waitForPost(params.sessionId);
+  } catch {
+    sseResponse.sendEvent('error', { error: 'post-timeout' });
+    sseResponse.end();
+    return;
+  }
+  console.log('b');
+  console.log(message);
 
   const textChunks = await invokeAgent(message, params.sessionId);
 
-  sseResponse.initialize();
   try {
     for await (const chunk of textChunks) {
       sseResponse.sendEvent('text', { chunk });
@@ -36,19 +47,19 @@ export const getChatHandler: RequestHandler = async (request, response) => {
   sseResponse.end();
 };
 
-const waitForMessage = async (sessionId: string): Promise<string> => {
+const waitForPost = async (sessionId: string): Promise<string> => {
   return new Promise<string>((resolve, reject) => {
     const eventName = `chat.post.${sessionId}`;
 
-    const handler = ({ message }: { message: string }) => {
+    const handler = ({ message }: { message: string }): void => {
       clearTimeout(timeoutId);
       resolve(message);
     };
 
     const timeoutId = setTimeout(() => {
-      eventEmitter.off(eventName, handler);
+      eventEmitter.removeListener(eventName, handler);
       reject(new Error('Timeout'));
-    }, 30_000);
+    }, 5_000);
 
     eventEmitter.once(eventName, handler);
   });
