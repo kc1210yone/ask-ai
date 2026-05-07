@@ -30,7 +30,7 @@ const whenHeadersNotSent = (error: unknown, response: Response): void => {
 const whenHeadersSent = (response: Response): void => {
   if (response.get('Content-Type') === 'text/event-stream') {
     response.write('event: error\n');
-    response.write('data: {}\n\n');
+    response.write('data: {"error": "unknown"}\n\n');
   }
   response.end();
 };
