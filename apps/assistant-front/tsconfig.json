@@ -5,8 +5,6 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "esnext",
     "rootDir": ".",
-    // TODO: 他のTypesが消えてしまっている
-    "types": ["vite/client"],
     "paths": {
       "#src/*": ["./src/*"]
     },
