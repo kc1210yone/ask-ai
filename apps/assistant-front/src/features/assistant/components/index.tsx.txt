@@ -1,17 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import type { JSX } from 'react';
-
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
+import type { Message } from './presentational.tsx';
+import { Presentational } from './presentational.tsx';
 
 interface ChatWidgetProps {
   bffUrl: string;
 }
 
-const ChatWidget = ({}: ChatWidgetProps): JSX.Element => {
-  const bffUrl = 'http://localhost:3000';
+const ChatWidget = ({ bffUrl }: ChatWidgetProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -99,7 +95,23 @@ const ChatWidget = ({}: ChatWidgetProps): JSX.Element => {
     };
   };
 
-  return <Presentational />;
+  return (
+    <Presentational
+      isOpen={isOpen}
+      messages={messages}
+      inputValue={inputValue}
+      isStreaming={isStreaming}
+      messagesEndRef={messagesEndRef}
+      onClose={() => {
+        setIsOpen(false);
+      }}
+      onToggle={() => {
+        setIsOpen((previous) => !previous);
+      }}
+      onInputChange={setInputValue}
+      onSend={handleSend}
+    />
+  );
 };
 
 export default ChatWidget;
