@@ -17,6 +17,9 @@ export default defineConfig({
       formats: ['es'],
     },
   },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+  },
   resolve: {
     alias: {
       '#src': fileURLToPath(new URL('./src', import.meta.url)),
