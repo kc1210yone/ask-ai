@@ -7,6 +7,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
+    target: 'es2020',
     lib: {
       entry: {
         'ask-ai-assistant': fileURLToPath(
@@ -14,15 +15,6 @@ export default defineConfig({
         ),
       },
       formats: ['es'],
-    },
-    target: 'es2020',
-    minify: 'esbuild',
-    cssCodeSplit: false,
-    rolldownOptions: {
-      // input: {},
-      output: {
-        inlineDynamicImports: true,
-      },
     },
   },
   resolve: {
