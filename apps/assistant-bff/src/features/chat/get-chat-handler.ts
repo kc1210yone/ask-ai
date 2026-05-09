@@ -40,6 +40,7 @@ export const getChatHandler: RequestHandler = async (request, response) => {
   sseResponse.end();
 };
 
+// TODO: remove neverthrow
 const waitForPost = async (
   sessionId: string,
 ): Promise<Result<string, void>> => {
