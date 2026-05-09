@@ -14,7 +14,7 @@ export const Chat = ({
     return null;
   }
   return (
-    <div>
+    <div className="fixed right-8 bottom-8">
       <button
         onClick={() => {
           setAssistantIsOpen(false);
