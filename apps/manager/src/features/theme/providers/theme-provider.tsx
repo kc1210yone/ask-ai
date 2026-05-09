@@ -4,7 +4,7 @@ import 'client-only';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 
-export interface Props {
+interface Props {
   children: ReactNode;
 }
 
