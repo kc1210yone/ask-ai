@@ -1,20 +1,13 @@
-import { type ReactNode } from 'react';
+import { type ComponentProps, type ReactNode } from 'react';
+import { ChatProvider } from './chat-provider/provider';
+import { Inner } from './inner';
 
-interface Props {
-  assistantIsOpen: boolean;
-  setAssistantIsOpen: (value: boolean) => void;
-}
+type Props = ComponentProps<typeof Inner>;
 
-export const Chat = ({
-  assistantIsOpen,
-  setAssistantIsOpen,
-}: Props): ReactNode => {
-  if (!assistantIsOpen) {
-    return null;
-  }
+export const Chat = (props: Props): ReactNode => {
   return (
     <ChatProvider>
-      <Inner />
+      <Inner {...props} />
     </ChatProvider>
   );
 };

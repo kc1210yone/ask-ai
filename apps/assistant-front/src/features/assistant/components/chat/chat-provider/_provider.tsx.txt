@@ -1,16 +1,12 @@
 import { useContext, useMemo, useRef, useState, type ReactNode } from 'react';
 import { z } from 'zod';
-import type { Message } from './types';
+import type { Message } from '../types';
+import { ChatContext } from './context';
 
 const BFF_BASE_URL = z.string().parse(import.meta.env['VITE_BFF_BASE_URL']);
 
 interface Props {
   children: ReactNode;
-}
-
-interface ContextValue {
-  messages: Messages[];
-  sendMessage: () => void;
 }
 
 export const ChatProvider = ({ children }: Props): ReactNode => {
@@ -69,7 +65,7 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
     eventSourceRef.current = null;
   };
 
-  const sendMessage = async (inputMessage: string): boolean => {
+  const sendMessage = async (inputMessage: string): Promise<boolean> => {
     openConnection();
     await new Promise<void>((resolve) => {
       setOnReady(() => {
@@ -85,19 +81,14 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
     return true;
   };
 
-  const context = useContext();
-
-  const value = {
-    messages,
-    sendMessage,
-  };
-  return <context value={value}>{children}</context>;
-};
-
-export const useChat = (): ContextValue => {
-  useContext();
-  return {
-    message,
-    sendMessage,
-  };
+  return (
+    <ChatContext
+      value={{
+        messages,
+        sendMessage,
+      }}
+    >
+      {children}
+    </ChatContext>
+  );
 };
