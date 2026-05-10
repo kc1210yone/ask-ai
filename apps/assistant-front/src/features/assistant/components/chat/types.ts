@@ -1,5 +1,4 @@
 export interface Message {
-  from: 'user' | 'assistant';
-  type: 'normal' | 'error';
+  type: 'user' | 'assistant-receiving' | 'assistant-done' | 'assistant-error';
   content: string;
 }

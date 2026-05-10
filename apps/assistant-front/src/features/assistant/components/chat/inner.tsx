@@ -31,7 +31,7 @@ export const Inner = ({
       <div>
         {messages.map((message, index) => (
           <div key={index}>
-            {message.from}, {message.type}, {message.content}
+            {message.type}, {message.content}
           </div>
         ))}
       </div>

@@ -6,6 +6,10 @@ import { ChatContext } from './context';
 
 const BFF_BASE_URL = z.string().parse(import.meta.env['VITE_BFF_BASE_URL']);
 
+const OutputMessageDataSchema = z.object({
+  chunk: z.string(),
+});
+
 const PostResponseSchema = z.object({
   status: z.enum(['ok', 'error']),
 });
@@ -25,58 +29,87 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
 
   const onReadyRef = useRef<(() => void) | null>(null);
 
-  const readyHandler = useCallback((event: Event) => {
-    console.log(event);
-    onReadyRef.current?.();
+  const onReadyListener = useCallback((): void => {
+    invariant(onReadyRef.current);
+    onReadyRef.current();
   }, []);
 
-  const doneHandler = useCallback((event: Event) => {
-    console.log(event);
+  const onOutputMessageListener = useCallback((event: MessageEvent): void => {
+    const dataString = z.string().parse(event.data);
+    const data = OutputMessageDataSchema.parse(JSON.parse(dataString));
+    setMessages((previous) => {
+      const rest = previous.slice(0, -1);
+      const last = previous[previous.length - 1];
+      invariant(last);
+      invariant(last.type === 'assistant-receiving');
+      return [...rest, { ...last, content: last.content + data.chunk }];
+    });
+  }, []);
+
+  const onDoneListener = useCallback((): void => {
+    setMessages((previous) => {
+      const rest = previous.slice(0, -1);
+      const last = previous[previous.length - 1];
+      invariant(last);
+      invariant(last.type === 'assistant-receiving');
+      return [...rest, { ...last, type: 'assistant-done' }];
+    });
+    invariant(disconnectRef.current);
+    disconnectRef.current();
+  }, []);
+
+  const setAssistantErrorMessage = useCallback((): void => {
+    setMessages((previous) => {
+      if (previous.length === 0) {
+        return previous;
+      }
+      const rest = previous.slice(0, -1);
+      const last = previous[previous.length - 1];
+      invariant(last);
+      if (last.type !== 'assistant-receiving') {
+        return previous;
+      }
+      return [...rest, { ...last, type: 'assistant-error' }];
+    });
+  }, []);
+
+  const onAppErrorListener = useCallback((): void => {
+    setAssistantErrorMessage();
+    // app-errorを受信するときにはdisconnectRefは登録済み。
+    invariant(disconnectRef.current);
+    disconnectRef.current();
+  }, [setAssistantErrorMessage]);
+
+  const onErrorListener = useCallback((): void => {
+    setAssistantErrorMessage();
+    // errorを受信するときにはdisconnectRefは未登録の可能性がある。
     disconnectRef.current?.();
-  }, []);
+  }, [setAssistantErrorMessage]);
 
-  const appErrorHandler = useCallback((event: Event) => {
-    console.log(event);
-    disconnectRef.current?.();
-  }, []);
-
-  const outputMessageHandler = useCallback((event: Event) => {
-    console.log(event);
-    setMessages((previous) => [
-      ...previous,
-      { from: 'assistant', type: 'normal', content: 'message' },
-    ]);
-  }, []);
-
-  const errorHandler = useCallback((event: Event) => {
-    console.log(event);
-    disconnectRef.current?.();
-  }, []);
-
-  const handlers = useMemo(
+  const listeners = useMemo(
     () => ({
-      ready: readyHandler,
-      done: doneHandler,
-      'app-error': appErrorHandler,
-      error: errorHandler,
-      'output-message': outputMessageHandler,
+      ready: onReadyListener,
+      'output-message': onOutputMessageListener,
+      done: onDoneListener,
+      'app-error': onAppErrorListener,
+      error: onErrorListener,
     }),
     [
-      appErrorHandler,
-      doneHandler,
-      errorHandler,
-      outputMessageHandler,
-      readyHandler,
+      onAppErrorListener,
+      onDoneListener,
+      onErrorListener,
+      onOutputMessageListener,
+      onReadyListener,
     ],
   );
 
   const connect = useCallback(async () => {
     eventSourceRef.current = new EventSource(
-      `${BFF_BASE_URL}/chat/${sessionId}`,
+      `${BFF_BASE_URL}/chata/${sessionId}`,
     );
-    Object.entries(handlers).forEach(([eventType, handler]) => {
+    Object.entries(listeners).forEach(([eventType, listener]) => {
       invariant(eventSourceRef.current);
-      eventSourceRef.current.addEventListener(eventType, handler);
+      eventSourceRef.current.addEventListener(eventType, listener);
     });
     await new Promise<void>((resolve) => {
       onReadyRef.current = () => {
@@ -84,12 +117,14 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       };
     });
     disconnectRef.current = () => {
-      Object.entries(handlers).forEach(([eventType, handler]) => {
+      Object.entries(listeners).forEach(([eventType, listener]) => {
         invariant(eventSourceRef.current);
-        eventSourceRef.current.removeEventListener(eventType, handler);
+        eventSourceRef.current.removeEventListener(eventType, listener);
       });
+      invariant(eventSourceRef.current);
+      eventSourceRef.current.close();
     };
-  }, [handlers, sessionId]);
+  }, [listeners, sessionId]);
 
   const sendMessage = useCallback(
     async (inputMessage: string): Promise<boolean> => {
@@ -105,7 +140,8 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       }
       setMessages((previous) => [
         ...previous,
-        { from: 'user', type: 'normal', content: inputMessage },
+        { type: 'user', content: inputMessage },
+        { type: 'assistant-receiving', content: '' },
       ]);
       return true;
     },
