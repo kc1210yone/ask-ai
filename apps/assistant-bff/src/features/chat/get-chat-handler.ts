@@ -1,5 +1,4 @@
 import type { RequestHandler } from 'express';
-import { err, ok, Result } from 'neverthrow';
 import { z } from 'zod';
 import { invokeAgent } from './bedrock-client.js';
 import { eventEmitter } from './event.js';
@@ -22,13 +21,12 @@ export const getChatHandler: RequestHandler = async (request, response) => {
 
   sseResponse.sendEvent('ready', {});
 
-  const inputMessageResult = await waitForPost(params.sessionId);
-  if (inputMessageResult.isErr()) {
+  const inputMessage = await waitForPost(params.sessionId);
+  if (!inputMessage) {
     sseResponse.sendEvent('error', { error: 'input-message-error' });
     sseResponse.end();
     return;
   }
-  const inputMessage = inputMessageResult.value;
 
   const outputMessageChunks = await invokeAgent(params.sessionId, inputMessage);
 
@@ -40,21 +38,18 @@ export const getChatHandler: RequestHandler = async (request, response) => {
   sseResponse.end();
 };
 
-// TODO: remove neverthrow
-const waitForPost = async (
-  sessionId: string,
-): Promise<Result<string, void>> => {
+const waitForPost = async (sessionId: string): Promise<string | null> => {
   return new Promise((resolve) => {
     const eventName = `chat.post.${sessionId}`;
 
     const handler = ({ inputMessage }: { inputMessage: string }): void => {
       clearTimeout(timeoutId);
-      resolve(ok(inputMessage));
+      resolve(inputMessage);
     };
 
     const timeoutId = setTimeout(() => {
       eventEmitter.removeListener(eventName, handler);
-      resolve(err());
+      resolve(null);
     }, 5_000);
 
     eventEmitter.once(eventName, handler);
