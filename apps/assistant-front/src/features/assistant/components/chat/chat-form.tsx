@@ -24,6 +24,7 @@ export const ChatForm = (): ReactNode => {
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
     await sendMessage(data.message);
+    form.reset();
   };
 
   return (

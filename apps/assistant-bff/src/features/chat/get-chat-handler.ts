@@ -23,7 +23,7 @@ export const getChatHandler: RequestHandler = async (request, response) => {
 
   const inputMessage = await waitForPost(params.sessionId);
   if (!inputMessage) {
-    sseResponse.sendEvent('error', { error: 'input-message-error' });
+    sseResponse.sendEvent('app-error', { error: 'input-message-error' });
     sseResponse.end();
     return;
   }
