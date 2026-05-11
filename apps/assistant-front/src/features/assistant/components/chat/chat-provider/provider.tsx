@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from 'react';
+import { useCallback, useRef, useState, type ReactNode } from 'react';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 import type { Message } from '../types';
@@ -13,6 +13,8 @@ interface Props {
 
 export const ChatProvider = ({ children }: Props): ReactNode => {
   const [sessionId] = useState(() => crypto.randomUUID());
+
+  const disconnectRef = useRef<(() => void) | null>(null);
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -35,6 +37,7 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       });
       const dataString = z.string().parse(event.data);
       const data = Schema.parse(JSON.parse(dataString));
+
       setMessages((previous) => {
         const rest = previous.slice(0, -1);
         const last = previous[previous.length - 1];
@@ -53,7 +56,9 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
         invariant(last.type === 'assistant-receiving');
         return [...rest, { ...last, type: 'assistant-done' }];
       });
-      disconnect();
+
+      invariant(disconnectRef.current);
+      disconnectRef.current();
     };
     eventSource.addEventListener('done', onDoneListener);
 
@@ -70,13 +75,16 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
         }
         return [...rest, { ...last, type: 'assistant-error' }];
       });
-      disconnect();
+
+      invariant(disconnectRef.current);
+      disconnectRef.current();
+
       readyResolve(false);
     };
     eventSource.addEventListener('app-error', onErrorListener);
     eventSource.addEventListener('error', onErrorListener);
 
-    const disconnect = (): void => {
+    disconnectRef.current = (): void => {
       eventSource.removeEventListener('ready', onReadyListener);
       eventSource.removeEventListener(
         'output-message',
@@ -87,6 +95,8 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       eventSource.removeEventListener('error', onErrorListener);
 
       eventSource.close();
+
+      disconnectRef.current = null;
     };
 
     return await readyPromise;
@@ -108,10 +118,12 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
           signal: timeoutSignal(10_000),
         });
         if (response.status !== 200) {
+          disconnectRef.current?.();
           return false;
         }
         responseBody = (await response.json()) as unknown;
       } catch {
+        disconnectRef.current?.();
         return false;
       }
 
@@ -120,6 +132,7 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       });
       const parsedBody = Schema.parse(responseBody);
       if (parsedBody.status === 'error') {
+        disconnectRef.current?.();
         return false;
       }
 
