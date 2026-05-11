@@ -31,6 +31,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   test: {
+    passWithNoTests: true,
     include: ['src/**/*.{test,spec}.ts?(x)'],
   },
 });
