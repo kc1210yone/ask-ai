@@ -8,7 +8,7 @@ export default {
   ...Object.fromEntries(
     [
       'apps/assistant-bff',
-      'apps/assistant-front',
+      'apps/assistant-web',
       'apps/functions',
       'apps/manager',
       'packages/db',
