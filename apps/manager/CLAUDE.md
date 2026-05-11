@@ -13,7 +13,6 @@ AIアシスタントが回答するときに参照するデータを入稿する
 - Vitest
 - React Compiler
 - React Hook Form 7.x, @hookform/resolvers/zod
-- Prisma
 - AWS Cognito
 - AWS Amplify
 - date-fns
@@ -34,7 +33,6 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 - `npm run lint:check -w @internal/manager`: ESLint/Prettierによるチェック。
 - `npm run lint:fix -w @internal/manager`: ESLint/Prettierによる自動Fix。
 - `npx -w @internal/manager shadcn add <component>`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
-- `npx -w @internal/manager prisma <command>`: Prismaのコマンドを実行。
 
 ## アーキテクチャ
 
