@@ -1,6 +1,4 @@
 <div className="flex h-96 w-80 flex-col rounded-xl border border-gray-200 bg-white shadow-lg">
-
-
   <div className="flex gap-2 border-t border-gray-100 p-3">
     <input
       type="text"
