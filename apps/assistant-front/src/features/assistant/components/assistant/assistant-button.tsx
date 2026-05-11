@@ -10,7 +10,7 @@ export const AssistantButton = (): ReactNode => {
   }
   return (
     <button
-      className="fixed right-8 bottom-8 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-600"
+      className="fixed right-8 bottom-8 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white transition hover:bg-blue-600"
       onClick={() => {
         setAssistantIsOpen(true);
       }}
