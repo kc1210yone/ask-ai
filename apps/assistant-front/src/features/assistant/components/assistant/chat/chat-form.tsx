@@ -1,3 +1,5 @@
+'use no memo';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,7 +15,7 @@ const FormSchema = z.object({
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 export const ChatForm = (): ReactNode => {
-  const { sendMessage } = useChat();
+  const { sendMessage, sendingDisabled } = useChat();
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
@@ -37,7 +39,9 @@ export const ChatForm = (): ReactNode => {
       {form.formState.errors.message && (
         <p>{form.formState.errors.message.message}</p>
       )}
-      <button>送信</button>
+      <button disabled={sendingDisabled}>
+        送信 ({String(sendingDisabled)})
+      </button>
     </form>
   );
 };
