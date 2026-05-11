@@ -21,6 +21,8 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
   const [sendingDisabled, setSendingDisabled] = useState(false);
 
   const connect = useCallback(async (): Promise<boolean> => {
+    setSendingDisabled(true);
+
     const eventSource = new EventSource(`${BFF_BASE_URL}/chat/${sessionId}`);
 
     let readyResolve: (value: boolean) => void;
@@ -61,8 +63,6 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
 
       invariant(disconnectRef.current);
       disconnectRef.current();
-
-      setSendingDisabled(false);
     };
     eventSource.addEventListener('done', onDoneListener);
 
@@ -84,7 +84,6 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       disconnectRef.current();
 
       readyResolve(false);
-      setSendingDisabled(false);
     };
     eventSource.addEventListener('app-error', onErrorListener);
     eventSource.addEventListener('error', onErrorListener);
@@ -102,6 +101,8 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       eventSource.close();
 
       disconnectRef.current = null;
+
+      setSendingDisabled(false);
     };
 
     return await readyPromise;
@@ -109,8 +110,6 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
 
   const sendMessage = useCallback(
     async (inputMessage: string): Promise<boolean> => {
-      setSendingDisabled(true);
-
       const connectResult = await connect();
       if (!connectResult) {
         return false;
