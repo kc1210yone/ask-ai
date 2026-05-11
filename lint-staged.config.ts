@@ -6,14 +6,18 @@ export default {
     'prettier --write --ignore-unknown',
   ],
   ...Object.fromEntries(
-    ['apps/assistant-bff', 'apps/functions', 'apps/manager'].map(
-      (workspace) => [
-        `${workspace}/**/*`,
-        [
-          `npx -w ./${workspace} eslint --fix --no-warn-ignored`,
-          `npx -w ./${workspace} prettier --write --ignore-path ../../.prettierignore --ignore-unknown`,
-        ],
+    [
+      'apps/assistant-bff',
+      'apps/assistant-front',
+      'apps/functions',
+      'apps/manager',
+      'packages/db',
+    ].map((workspace) => [
+      `${workspace}/**/*`,
+      [
+        `npx -w ./${workspace} eslint --fix --no-warn-ignored`,
+        `npx -w ./${workspace} prettier --write --ignore-path ../../.prettierignore --ignore-unknown`,
       ],
-    ),
+    ]),
   ),
 } satisfies Configuration;
