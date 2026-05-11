@@ -1,20 +1,14 @@
-# Assistant Web
+# Assistant BFF
 
-AIアシスタントのブラウザ用FE。
+AIアシスタントのBFF。
 このディレクトリはモノレポのワークスペースの一つである。
-成果物であるJSファイルを管理ユーザーが自社のウェブサイトに組み込むことで、簡単にAIアシスタントを設置できる。
 
 ## 技術スタック
 
-- Lucide for React
-- React 19
-- React Hook Form 7.x, @hookform/resolvers/zod
-- Tailwind Variants
-- tiny-invariant
+- Amazon Bedrock Agent
+- Amazon Bedrock Knowledge Base
+- Express
 - Zod 4
-- Tailwind CSS 4
-- React Compiler
-- Vite
 - Vitest
 
 ## コードスタイル
@@ -25,21 +19,18 @@ AIアシスタントのブラウザ用FE。
 
 Workspaceのディレクトリではなくプロジェクトルートのディレクトリから実行。
 
-- `npm run dev -w @internal/assistant-web`: Devサーバ起動。
-- `npm run test:typecheck -w @internal/assistant-web`: TypeScriptのタイプチェック。
-- `npm run test:vitest -w @internal/assistant-web`: Vitestによるテスト。
-- `npm run lint:check -w @internal/assistant-web`: ESLint/Prettierによるチェック。
-- `npm run lint:fix -w @internal/assistant-web`: ESLint/Prettierによる自動Fix。
+- `npm run dev -w @internal/assistant-bff`: Devサーバ起動。
+- `npm run test:typecheck -w @internal/assistant-bff`: TypeScriptのタイプチェック。
+- `npm run test:vitest -w @internal/assistant-bff`: Vitestによるテスト。
+- `npm run lint:check -w @internal/assistant-bff`: ESLint/Prettierによるチェック。
+- `npm run lint:fix -w @internal/assistant-bff`: ESLint/Prettierによる自動Fix。
 
 ## アーキテクチャ
 
-- `./public`: Publicディレクトリ。
 - `#src` (`./src`): ソースディレクトリ。
+- `#src/bootstrap`: 起動関係。
 - `#src/features`: 各機能。
-- `#src/lib`: ロジック。
-- `#src/pages`: ページ。この層はできるだけ薄くする。
-- `#src/scripts`: 出力するスクリプトファイルのエントリーポイント。この層はできるだけ薄くする。
-- `#src/types`: 型。
+- `#src/lib`: 共通ロジック。
 
 ## その他注意事項
 
