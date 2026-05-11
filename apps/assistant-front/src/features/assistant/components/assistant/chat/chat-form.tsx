@@ -1,6 +1,7 @@
 'use no memo';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { SendHorizontalIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,7 +26,7 @@ export const ChatForm = (): ReactNode => {
   });
 
   const onSubmit = async (data: FormSchemaType): Promise<void> => {
-    await sendMessage(data.message);
+    const result = await sendMessage(data.message);
     form.reset();
   };
 
@@ -35,12 +36,16 @@ export const ChatForm = (): ReactNode => {
         {...form.register('message')}
         placeholder="AIに質問しましょう。"
         rows={2}
+        className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400 disabled:opacity-50"
       />
       {form.formState.errors.message && (
         <p>{form.formState.errors.message.message}</p>
       )}
-      <button disabled={sendingDisabled}>
-        送信 ({String(sendingDisabled)})
+      <button
+        className="rounded-lg bg-blue-500 text-white enabled:hover:bg-blue-600 disabled:opacity-50"
+        disabled={sendingDisabled}
+      >
+        <SendHorizontalIcon />
       </button>
     </form>
   );
@@ -49,24 +54,6 @@ export const ChatForm = (): ReactNode => {
 /*
 <div className="flex h-96 w-80 flex-col rounded-xl border border-gray-200 bg-white shadow-lg">
   <div className="flex gap-2 border-t border-gray-100 p-3">
-    <input
-      type="text"
-      value={inputValue}
-      onChange={(event) => {
-        onInputChange(event.target.value);
-      }}
-      placeholder="メッセージを入力..."
-      disabled={isStreaming}
-      className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400 disabled:opacity-50"
-    />
-    <button
-      onClick={onSend}
-      disabled={isStreaming || !inputValue.trim()}
-      className="rounded-lg bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
-      aria-label="Send"
-    >
-      送信
-    </button>
   </div>
 </div>
  */
