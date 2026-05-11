@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SendHorizontalIcon } from 'lucide-react';
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useState, type KeyboardEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useChat } from './chat-provider/hook';
@@ -39,6 +39,16 @@ export const ChatForm = (): ReactNode => {
     form.reset();
   };
 
+  const onTextAreaKeyDown = async (
+    event: KeyboardEvent<HTMLTextAreaElement>,
+  ): Promise<void> => {
+    const isSendKey = (event.ctrlKey || event.metaKey) && event.key === 'Enter';
+    if (!isSendKey || sendingDisabled) {
+      return;
+    }
+    await form.handleSubmit(onSubmit)();
+  };
+
   return (
     <form
       onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
@@ -50,6 +60,7 @@ export const ChatForm = (): ReactNode => {
           placeholder="AIに質問しましょう。"
           rows={2}
           className="flex-1 resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400 disabled:opacity-50"
+          onKeyDown={(event) => void onTextAreaKeyDown(event)}
         />
         <button
           className="rounded-lg bg-blue-500 p-2 text-white transition enabled:hover:bg-blue-600 disabled:opacity-50"
