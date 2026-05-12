@@ -5,7 +5,7 @@ export default {
   singleQuote: true,
   overrides: [
     {
-      files: '*.yaml',
+      files: ['*.yml', '*.yaml'],
       options: {
         singleQuote: false,
       },
