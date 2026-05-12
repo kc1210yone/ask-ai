@@ -1,5 +1,4 @@
-# FROM node:24 AS builder
-FROM node:24
+FROM node:24 AS builder
 
 WORKDIR /app
 
@@ -7,17 +6,17 @@ COPY ./.npmrc ./package-lock.json ./package.json ./
 COPY ./apps/manager/package.json ./apps/manager/
 COPY ./packages/db/package.json ./packages/db/
 
-# RUN npm ci -w @internal/manager --include-workspace-root
-RUN npm ci -w @internal/manager
+RUN npm ci -w @internal/manager --include-workspace-root
 
-# COPY apps/manager ./apps/manager
-# COPY packages/db ./packages/db
-#
-# RUN mkdir -p apps/manager/public
-#
-# RUN npm run build -w @internal/db
-# RUN npm run build -w @internal/manager -- --webpack
-#
+COPY ./apps/manager/src ./apps/manager/src
+COPY ./apps/manager/next.config.mts ./apps/manager/postcss.config.mts ./apps/manager/tsconfig.json ./apps/manager/
+COPY ./packages/db/prisma ./packages/db/prisma
+COPY ./packages/db/src ./packages/db/src
+COPY ./packages/db/prisma.config.mts ./packages/db/tsconfig.json ./packages/db/
+
+RUN npm run build -w @internal/db
+RUN npm run build -w @internal/manager
+
 # FROM node:24-slim
 #
 # WORKDIR /app
