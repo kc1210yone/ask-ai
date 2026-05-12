@@ -13,7 +13,7 @@ export default {
       'apps/manager',
       'packages/db',
     ].map((workspace) => [
-      `${workspace}/**/*`,
+      `${workspace}/**`,
       [
         `npx -w ./${workspace} eslint --fix --no-warn-ignored`,
         `npx -w ./${workspace} prettier --write --ignore-path ../../.prettierignore --ignore-unknown`,
