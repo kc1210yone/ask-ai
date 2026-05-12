@@ -1,5 +1,9 @@
 FROM node:24 AS builder
 
+ARG NEXT_PUBLIC_USER_POOL_ID
+ARG NEXT_PUBLIC_USER_POOL_CLIENT_ID
+ARG DATABASE_URL
+
 WORKDIR /app
 
 COPY ./.npmrc ./package-lock.json ./package.json ./
@@ -14,6 +18,11 @@ COPY ./packages/db/prisma ./packages/db/prisma
 COPY ./packages/db/src ./packages/db/src
 COPY ./packages/db/prisma.config.mts ./packages/db/tsconfig.json ./packages/db/
 
+ENV NEXT_PUBLIC_USER_POOL_ID=$NEXT_PUBLIC_USER_POOL_ID \
+  NEXT_PUBLIC_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_USER_POOL_CLIENT_ID \
+  DATABASE_URL=$DATABASE_URL
+
+RUN npx -w @internal/db prisma generate
 RUN npm run build -w @internal/db
 RUN npm run build -w @internal/manager
 
