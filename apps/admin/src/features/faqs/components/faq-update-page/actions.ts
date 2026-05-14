@@ -1,7 +1,7 @@
 'use server';
 
 import 'server-only';
-import { prisma } from '@internal/db/index.js';
+import { prisma } from '@internal/rdb/index.js';
 import { revalidatePath } from 'next/cache';
 import { FormSchema, type FormSchemaType } from './types';
 import { getAuthUserOrRedirect } from '#src/features/auth';

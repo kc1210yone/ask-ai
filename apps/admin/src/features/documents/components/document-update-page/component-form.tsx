@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Document } from '@internal/db/generated/prisma/client.js';
+import type { Document } from '@internal/rdb/generated/prisma/client.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

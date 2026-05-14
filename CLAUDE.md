@@ -39,7 +39,7 @@ npm workspacesを使ったモノレポ構成。
 - `@internal/assistant-bff` (`./apps/assistant-bff`): AIアシスタントのBFF。
 - `@internal/assistant-web` (`./apps/assistant-web`): AIアシスタントのWeb FE。
 - `@internal/functions` (`./apps/functions`): FaaSの関数群。
-- `@packages/db` (`./packages/db`): DBの設定。
+- `@packages/rdb` (`./packages/rdb`): RDBの設定。
 
 ## その他注意事項
 

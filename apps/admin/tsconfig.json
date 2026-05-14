@@ -34,7 +34,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "references": [{ "path": "../../packages/db" }],
+  "references": [{ "path": "../../packages/rdb" }],
   "include": [
     "src",
     "next-env.d.ts",

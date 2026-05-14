@@ -1,6 +1,6 @@
 import 'server-only';
-import type { User } from '@internal/db/generated/prisma/client.js';
-import { prisma } from '@internal/db/index.js';
+import type { User } from '@internal/rdb/generated/prisma/client.js';
+import { prisma } from '@internal/rdb/index.js';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 

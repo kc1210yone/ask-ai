@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { prisma } from '@internal/db/index.js';
+import { prisma } from '@internal/rdb/index.js';
 import type { Context } from 'aws-lambda';
 import { z } from 'zod';
 import { syncDocuments } from './documents.js';

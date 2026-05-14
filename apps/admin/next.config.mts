@@ -2,5 +2,5 @@ import type { NextConfig } from 'next';
 
 export default {
   reactCompiler: true,
-  serverExternalPackages: ['@internal/db'],
+  serverExternalPackages: ['@internal/rdb'],
 } satisfies NextConfig;

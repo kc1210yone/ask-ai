@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-agent-runtime": "3.1041.0",
-    "@internal/db": "*",
+    "@internal/rdb": "*",
     "cors": "2.8.6",
     "dotenv": "17.4.2",
     "express": "5.2.1",

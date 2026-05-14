@@ -1,5 +1,5 @@
 import 'server-only';
-import type { Project } from '@internal/db/generated/prisma/client.js';
+import type { Project } from '@internal/rdb/generated/prisma/client.js';
 import { type ReactNode } from 'react';
 import { AppSidebarContent } from './app-sidebar-content';
 import { AppSidebarFooter } from './app-sidebar-footer';

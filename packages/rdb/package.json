@@ -1,11 +1,11 @@
 {
-  "name": "@internal/db",
+  "name": "@internal/rdb",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
   "imports": {
-    "#db/*": "./dist/src/*"
+    "#rdb/*": "./dist/src/*"
   },
   "exports": {
     "./*": "./dist/src/*"

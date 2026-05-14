@@ -20,7 +20,7 @@
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "1.7.2",
     "@hookform/resolvers": "5.2.2",
-    "@internal/db": "*",
+    "@internal/rdb": "*",
     "aws-amplify": "6.16.4",
     "class-variance-authority": "0.7.1",
     "client-only": "0.0.1",

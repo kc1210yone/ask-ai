@@ -1,6 +1,6 @@
 import 'server-only';
-import { Prisma } from '@internal/db/generated/prisma/client.js';
-import { prisma } from '@internal/db/index.js';
+import { Prisma } from '@internal/rdb/generated/prisma/client.js';
+import { prisma } from '@internal/rdb/index.js';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { getAuthUserOrRedirect } from '#src/features/auth';

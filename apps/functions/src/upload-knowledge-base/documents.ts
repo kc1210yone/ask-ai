@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import type { Document } from '@internal/db/generated/prisma/client.js';
-import { prisma } from '@internal/db/index.js';
+import type { Document } from '@internal/rdb/generated/prisma/client.js';
+import { prisma } from '@internal/rdb/index.js';
 import {
   deleteObjects,
   listObjects,

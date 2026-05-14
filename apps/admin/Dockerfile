@@ -11,15 +11,15 @@ RUN curl -sSL -o ./tini https://github.com/krallin/tini/releases/download/v0.19.
   chmod +x ./tini
 
 COPY ./apps/admin/package.json ./apps/admin/
-COPY ./packages/db/package.json ./packages/db/
+COPY ./packages/rdb/package.json ./packages/rdb/
 COPY ./.npmrc ./package-lock.json ./package.json ./
 RUN npm ci -w @internal/admin --include-workspace-root
 
-COPY ./packages/db/prisma ./packages/db/prisma
-COPY ./packages/db/src ./packages/db/src
-COPY ./packages/db/prisma.config.mts ./packages/db/tsconfig.json ./packages/db/
-RUN npx -w @internal/db prisma generate && \
-  npm run build -w @internal/db
+COPY ./packages/rdb/prisma ./packages/rdb/prisma
+COPY ./packages/rdb/src ./packages/rdb/src
+COPY ./packages/rdb/prisma.config.mts ./packages/rdb/tsconfig.json ./packages/rdb/
+RUN npx -w @internal/rdb prisma generate && \
+  npm run build -w @internal/rdb
 
 COPY ./apps/admin/src ./apps/admin/src
 COPY ./apps/admin/next.config.mts ./apps/admin/postcss.config.mts ./apps/admin/tsconfig.json ./apps/admin/
@@ -35,13 +35,13 @@ FROM node:24-slim
 WORKDIR /app
 
 COPY ./apps/admin/package.json ./apps/admin/
-COPY ./packages/db/package.json ./packages/db/
+COPY ./packages/rdb/package.json ./packages/rdb/
 COPY ./.npmrc ./package-lock.json ./package.json ./
 RUN npm ci -w @internal/admin --include-workspace-root --omit=dev
 
 COPY ./apps/admin/next.config.mts ./apps/admin/
 COPY --from=builder /app/apps/admin/.next ./apps/admin/.next
-COPY --from=builder /app/packages/db/dist ./packages/db/dist
+COPY --from=builder /app/packages/rdb/dist ./packages/rdb/dist
 COPY --from=builder /app/tini ./
 
 ENV PORT=3000

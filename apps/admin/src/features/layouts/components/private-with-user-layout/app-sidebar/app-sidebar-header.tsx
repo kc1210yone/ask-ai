@@ -1,7 +1,7 @@
 'use client';
 
 import 'client-only';
-import type { Project } from '@internal/db/generated/prisma/client.js';
+import type { Project } from '@internal/rdb/generated/prisma/client.js';
 import { ChevronDownIcon, FolderIcon, FolderPlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';

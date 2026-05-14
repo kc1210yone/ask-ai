@@ -50,10 +50,10 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 ### app配下
 
 - `#src/app/(private)`: 認証が必要なページ。
-- `#src/app/(private)/(with-user)`: DBにすでにユーザーが存在する場合用のページ。
+- `#src/app/(private)/(with-user)`: RDBにすでにユーザーが存在する場合用のページ。
 - `#src/app/(private)/(with-user)/(with-project)`: プロジェクトが選択されている時用のページ。
 - `#src/app/(private)/(with-user)/(without-project)`: プロジェクトが選択されていない時用や、特定のプロジェクトに依存しないページ。
-- `#src/app/(private)/(without-user)`: ログインはなされているけれどもまだDBにユーザーが存在しない時用のページ。
+- `#src/app/(private)/(without-user)`: ログインはなされているけれどもまだRDBにユーザーが存在しない時用のページ。
 - `#src/app/(public)`: 認証が不要なページ。
 - `#src/app/(public)/auth`: サインアップやログインなど認証関係のページ。
 

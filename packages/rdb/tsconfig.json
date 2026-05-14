@@ -4,7 +4,7 @@
     "module": "nodenext",
     "rootDir": ".",
     "paths": {
-      "#db/*": ["./src/*"]
+      "#rdb/*": ["./src/*"]
     },
     "outDir": "./dist",
     "composite": true,

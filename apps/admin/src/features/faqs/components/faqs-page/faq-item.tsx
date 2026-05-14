@@ -1,7 +1,7 @@
 'use client';
 
 import 'client-only';
-import type { Faq } from '@internal/db/generated/prisma/client.js';
+import type { Faq } from '@internal/rdb/generated/prisma/client.js';
 import { PencilIcon, TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type ReactNode } from 'react';
