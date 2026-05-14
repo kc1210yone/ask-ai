@@ -7,10 +7,10 @@ export default {
   ],
   ...Object.fromEntries(
     [
+      'apps/admin',
       'apps/assistant-bff',
       'apps/assistant-web',
       'apps/functions',
-      'apps/manager',
       'packages/db',
     ].map((workspace) => [
       `${workspace}/**`,

@@ -1,4 +1,4 @@
-# Manager
+# Admin
 
 管理ユーザー用の管理画面。
 AIアシスタントが回答するときに参照するデータを入稿するシステム。
@@ -27,12 +27,12 @@ AIアシスタントが回答するときに参照するデータを入稿する
 
 Workspaceのディレクトリではなくプロジェクトルートのディレクトリから実行。
 
-- `npm run dev -w @internal/manager`: Next.jsのDevモード起動。
-- `npm run test:typecheck -w @internal/manager`: TypeScriptのタイプチェック。
-- `npm run test:vitest -w @internal/manager`: Vitestによるテスト。
-- `npm run lint:check -w @internal/manager`: ESLint/Prettierによるチェック。
-- `npm run lint:fix -w @internal/manager`: ESLint/Prettierによる自動Fix。
-- `npx -w @internal/manager shadcn add <component>`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
+- `npm run dev -w @internal/admin`: Next.jsのDevモード起動。
+- `npm run test:typecheck -w @internal/admin`: TypeScriptのタイプチェック。
+- `npm run test:vitest -w @internal/admin`: Vitestによるテスト。
+- `npm run lint:check -w @internal/admin`: ESLint/Prettierによるチェック。
+- `npm run lint:fix -w @internal/admin`: ESLint/Prettierによる自動Fix。
+- `npx -w @internal/admin shadcn add <component>`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
 
 ## アーキテクチャ
 

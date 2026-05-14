@@ -22,6 +22,6 @@
   "tailwindCSS.files.exclude": [
     "**/.git/**",
     "**/node_modules/**",
-    "apps/manager/src/components/ui/*"
+    "apps/admin/src/components/ui/*"
   ],
 }

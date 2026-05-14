@@ -35,10 +35,10 @@
 npm workspacesを使ったモノレポ構成。
 各workspace内のコマンドは、プロジェクトルートディレクトリ内で、`npm run xxx -w @internal/xxx`のように実行。（各workspaceのディレクトリで実行しない。）
 
+- `@internal/admin` (`./apps/admin`): 管理ユーザー用の管理画面。
 - `@internal/assistant-bff` (`./apps/assistant-bff`): AIアシスタントのBFF。
 - `@internal/assistant-web` (`./apps/assistant-web`): AIアシスタントのWeb FE。
 - `@internal/functions` (`./apps/functions`): FaaSの関数群。
-- `@internal/manager` (`./apps/manager`): 管理ユーザー用の管理画面。
 - `@packages/db` (`./packages/db`): DBの設定。
 
 ## その他注意事項
