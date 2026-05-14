@@ -10,7 +10,7 @@ RUN npm ci -w @internal/functions --include-workspace-root
 COPY ./packages/db/prisma ./packages/db/prisma
 COPY ./packages/db/src ./packages/db/src
 COPY ./packages/db/prisma.config.mts ./packages/db/tsconfig.json ./packages/db/
-RUN DATABASE_URL=dummy npx -w @internal/db prisma generate && \
+RUN npx -w @internal/db prisma generate && \
   npm run build -w @internal/db
 
 COPY ./apps/functions/src ./apps/functions/src

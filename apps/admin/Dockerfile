@@ -1,5 +1,6 @@
 FROM node:24 AS builder
 
+ARG AWS_REGION
 ARG DATABASE_URL
 ARG NEXT_PUBLIC_USER_POOL_ID
 ARG NEXT_PUBLIC_USER_POOL_CLIENT_ID
@@ -17,13 +18,14 @@ RUN npm ci -w @internal/admin --include-workspace-root
 COPY ./packages/db/prisma ./packages/db/prisma
 COPY ./packages/db/src ./packages/db/src
 COPY ./packages/db/prisma.config.mts ./packages/db/tsconfig.json ./packages/db/
-ENV DATABASE_URL=$DATABASE_URL
 RUN npx -w @internal/db prisma generate && \
   npm run build -w @internal/db
 
 COPY ./apps/admin/src ./apps/admin/src
 COPY ./apps/admin/next.config.mts ./apps/admin/postcss.config.mts ./apps/admin/tsconfig.json ./apps/admin/
-ENV NEXT_PUBLIC_USER_POOL_ID=$NEXT_PUBLIC_USER_POOL_ID \
+ENV AWS_REGION=$AWS_REGION \
+  DATABASE_URL=$DATABASE_URL \
+  NEXT_PUBLIC_USER_POOL_ID=$NEXT_PUBLIC_USER_POOL_ID \
   NEXT_PUBLIC_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_USER_POOL_CLIENT_ID
 RUN npm run build -w @internal/admin
 
