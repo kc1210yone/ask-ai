@@ -12,9 +12,8 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "test": "run-s test:{typecheck,vitest}",
+    "test": "run-s test:typecheck",
     "test:typecheck": "tsc --noEmit",
-    "test:vitest": ":",
     "lint:check": "run-s lint:check:{eslint,prettier,prisma}",
     "lint:check:eslint": "eslint .",
     "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
