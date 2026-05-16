@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import { defineConfig, env } from 'prisma/config';
+import { defineConfig } from 'prisma/config';
 
-// CIでDATABASE_URLがセットされていなくてもprisma generateが動くようにする。
-process.env['DATABASE_URL'] = process.env['DATABASE_URL'] ?? 'dummy';
+const databaseUrl = new URL(process.env['DATABASE_URL'] ?? 'invalid://');
+databaseUrl.password = process.env['DATABASE_PASSWORD'] ?? '';
 
 export default defineConfig({
   schema: './prisma/schema.prisma',
@@ -10,6 +10,6 @@ export default defineConfig({
     path: './prisma/migrations',
   },
   datasource: {
-    url: env('DATABASE_URL'),
+    url: databaseUrl.href,
   },
 });

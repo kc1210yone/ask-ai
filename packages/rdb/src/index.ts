@@ -1,4 +1,3 @@
-import assert from 'node:assert/strict';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from './generated/prisma/client.js';
 
@@ -7,9 +6,10 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 const createPrismaClient = (): PrismaClient => {
-  const databaseUrl = process.env['DATABASE_URL'];
-  assert(databaseUrl);
-  const adapter = new PrismaMariaDb(databaseUrl);
+  const databaseUrl = new URL(process.env['DATABASE_URL'] ?? 'invalid://');
+  databaseUrl.password = process.env['DATABASE_PASSWORD'] ?? '';
+
+  const adapter = new PrismaMariaDb(databaseUrl.href);
   return new PrismaClient({ adapter });
 };
 
