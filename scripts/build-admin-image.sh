@@ -13,7 +13,6 @@ docker image build \
   -t ask-ai/admin \
   -f ./apps/admin/Dockerfile \
   --build-arg AWS_REGION \
-  --build-arg DATABASE_URL \
   --build-arg NEXT_PUBLIC_USER_POOL_ID \
   --build-arg NEXT_PUBLIC_USER_POOL_CLIENT_ID \
   .
