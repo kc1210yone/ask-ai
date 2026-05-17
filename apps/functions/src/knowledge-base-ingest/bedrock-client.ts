@@ -5,8 +5,8 @@ import {
   StartIngestionJobCommand,
 } from '@aws-sdk/client-bedrock-agent';
 
-const KNOWLEDGE_BASE_ID = 'NOTTQ5JXC7';
-const DATA_SOURCE_ID = 'SWSWIA7F4D';
+const KNOWLEDGE_BASE_ID = 'NE15TNTCMG';
+const DATA_SOURCE_ID = '9ZMZC6HIRU';
 
 const bedrockAgentClient = new BedrockAgentClient();
 
