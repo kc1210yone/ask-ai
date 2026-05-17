@@ -18,18 +18,20 @@ export const SignUpConfirmPage = async (): Promise<ReactNode> => {
   }
 
   return (
-    <Card className="w-md">
-      <CardHeader>
-        <CardTitle>
-          <h2>アカウント認証</h2>
-        </CardTitle>
-        <CardDescription>
-          メールに送信された確認コードを入力してください。
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ComponentForm />
-      </CardContent>
-    </Card>
+    <div className="px-6">
+      <Card className="mx-auto w-md max-w-full">
+        <CardHeader>
+          <CardTitle>
+            <h2>アカウント認証</h2>
+          </CardTitle>
+          <CardDescription>
+            メールに送信された確認コードを入力してください。
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ComponentForm />
+        </CardContent>
+      </Card>
+    </div>
   );
 };

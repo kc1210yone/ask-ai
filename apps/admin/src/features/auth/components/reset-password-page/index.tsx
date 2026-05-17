@@ -21,26 +21,28 @@ export const ResetPasswordPage = async (): Promise<ReactNode> => {
   }
 
   return (
-    <Card className="w-md">
-      <CardHeader>
-        <CardTitle>
-          <h2>パスワードのリセット</h2>
-        </CardTitle>
-        <CardDescription>
-          パスワードをリセットしたいアカウント情報を入力してください。
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ComponentForm />
-      </CardContent>
-      <CardFooter>
-        <p>
-          パスワードがわかる方は
-          <Button variant="link" asChild className="text-card-foreground">
-            <Link href="/auth/login">ログイン</Link>
-          </Button>
-        </p>
-      </CardFooter>
-    </Card>
+    <div className="px-6">
+      <Card className="mx-auto w-md max-w-full">
+        <CardHeader>
+          <CardTitle>
+            <h2>パスワードのリセット</h2>
+          </CardTitle>
+          <CardDescription>
+            パスワードをリセットしたいアカウント情報を入力してください。
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ComponentForm />
+        </CardContent>
+        <CardFooter>
+          <p>
+            パスワードがわかる方は
+            <Button variant="link" asChild className="text-card-foreground">
+              <Link href="/auth/login">ログイン</Link>
+            </Button>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };

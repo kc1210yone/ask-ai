@@ -21,26 +21,28 @@ export const SignUpPage = async (): Promise<ReactNode> => {
   }
 
   return (
-    <Card className="w-md">
-      <CardHeader>
-        <CardTitle>
-          <h2>アカウント作成</h2>
-        </CardTitle>
-        <CardDescription>
-          管理画面の新規アカウントを作成します。
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ComponentForm />
-      </CardContent>
-      <CardFooter>
-        <p>
-          すでにアカウントをお持ちの方は
-          <Button variant="link" asChild className="text-card-foreground">
-            <Link href="/auth/login">ログイン</Link>
-          </Button>
-        </p>
-      </CardFooter>
-    </Card>
+    <div className="px-6">
+      <Card className="mx-auto w-md max-w-full">
+        <CardHeader>
+          <CardTitle>
+            <h2>アカウント作成</h2>
+          </CardTitle>
+          <CardDescription>
+            管理画面の新規アカウントを作成します。
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ComponentForm />
+        </CardContent>
+        <CardFooter>
+          <p>
+            すでにアカウントをお持ちの方は
+            <Button variant="link" asChild className="text-card-foreground">
+              <Link href="/auth/login">ログイン</Link>
+            </Button>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };

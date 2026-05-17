@@ -14,7 +14,7 @@ export const AuthLayout = ({ children }: Props): ReactNode => {
           <h1 className="text-2xl font-semibold">Ask AI 管理画面</h1>
         </Link>
       </header>
-      <main>{children}</main>
+      <main className="w-full">{children}</main>
     </div>
   );
 };

@@ -18,18 +18,20 @@ export const ResetPasswordConfirmPage = async (): Promise<ReactNode> => {
   }
 
   return (
-    <Card className="w-md">
-      <CardHeader>
-        <CardTitle>
-          <h2>パスワードのリセット</h2>
-        </CardTitle>
-        <CardDescription>
-          確認コードと新しいパスワードを入力してください。
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ComponentForm />
-      </CardContent>
-    </Card>
+    <div className="px-6">
+      <Card className="mx-auto w-md max-w-full">
+        <CardHeader>
+          <CardTitle>
+            <h2>パスワードのリセット</h2>
+          </CardTitle>
+          <CardDescription>
+            確認コードと新しいパスワードを入力してください。
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ComponentForm />
+        </CardContent>
+      </Card>
+    </div>
   );
 };

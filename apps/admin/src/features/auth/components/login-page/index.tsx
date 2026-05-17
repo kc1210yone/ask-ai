@@ -21,32 +21,34 @@ export const LoginPage = async (): Promise<ReactNode> => {
   }
 
   return (
-    <Card className="w-md">
-      <CardHeader>
-        <CardTitle>
-          <h2>ログイン</h2>
-        </CardTitle>
-        <CardDescription>管理画面にログインしてください。</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ComponentForm />
-      </CardContent>
-      <CardFooter>
-        <div>
-          <p>
-            アカウントをお持ちでない方は
-            <Button variant="link" asChild className="text-card-foreground">
-              <Link href="/auth/sign-up">新規登録</Link>
-            </Button>
-          </p>
-          <p>
-            パスワードを忘れた方は
-            <Button variant="link" asChild className="text-card-foreground">
-              <Link href="/auth/reset-password">こちら</Link>
-            </Button>
-          </p>
-        </div>
-      </CardFooter>
-    </Card>
+    <div className="px-6">
+      <Card className="mx-auto w-md max-w-full">
+        <CardHeader>
+          <CardTitle>
+            <h2>ログイン</h2>
+          </CardTitle>
+          <CardDescription>管理画面にログインしてください。</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ComponentForm />
+        </CardContent>
+        <CardFooter>
+          <div>
+            <p>
+              アカウントをお持ちでない方は
+              <Button variant="link" asChild className="text-card-foreground">
+                <Link href="/auth/sign-up">新規登録</Link>
+              </Button>
+            </p>
+            <p>
+              パスワードを忘れた方は
+              <Button variant="link" asChild className="text-card-foreground">
+                <Link href="/auth/reset-password">こちら</Link>
+              </Button>
+            </p>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
