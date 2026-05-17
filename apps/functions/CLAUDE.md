@@ -29,8 +29,8 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 ## アーキテクチャ
 
 - `#src` (`./src`): ソースディレクトリ。
-- `#src/ingest`: Amazon Bedrock Knowledge Baseのインジェスチョンを起動するFunction。
-- `#src/upload-knowledge-base`: 管理画面のDBのデータをAmazon Bedrock Knowledge BaseのデータソースにアップロードするFunction。
+- `#src/knowledge-base-ingest`: Amazon Bedrock Knowledge Baseのインジェスチョンを起動するFunction。
+- `#src/knowledge-base-upload`: 管理画面のDBのデータをAmazon Bedrock Knowledge BaseのデータソースにアップロードするFunction。
 
 ## その他注意事項
 
