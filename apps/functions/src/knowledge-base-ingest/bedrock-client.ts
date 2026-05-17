@@ -5,10 +5,10 @@ import {
   StartIngestionJobCommand,
 } from '@aws-sdk/client-bedrock-agent';
 
-const KNOWLEDGE_BASE_ID = 'NE15TNTCMG';
-const DATA_SOURCE_ID = '9ZMZC6HIRU';
+const KNOWLEDGE_BASE_ID = 'W5MT28ANKW';
+const DATA_SOURCE_ID = '9MO6LUNVEU';
 
-const bedrockAgentClient = new BedrockAgentClient();
+const bedrockAgentClient = new BedrockAgentClient({ region: 'us-east-1' });
 
 export const startIngestion = async (): Promise<string> => {
   const response = await bedrockAgentClient.send(

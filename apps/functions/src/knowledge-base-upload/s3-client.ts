@@ -6,9 +6,9 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 
-const BUCKET = 'ask-ai-knowledge-base-953334885917-ap-northeast-1-an';
+const BUCKET = 'ask-ai-knowledge-base-953334885917-us-east-1-an';
 
-const s3Client = new S3Client();
+const s3Client = new S3Client({ region: 'us-east-1' });
 
 export interface ListObjectsItem {
   key: string;
