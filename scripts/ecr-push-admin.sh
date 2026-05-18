@@ -10,9 +10,11 @@ source "$project_directory/apps/admin/.env"
 set +a
 
 docker image build \
-  -t ask-ai/admin \
+  -t 953334885917.dkr.ecr.ap-northeast-1.amazonaws.com/ask-ai/admin:latest \
   -f ./apps/admin/Dockerfile \
   --build-arg AWS_REGION \
   --build-arg NEXT_PUBLIC_USER_POOL_ID \
   --build-arg NEXT_PUBLIC_USER_POOL_CLIENT_ID \
   .
+
+docker push 953334885917.dkr.ecr.ap-northeast-1.amazonaws.com/ask-ai/admin:latest

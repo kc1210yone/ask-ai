@@ -27,5 +27,3 @@ RUN npm ci -w @internal/functions --include-workspace-root --omit=dev
 
 COPY --from=builder /app/apps/functions/dist ./apps/functions/dist
 COPY --from=builder /app/packages/rdb/dist ./packages/rdb/dist
-
-CMD [ "./dist/src/ingest/index.handler" ]
