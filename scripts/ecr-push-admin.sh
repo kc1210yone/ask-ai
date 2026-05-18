@@ -17,4 +17,4 @@ docker image build \
   --build-arg NEXT_PUBLIC_USER_POOL_CLIENT_ID \
   .
 
-docker push 953334885917.dkr.ecr.ap-northeast-1.amazonaws.com/ask-ai/admin:latest
+docker image push 953334885917.dkr.ecr.ap-northeast-1.amazonaws.com/ask-ai/admin:latest
