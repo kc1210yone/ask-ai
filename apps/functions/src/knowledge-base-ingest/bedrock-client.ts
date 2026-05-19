@@ -6,7 +6,10 @@ import {
 } from '@aws-sdk/client-bedrock-agent';
 
 const KNOWLEDGE_BASE_ID = 'QSCOK2GG0W';
-const DATA_SOURCE_ID = '39QQJTBE5B';
+assert(KNOWLEDGE_BASE_ID);
+
+const KNOWLEDGE_BASE_DATA_SOURCE_ID = '39QQJTBE5B';
+assert(KNOWLEDGE_BASE_DATA_SOURCE_ID);
 
 const bedrockAgentClient = new BedrockAgentClient({ region: 'us-east-1' });
 
@@ -14,7 +17,7 @@ export const startIngestion = async (): Promise<string> => {
   const response = await bedrockAgentClient.send(
     new StartIngestionJobCommand({
       knowledgeBaseId: KNOWLEDGE_BASE_ID,
-      dataSourceId: DATA_SOURCE_ID,
+      dataSourceId: KNOWLEDGE_BASE_DATA_SOURCE_ID,
     }),
   );
   const ingestionJobId = response.ingestionJob?.ingestionJobId;
@@ -31,7 +34,7 @@ export const waitForIngestionFinish = async (
     const response = await bedrockAgentClient.send(
       new GetIngestionJobCommand({
         knowledgeBaseId: KNOWLEDGE_BASE_ID,
-        dataSourceId: DATA_SOURCE_ID,
+        dataSourceId: KNOWLEDGE_BASE_DATA_SOURCE_ID,
         ingestionJobId,
       }),
     );

@@ -6,7 +6,9 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 
-const BUCKET = 'ask-ai-knowledge-base-953334885917-us-east-1-an';
+const KNOWLEDGE_BASE_S3_BUCKET =
+  'ask-ai-knowledge-base-953334885917-us-east-1-an';
+assert(KNOWLEDGE_BASE_S3_BUCKET);
 
 const s3Client = new S3Client({ region: 'us-east-1' });
 
@@ -23,7 +25,7 @@ export const listObjects = async (
   do {
     const response = await s3Client.send(
       new ListObjectsV2Command({
-        Bucket: BUCKET,
+        Bucket: KNOWLEDGE_BASE_S3_BUCKET,
         Prefix: prefix,
         ContinuationToken: continuationToken,
       }),
@@ -45,7 +47,7 @@ export const listObjects = async (
 export const putObject = async (key: string, body: string): Promise<void> => {
   await s3Client.send(
     new PutObjectCommand({
-      Bucket: BUCKET,
+      Bucket: KNOWLEDGE_BASE_S3_BUCKET,
       Key: key,
       Body: body,
       ContentType: 'text/plain',
@@ -59,7 +61,7 @@ export const deleteObjects = async (keys: string[]): Promise<void> => {
     const chunkedKeys = keys.slice(i, i + chunkSize);
     await s3Client.send(
       new DeleteObjectsCommand({
-        Bucket: BUCKET,
+        Bucket: KNOWLEDGE_BASE_S3_BUCKET,
         Delete: {
           Objects: chunkedKeys.map((k) => ({ Key: k })),
         },
