@@ -1,5 +1,5 @@
 import type { Context } from 'aws-lambda';
-import { startIngestion, waitForIngestionFinish } from './bedrock-client.js';
+import { startIngestion } from './bedrock-client.js';
 
 export const handler = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -7,6 +7,5 @@ export const handler = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _context: Context,
 ): Promise<void> => {
-  const ingestionJobId = await startIngestion();
-  await waitForIngestionFinish(ingestionJobId);
+  await startIngestion();
 };
