@@ -6,8 +6,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 
-const KNOWLEDGE_BASE_S3_BUCKET =
-  'ask-ai-knowledge-base-953334885917-us-east-1-an';
+const KNOWLEDGE_BASE_S3_BUCKET = process.env['KNOWLEDGE_BASE_S3_BUCKET'];
 assert(KNOWLEDGE_BASE_S3_BUCKET);
 
 const s3Client = new S3Client({ region: 'us-east-1' });
