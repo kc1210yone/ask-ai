@@ -1,9 +1,12 @@
-import { useCallback, useRef, useState, type ReactNode } from 'react';
+import {
+  fetchEventSource,
+  type EventSourceMessage,
+} from '@microsoft/fetch-event-source';
+import { useCallback, useState, type ReactNode } from 'react';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 import type { Message } from '../types';
 import { ChatContext } from './context';
-import { timeoutSignal } from '#src/lib/timeout-signal';
 
 const BFF_BASE_URL = z.string().parse(import.meta.env['VITE_BFF_BASE_URL']);
 
@@ -14,143 +17,93 @@ interface Props {
 export const ChatProvider = ({ children }: Props): ReactNode => {
   const [sessionId] = useState(() => crypto.randomUUID());
 
-  const disconnectRef = useRef<(() => void) | null>(null);
-
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [sendingDisabled, setSendingDisabled] = useState(false);
 
-  const connect = useCallback(async (): Promise<boolean> => {
-    setSendingDisabled(true);
-
-    const eventSource = new EventSource(`${BFF_BASE_URL}/chat/${sessionId}`);
-
-    let readyResolve: (value: boolean) => void;
-    const readyPromise = new Promise<boolean>((resolve) => {
-      readyResolve = resolve;
-    });
-
-    const onReadyListener = (): void => {
-      readyResolve(true);
-    };
-    eventSource.addEventListener('ready', onReadyListener);
-
-    const onOutputMessageListener = (event: MessageEvent): void => {
-      const Schema = z.object({
-        chunk: z.string(),
-      });
-      const dataString = z.string().parse(event.data);
-      const data = Schema.parse(JSON.parse(dataString));
-
-      setMessages((previous) => {
-        const rest = previous.slice(0, -1);
-        const last = previous[previous.length - 1];
-        invariant(last);
-        invariant(last.type === 'assistant-receiving');
-        return [...rest, { ...last, content: last.content + data.chunk }];
-      });
-    };
-    eventSource.addEventListener('output-message', onOutputMessageListener);
-
-    const onDoneListener = (): void => {
-      setMessages((previous) => {
-        const rest = previous.slice(0, -1);
-        const last = previous[previous.length - 1];
-        invariant(last);
-        invariant(last.type === 'assistant-receiving');
-        return [...rest, { ...last, type: 'assistant-done' }];
-      });
-
-      invariant(disconnectRef.current);
-      disconnectRef.current();
-    };
-    eventSource.addEventListener('done', onDoneListener);
-
-    const onErrorListener = (): void => {
-      setMessages((previous) => {
-        if (previous.length === 0) {
-          return previous;
-        }
-        const rest = previous.slice(0, -1);
-        const last = previous[previous.length - 1];
-        invariant(last);
-        if (last.type !== 'assistant-receiving') {
-          return previous;
-        }
-        return [...rest, { ...last, type: 'assistant-error' }];
-      });
-
-      invariant(disconnectRef.current);
-      disconnectRef.current();
-
-      readyResolve(false);
-    };
-    eventSource.addEventListener('app-error', onErrorListener);
-    eventSource.addEventListener('error', onErrorListener);
-
-    disconnectRef.current = (): void => {
-      eventSource.removeEventListener('ready', onReadyListener);
-      eventSource.removeEventListener(
-        'output-message',
-        onOutputMessageListener,
-      );
-      eventSource.removeEventListener('done', onDoneListener);
-      eventSource.removeEventListener('app-error', onErrorListener);
-      eventSource.removeEventListener('error', onErrorListener);
-
-      eventSource.close();
-
-      disconnectRef.current = null;
-
-      setSendingDisabled(false);
-    };
-
-    return await readyPromise;
-  }, [sessionId]);
-
   const sendMessage = useCallback(
     async (inputMessage: string): Promise<boolean> => {
-      const connectResult = await connect();
-      if (!connectResult) {
-        return false;
-      }
-
-      let responseBody;
-      try {
-        const response = await fetch(`${BFF_BASE_URL}/chat/${sessionId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ inputMessage }),
-          signal: timeoutSignal(10_000),
-        });
-        if (response.status !== 200) {
-          disconnectRef.current?.();
-          return false;
+      const onMessage = (event: EventSourceMessage): void => {
+        switch (event.event) {
+          case 'output-message': {
+            const Schema = z.object({
+              chunk: z.string(),
+            });
+            const data = Schema.parse(JSON.parse(event.data));
+            setMessages((previous) => {
+              const rest = previous.slice(0, -1);
+              const last = previous[previous.length - 1];
+              invariant(last);
+              invariant(last.type === 'assistant-receiving');
+              return [...rest, { ...last, content: last.content + data.chunk }];
+            });
+            break;
+          }
+          case 'done':
+            setMessages((previous) => {
+              const rest = previous.slice(0, -1);
+              const last = previous[previous.length - 1];
+              invariant(last);
+              invariant(last.type === 'assistant-receiving');
+              return [...rest, { ...last, type: 'assistant-done' }];
+            });
+            setSendingDisabled(false);
+            break;
+          case 'app-error':
+            throw new Error('Got to onerror.');
+          default:
+            throw new Error();
         }
-        responseBody = (await response.json()) as unknown;
-      } catch {
-        disconnectRef.current?.();
-        return false;
-      }
+      };
 
-      const Schema = z.object({
-        status: z.enum(['ok', 'error']),
+      setSendingDisabled(true);
+
+      let connectPromiseResolve!: (value: boolean) => void;
+      const connectPromise = new Promise<boolean>((resolve) => {
+        connectPromiseResolve = resolve;
       });
-      const parsedBody = Schema.parse(responseBody);
-      if (parsedBody.status === 'error') {
-        disconnectRef.current?.();
-        return false;
-      }
 
-      setMessages((previous) => [
-        ...previous,
-        { type: 'user', content: inputMessage },
-        { type: 'assistant-receiving', content: '' },
-      ]);
+      void fetchEventSource(`${BFF_BASE_URL}/chat/${sessionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inputMessage }),
+        // eslint-disable-next-line @typescript-eslint/require-await
+        onopen: async (response) => {
+          if (response.status !== 200) {
+            throw new Error('Got to onerror.');
+          }
+          setMessages((previous) => [
+            ...previous,
+            { type: 'user', content: inputMessage },
+            { type: 'assistant-receiving', content: '' },
+          ]);
+          connectPromiseResolve(true);
+        },
+        onmessage: onMessage,
+        onerror: () => {
+          connectPromiseResolve(false);
+          setMessages((previous) => {
+            if (previous.length === 0) {
+              return previous;
+            }
+            const rest = previous.slice(0, -1);
+            const last = previous[previous.length - 1];
+            invariant(last);
+            if (last.type !== 'assistant-receiving') {
+              return previous;
+            }
+            return [...rest, { ...last, type: 'assistant-error' }];
+          });
+          setSendingDisabled(false);
+          throw new Error('Stop retry.');
+        },
+      }).catch(() => {
+        // 再接続を停止させるためのthrowによりここにくるが、実際のエラーハンドリングはonerrorに書く。
+      });
 
-      return true;
+      return await connectPromise;
     },
-    [connect, sessionId],
+    [sessionId],
   );
 
   return (

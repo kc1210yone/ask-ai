@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express';
 import { z } from 'zod';
-import { eventEmitter } from './event.js';
+import { invokeAgent } from './bedrock-client.js';
+import { SseResponse } from './sse.js';
 import { HttpError } from '#src/lib/errors/index.js';
 
 const ParamsSchema = z.object({
@@ -8,7 +9,7 @@ const ParamsSchema = z.object({
   inputMessage: z.string().min(1),
 });
 
-export const postChatHandler: RequestHandler = (request, response) => {
+export const postChatHandler: RequestHandler = async (request, response) => {
   const parseResult = ParamsSchema.safeParse({
     ...request.params,
     ...request.query,
@@ -19,9 +20,19 @@ export const postChatHandler: RequestHandler = (request, response) => {
   }
   const params = parseResult.data;
 
-  eventEmitter.emit(`chat.post.${params.sessionId}`, {
-    inputMessage: params.inputMessage,
-  });
+  const sseResponse = new SseResponse(response);
 
-  response.json({ status: 'ok' });
+  sseResponse.initialize();
+
+  const outputMessageChunks = await invokeAgent(
+    params.sessionId,
+    params.inputMessage,
+  );
+
+  for await (const chunk of outputMessageChunks) {
+    sseResponse.sendEvent('output-message', { chunk });
+  }
+
+  sseResponse.sendEvent('done', {});
+  sseResponse.end();
 };

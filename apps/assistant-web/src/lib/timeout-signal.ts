@@ -1,12 +1,12 @@
 // Polyfill of AbortSignal.timeout().
-export const timeoutSignal = (ms: number): AbortSignal => {
+export const timeoutSignal = (timeout: number): AbortSignal => {
   const controller = new AbortController();
 
   const timeoutId = setTimeout(() => {
     controller.abort(
       new DOMException('The operation timed out.', 'TimeoutError'),
     );
-  }, ms);
+  }, timeout);
 
   controller.signal.addEventListener(
     'abort',
