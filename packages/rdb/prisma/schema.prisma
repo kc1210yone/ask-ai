@@ -19,15 +19,17 @@ model User {
 }
 
 model Project {
-  id        String     @id @default(cuid()) @db.VarChar(25)
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
-  deletedAt DateTime?  @map("deleted_at")
-  userId    String     @map("user_id") @db.VarChar(25)
-  user      User       @relation(fields: [userId], references: [id])
-  name      String     @db.VarChar(255)
-  documents Document[]
-  faqs      Faq[]
+  id                              String     @id @default(cuid()) @db.VarChar(25)
+  createdAt                       DateTime   @default(now()) @map("created_at")
+  updatedAt                       DateTime   @updatedAt @map("updated_at")
+  deletedAt                       DateTime?  @map("deleted_at")
+  userId                          String     @map("user_id") @db.VarChar(25)
+  user                            User       @relation(fields: [userId], references: [id])
+  name                            String     @db.VarChar(255)
+  documents                       Document[]
+  faqs                            Faq[]
+  knowledgeBaseIsUploading        Boolean    @default(false) @map("knowledge_base_is_uploading")
+  knowledgeBaseLastUploadDateTime DateTime?  @map("knowledge_base_last_upload_date_time")
 
   @@map("projects")
 }

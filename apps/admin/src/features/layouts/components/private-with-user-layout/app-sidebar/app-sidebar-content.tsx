@@ -2,6 +2,7 @@
 
 import 'client-only';
 import {
+  CloudUploadIcon,
   FileIcon,
   FileQuestionMarkIcon,
   FolderCogIcon,
@@ -73,6 +74,14 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
                   <Link href={`/projects/${projectId}/faqs`}>
                     <FileQuestionMarkIcon />
                     <span>FAQ</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={`/projects/${projectId}/knowledge-base/upload`}>
+                    <CloudUploadIcon />
+                    <span>ナレッジベースの反映</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
