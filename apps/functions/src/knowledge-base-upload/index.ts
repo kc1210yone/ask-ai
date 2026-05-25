@@ -24,6 +24,30 @@ export const handler = async (
   });
   assert(project);
 
-  await syncDocuments(project.id);
-  await syncFaqs(project.id);
+  const updateResult = await prisma.project.updateMany({
+    data: { knowledgeBaseIsUploading: true },
+    where: { id: project.id, knowledgeBaseIsUploading: false },
+  });
+  if (updateResult.count === 0) {
+    return;
+  }
+
+  try {
+    await syncDocuments(project.id);
+    await syncFaqs(project.id);
+
+    await prisma.project.update({
+      data: {
+        knowledgeBaseLastUploadDateTime: new Date(),
+      },
+      where: { id: project.id },
+    });
+  } finally {
+    await prisma.project.update({
+      data: {
+        knowledgeBaseIsUploading: false,
+      },
+      where: { id: project.id },
+    });
+  }
 };

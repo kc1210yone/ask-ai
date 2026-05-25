@@ -1,9 +1,12 @@
 'use server';
 
 import 'server-only';
+import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 import { prisma } from '@internal/rdb/index.js';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+
+const lambdaClient = new LambdaClient();
 
 interface ActionResponse {
   status: 'ok' | 'error';
@@ -20,6 +23,15 @@ export const upload = async (projectId: string): Promise<ActionResponse> => {
   if (!project || project.userId !== user.id) {
     return { status: 'error' };
   }
+
+  const response = await lambdaClient.send(
+    new InvokeCommand({
+      FunctionName: 'aaa',
+      InvocationType: 'Event',
+      Payload: JSON.stringify({}),
+    }),
+  );
+  console.log(response);
 
   return { status: 'ok' };
 };
