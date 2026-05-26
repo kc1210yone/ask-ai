@@ -29,16 +29,14 @@ export const listObjects = async (
         ContinuationToken: continuationToken,
       }),
     );
-    // TODO: resultの津s買い方おかしい
-    (response.Contents ?? []).reduce((accumulator, c) => {
+    (response.Contents ?? []).forEach((c) => {
       assert(c.Key);
       assert(c.LastModified);
-      accumulator[c.Key] = {
+      result[c.Key] = {
         key: c.Key,
         lastModified: c.LastModified,
       };
-      return accumulator;
-    }, result);
+    });
     continuationToken = response.NextContinuationToken;
   } while (continuationToken);
   return result;
