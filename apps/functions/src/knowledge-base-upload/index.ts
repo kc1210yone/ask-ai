@@ -4,6 +4,7 @@ import type { Context } from 'aws-lambda';
 import { z } from 'zod';
 import { syncDocuments } from './documents.js';
 import { syncFaqs } from './faqs.js';
+import { logger } from '#src/lib/logger/index.js';
 
 const EventSchema = z.object({
   projectId: z.string(),
@@ -42,6 +43,8 @@ export const handler = async (
       },
       where: { id: project.id },
     });
+  } catch (error) {
+    logger.error(error);
   } finally {
     await prisma.project.update({
       data: {

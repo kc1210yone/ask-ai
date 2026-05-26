@@ -29,6 +29,7 @@ export const listObjects = async (
         ContinuationToken: continuationToken,
       }),
     );
+    // TODO: resultの津s買い方おかしい
     (response.Contents ?? []).reduce((accumulator, c) => {
       assert(c.Key);
       assert(c.LastModified);

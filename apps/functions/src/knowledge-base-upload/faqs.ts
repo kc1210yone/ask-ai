@@ -7,6 +7,7 @@ import {
   putObject,
   type ListObjectsItem,
 } from './s3-client.js';
+import { logger } from '#src/lib/logger/index.js';
 
 export const syncFaqs = async (projectId: string): Promise<void> => {
   const faqs = await prisma.faq.findMany({
@@ -38,6 +39,8 @@ const putFaqObjects = async (
       continue;
     }
 
+    logger.info(`Put: ${s3Key}`);
+
     const body =
       `
 --- Question ---
@@ -66,5 +69,10 @@ const deleteFaqObjects = async (
     assert(keyFaqId);
     return !faqs.some((d) => d.id === keyFaqId);
   });
+
+  if (deletedKeys.length > 0) {
+    logger.info(`Delete: ${deletedKeys.join(', ')}`);
+  }
+
   await deleteObjects(deletedKeys);
 };

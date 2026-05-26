@@ -7,6 +7,7 @@ import {
   putObject,
   type ListObjectsItem,
 } from './s3-client.js';
+import { logger } from '#src/lib/logger/index.js';
 
 export const syncDocuments = async (projectId: string): Promise<void> => {
   const documents = await prisma.document.findMany({
@@ -42,6 +43,8 @@ const putDocumentObjects = async (
       continue;
     }
 
+    logger.info(`Put: ${s3Key}`);
+
     await putObject(s3Key, document.content);
 
     const metadata = {
@@ -62,5 +65,10 @@ const deleteDocumentObjects = async (
     assert(keyDocumentId);
     return !documents.some((d) => d.id === keyDocumentId);
   });
+
+  if (deletedKeys.length > 0) {
+    logger.info(`Delete: ${deletedKeys.join(', ')}`);
+  }
+
   await deleteObjects(deletedKeys);
 };
