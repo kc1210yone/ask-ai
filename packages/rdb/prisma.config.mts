@@ -17,8 +17,20 @@ const getDatabaseUrl = async (): Promise<string> => {
 
   const databaseUrl = new URL(process.env['DATABASE_URL']);
 
+  const credentials = await getCredentials();
+  databaseUrl.username = credentials.username;
+  databaseUrl.password = credentials.password;
+
+  return databaseUrl.href;
+};
+
+const getCredentials = async (): Promise<{
+  username: string;
+  password: string;
+}> => {
   const databaseCredentialsSecret = process.env['DATABASE_CREDENTIALS_SECRET'];
   assert(databaseCredentialsSecret);
+
   const response = await secretsManagerClient.send(
     new GetSecretValueCommand({
       SecretId: databaseCredentialsSecret,
@@ -26,13 +38,10 @@ const getDatabaseUrl = async (): Promise<string> => {
   );
   const secretString = response.SecretString;
   assert(secretString);
-  const secret = z
+
+  return z
     .object({ username: z.string(), password: z.string() })
     .parse(JSON.parse(secretString));
-  databaseUrl.username = secret.username;
-  databaseUrl.password = secret.password;
-
-  return databaseUrl.href;
 };
 
 export default defineConfig({
