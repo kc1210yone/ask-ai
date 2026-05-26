@@ -69,6 +69,7 @@ export const ComponentForm = ({ className }: Props): ReactNode => {
         newPassword: data.newPassword,
       });
     } catch (error) {
+      console.warn(error);
       invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {

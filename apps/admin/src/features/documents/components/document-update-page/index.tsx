@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { ComponentForm } from './component-form';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { serverLogger } from '#src/lib/logger';
 
 interface Props {
   projectId: string;
@@ -23,6 +24,7 @@ export const DocumentUpdatePage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
+    serverLogger.warn('Invalid project.');
     notFound();
   }
 
@@ -31,6 +33,7 @@ export const DocumentUpdatePage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!document || document.projectId !== projectId) {
+    serverLogger.warn('Invalid document.');
     notFound();
   }
 

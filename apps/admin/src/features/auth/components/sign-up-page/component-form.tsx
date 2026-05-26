@@ -70,6 +70,7 @@ export const ComponentForm = (): ReactNode => {
         },
       });
     } catch (error) {
+      console.warn(error);
       invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {

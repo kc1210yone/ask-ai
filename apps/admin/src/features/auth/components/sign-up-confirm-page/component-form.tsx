@@ -30,6 +30,7 @@ export const ComponentForm = (): ReactNode => {
 
   useEffect(() => {
     if (!username) {
+      console.warn('No username.');
       router.push('/auth/login');
     }
   }, [username, router]);
@@ -45,7 +46,8 @@ export const ComponentForm = (): ReactNode => {
     let result;
     try {
       result = await autoSignIn();
-    } catch {
+    } catch (error) {
+      console.warn(error);
       router.push('/auth/login');
       toast.error('ログインに失敗しました。', {
         position: 'top-center',
@@ -73,6 +75,7 @@ export const ComponentForm = (): ReactNode => {
         confirmationCode: data.code,
       });
     } catch (error) {
+      console.warn(error);
       invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {
@@ -113,7 +116,8 @@ export const ComponentForm = (): ReactNode => {
     invariant(username);
     try {
       await resendSignUpCode({ username });
-    } catch {
+    } catch (error) {
+      console.warn(error);
       toast.error('確認コードの再送に失敗しました。', {
         position: 'top-center',
       });

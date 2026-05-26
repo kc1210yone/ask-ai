@@ -6,6 +6,7 @@ import { AppSidebar } from './app-sidebar';
 import { SidebarProvider, SidebarTrigger } from '#src/components/ui/sidebar';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { serverLogger } from '#src/lib/logger';
 
 interface Props {
   projectId: string | null;
@@ -26,6 +27,7 @@ export const PrivateWithUserLayout = async ({
     });
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!project || project.userId !== user.id) {
+      serverLogger.warn('Invalid project.');
       notFound();
     }
   }

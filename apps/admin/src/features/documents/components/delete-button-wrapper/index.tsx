@@ -35,7 +35,8 @@ export const DeleteButtonWrapper = ({
     let response;
     try {
       response = await deleteDocument(projectId, documentId);
-    } catch {
+    } catch (error) {
+      console.warn(error);
       response = null;
     }
     const status = response?.status === 'ok' ? 'ok' : 'error';

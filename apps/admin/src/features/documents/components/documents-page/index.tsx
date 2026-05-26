@@ -17,6 +17,7 @@ import {
 import { ItemGroup } from '#src/components/ui/item';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { serverLogger } from '#src/lib/logger';
 
 interface Props {
   projectId: string;
@@ -33,6 +34,7 @@ export const DocumentsPage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
+    serverLogger.warn('Invalid project.');
     notFound();
   }
 

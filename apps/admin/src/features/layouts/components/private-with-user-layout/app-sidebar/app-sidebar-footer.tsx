@@ -31,7 +31,8 @@ export const AppSidebarFooter = ({ authUser }: Props): ReactNode => {
   const logout = async (): Promise<void> => {
     try {
       await signOut();
-    } catch {
+    } catch (error) {
+      console.warn(error);
       toast.error('ログアウトに失敗しました。');
       return;
     }

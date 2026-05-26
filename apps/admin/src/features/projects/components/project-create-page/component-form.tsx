@@ -36,7 +36,8 @@ export const ComponentForm = ({ className }: Props) => {
     let response;
     try {
       response = await formAction(data);
-    } catch {
+    } catch (error) {
+      console.warn(error);
       response = null;
     }
     if (!response || response.status === 'error') {

@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { FormSchema, type FormSchemaType } from './types';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { serverLogger } from '#src/lib/logger';
 
 interface ActionResponse {
   status: 'ok' | 'error';
@@ -16,6 +17,7 @@ export const formAction = async (
   formData: FormSchemaType,
 ): Promise<ActionResponse> => {
   if (!FormSchema.safeParse(formData).success) {
+    serverLogger.warn('Bad request.');
     return {
       status: 'error',
     };
@@ -29,6 +31,7 @@ export const formAction = async (
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
+    serverLogger.warn('Invalid project.');
     return { status: 'error' };
   }
 

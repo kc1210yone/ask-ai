@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { UploadButton } from './upload-button';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { serverLogger } from '#src/lib/logger';
 
 interface Props {
   projectId: string;
@@ -22,6 +23,7 @@ export const KnowledgeBaseUploadPage = async ({
   });
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (!project || project.userId !== user.id) {
+    serverLogger.warn('Invalid project.');
     notFound();
   }
 

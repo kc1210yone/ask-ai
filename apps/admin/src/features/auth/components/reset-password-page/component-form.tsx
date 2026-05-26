@@ -43,6 +43,7 @@ export const ComponentForm = (): ReactNode => {
         username: data.username,
       });
     } catch (error) {
+      console.warn(error);
       invariant(error instanceof Error);
       let errorMessage;
       switch (error.name) {

@@ -38,6 +38,7 @@
     "sonner": "2.0.7",
     "tailwind-merge": "3.5.0",
     "tiny-invariant": "1.3.3",
+    "winston": "3.19.0",
     "zod": "4.4.3"
   },
   "devDependencies": {
