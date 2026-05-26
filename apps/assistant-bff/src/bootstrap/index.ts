@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { errorHandler } from './error-handler.js';
 import { chatRouter } from '#src/features/chat/index.js';
+import { logger } from '#src/lib/logger/index.js';
 
 const main = (): void => {
   const app = express();
@@ -16,7 +17,7 @@ const main = (): void => {
 
   const port = 3000;
   app.listen(port, () => {
-    console.info(
+    logger.info(
       `Assistant BFF listening on http://localhost:${port.toString()}.`,
     );
   });

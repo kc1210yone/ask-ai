@@ -1,5 +1,6 @@
 import type { ErrorRequestHandler, Response } from 'express';
 import { HttpError } from '#src/lib/errors/index.js';
+import { logger } from '#src/lib/logger/index.js';
 
 export const errorHandler: ErrorRequestHandler = (
   error,
@@ -8,7 +9,15 @@ export const errorHandler: ErrorRequestHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next,
 ) => {
-  console.error(error);
+  if (
+    error instanceof HttpError &&
+    400 <= error.statusCode &&
+    error.statusCode < 500
+  ) {
+    logger.warn(error);
+  } else {
+    logger.error(error);
+  }
 
   if (!response.headersSent) {
     whenHeadersNotSent(error, response);

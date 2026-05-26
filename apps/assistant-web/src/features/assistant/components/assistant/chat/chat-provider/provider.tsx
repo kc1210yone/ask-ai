@@ -50,7 +50,7 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
             setSendingDisabled(false);
             break;
           case 'app-error':
-            throw new Error('Got to onerror.');
+            throw new Error(`app-error: ${event.data}`);
           default:
             throw new Error();
         }
@@ -70,7 +70,7 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
         // eslint-disable-next-line @typescript-eslint/require-await
         onopen: async (response) => {
           if (response.status !== 200) {
-            throw new Error('Got to onerror.');
+            throw new Error('Chat connection error.');
           }
           setMessages((previous) => [
             ...previous,
@@ -80,7 +80,8 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
           connectPromiseResolve(true);
         },
         onmessage: onMessage,
-        onerror: () => {
+        onerror: (error) => {
+          console.warn(error);
           connectPromiseResolve(false);
           setMessages((previous) => {
             if (previous.length === 0) {
