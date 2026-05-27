@@ -26,14 +26,15 @@ export const upload = async (projectId: string): Promise<ActionResponse> => {
     return { status: 'error' };
   }
 
-  const response = await lambdaClient.send(
+  await lambdaClient.send(
     new InvokeCommand({
-      FunctionName: 'aaa',
+      FunctionName: 'ask-ai-knowledge-base-upload',
       InvocationType: 'Event',
-      Payload: JSON.stringify({}),
+      Payload: JSON.stringify({
+        projectId,
+      }),
     }),
   );
-  console.log(response);
 
   return { status: 'ok' };
 };

@@ -33,7 +33,6 @@ export const KnowledgeBaseUploadPage = async ({
       <p className="text-muted-foreground mt-4">
         ナレッジベースとはドキュメントとFAQのことです。
         ナレッジベースの反映を行うことで、ナレッジベースのデータをAIアシスタントに同期します。
-        ナレッジベースの反映を行ってから実際にAIアシスタントの回答にデータが反映されるまで、最大1時間程度かかります。
       </p>
       <p className="mt-4">
         最終反映日時:{' '}
@@ -41,13 +40,7 @@ export const KnowledgeBaseUploadPage = async ({
           ? format(project.knowledgeBaseLastUploadDateTime, 'yyyy/MM/dd HH:mm')
           : '-'}
       </p>
-      <UploadButton
-        project={{
-          id: project.id,
-          knowledgeBaseIsUploading: project.knowledgeBaseIsUploading,
-        }}
-        className="mt-4"
-      />
+      <UploadButton projectId={project.id} className="mt-4" />
     </>
   );
 };

@@ -1,35 +1,54 @@
 'use client';
 
 import 'client-only';
-import type { Project } from '@internal/rdb/generated/prisma/client.js';
 import { useState, type ReactNode } from 'react';
+import { toast } from 'sonner';
 import { upload } from './actions';
 import { Button } from '#src/components/ui/button';
 
 interface Props {
-  project: Pick<Project, 'id' | 'knowledgeBaseIsUploading'>;
+  projectId: string;
   className?: string | undefined;
 }
 
-export const UploadButton = ({ project, className }: Props): ReactNode => {
+export const UploadButton = ({ projectId, className }: Props): ReactNode => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const onClick = async (): Promise<void> => {
     setIsLoading(true);
-    const response = await upload(project.id);
-    console.log(response.status);
+    let response;
+    try {
+      response = await upload(projectId);
+    } catch (error) {
+      console.warn(error);
+      response = null;
+    }
+    if (!response || response.status === 'error') {
+      toast.error('ナレッジベースの反映に失敗しました。');
+      setIsLoading(false);
+      return;
+    }
+    toast.success('ナレッジベースの反映を開始しました。');
+    setIsUploading(true);
   };
 
   return (
-    <Button
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onClick={onClick}
-      disabled={project.knowledgeBaseIsUploading || isLoading}
-      className={className}
-    >
-      {project.knowledgeBaseIsUploading
-        ? 'ナレッジベースを反映中'
-        : 'ナレッジベースを反映'}
-    </Button>
+    <>
+      <Button
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onClick={onClick}
+        disabled={isLoading || isUploading}
+        className={className}
+      >
+        {isUploading ? 'ナレッジベースを反映中' : 'ナレッジベースを反映'}
+      </Button>
+      {isUploading && (
+        <p className="text-muted-foreground mt-4 text-sm">
+          ナレッジベースの反映を行ってから実際にAIアシスタントの回答にデータが反映されるまで、最大1時間程度かかります。ページを離れてお待ちください。
+        </p>
+      )}
+    </>
   );
 };
