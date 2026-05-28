@@ -1,4 +1,5 @@
 import 'server-only';
+import { TZDate } from '@date-fns/tz';
 import { prisma } from '@internal/rdb/index.js';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
@@ -37,7 +38,10 @@ export const KnowledgeBaseUploadPage = async ({
       <p className="mt-4">
         最終反映日時:{' '}
         {project.knowledgeBaseLastUploadDateTime
-          ? format(project.knowledgeBaseLastUploadDateTime, 'yyyy/MM/dd HH:mm')
+          ? format(
+              new TZDate(project.knowledgeBaseLastUploadDateTime, 'Asia/Tokyo'),
+              'yyyy/MM/dd HH:mm',
+            )
           : '-'}
       </p>
       <UploadButton projectId={project.id} className="mt-4" />
