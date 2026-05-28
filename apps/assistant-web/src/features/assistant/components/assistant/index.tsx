@@ -3,7 +3,13 @@ import { AssistantButton } from './assistant-button';
 import { AssistantProvider } from './assistant-provider/provider';
 import { Chat } from './chat';
 
-export const Assistant = (): ReactNode => {
+interface Props {
+  projectId: string;
+}
+
+export const Assistant = ({ projectId }: Props): ReactNode => {
+  // TODO
+  console.log(projectId);
   return (
     <AssistantProvider>
       <AssistantButton />

@@ -25,9 +25,13 @@ export class AssistantElement extends HTMLElement {
   connectedCallback(): void {
     invariant(!this.root);
     this.root = createRoot(this.mountPointElement);
+
+    const projectId = this.getAttribute('project-id');
+    invariant(projectId, 'project-id属性がありません。');
+
     this.root.render(
       <StrictMode>
-        <Assistant />
+        <Assistant projectId={projectId} />
       </StrictMode>,
     );
   }
