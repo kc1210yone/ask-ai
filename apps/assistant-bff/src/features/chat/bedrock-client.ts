@@ -12,9 +12,13 @@ export const bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient();
 
 export const invokeAgent = async (
   sessionId: string,
+  projectId: string,
   inputMessage: string,
 ): Promise<AsyncGenerator<string>> => {
   // TODO
+  if (Math.random() < 0) {
+    console.log(projectId);
+  }
   if (Math.random() >= 0) {
     return generateDummyOutputMessageChunks();
   }

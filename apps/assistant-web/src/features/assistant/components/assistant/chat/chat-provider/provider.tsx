@@ -5,6 +5,7 @@ import {
 import { useCallback, useState, type ReactNode } from 'react';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
+import { useAssistant } from '../../assistant-provider/hook';
 import type { Message } from '../types';
 import { ChatContext } from './context';
 
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export const ChatProvider = ({ children }: Props): ReactNode => {
+  const { projectId } = useAssistant();
+
   const [sessionId] = useState(() => crypto.randomUUID());
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -66,7 +69,7 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
       void fetchEventSource(`${BFF_BASE_URL}/chat/${sessionId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ inputMessage }),
+        body: JSON.stringify({ projectId, inputMessage }),
         // eslint-disable-next-line @typescript-eslint/require-await
         onopen: async (response) => {
           if (response.status !== 200) {
@@ -104,7 +107,7 @@ export const ChatProvider = ({ children }: Props): ReactNode => {
 
       return await connectPromise;
     },
-    [sessionId],
+    [projectId, sessionId],
   );
 
   return (

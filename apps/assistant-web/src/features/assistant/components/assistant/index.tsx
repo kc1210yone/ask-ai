@@ -8,10 +8,8 @@ interface Props {
 }
 
 export const Assistant = ({ projectId }: Props): ReactNode => {
-  // TODO
-  console.log(projectId);
   return (
-    <AssistantProvider>
+    <AssistantProvider projectId={projectId}>
       <AssistantButton />
       <Chat />
     </AssistantProvider>

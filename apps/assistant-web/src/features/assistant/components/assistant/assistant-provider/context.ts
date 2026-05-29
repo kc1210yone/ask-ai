@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 export interface ContextValue {
+  projectId: string;
   assistantIsOpen: boolean;
   setAssistantIsOpen: (value: boolean) => void;
 }

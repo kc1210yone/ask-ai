@@ -6,6 +6,7 @@ import { HttpError } from '#src/lib/errors/index.js';
 
 const ParamsSchema = z.object({
   sessionId: z.uuid(),
+  projectId: z.string().min(1),
   inputMessage: z.string().min(1),
 });
 
@@ -26,6 +27,7 @@ export const postChatHandler: RequestHandler = async (request, response) => {
 
   const outputMessageChunks = await invokeAgent(
     params.sessionId,
+    params.projectId,
     params.inputMessage,
   );
 
