@@ -1,18 +1,14 @@
 FROM node:24 AS builder
 
-ARG AWS_REGION
-ARG NEXT_PUBLIC_USER_POOL_ID
-ARG NEXT_PUBLIC_USER_POOL_CLIENT_ID
-
 WORKDIR /app
 
 RUN curl -sSL -o ./tini https://github.com/krallin/tini/releases/download/v0.19.0/tini && \
   chmod +x ./tini
 
-COPY ./apps/admin/package.json ./apps/admin/
+COPY ./apps/assistant-bff/package.json ./apps/assistant-bff/
 COPY ./packages/rdb/package.json ./packages/rdb/
 COPY ./.npmrc ./package-lock.json ./package.json ./
-RUN npm ci -w @internal/admin --include-workspace-root
+RUN npm ci -w @internal/assistant-bff --include-workspace-root
 
 COPY ./packages/rdb/prisma ./packages/rdb/prisma
 COPY ./packages/rdb/src ./packages/rdb/src
@@ -20,29 +16,24 @@ COPY ./packages/rdb/prisma.config.mts ./packages/rdb/tsconfig.json ./packages/rd
 RUN npx -w @internal/rdb prisma generate && \
   npm run build -w @internal/rdb
 
-COPY ./apps/admin/src ./apps/admin/src
-COPY ./apps/admin/next.config.mts ./apps/admin/postcss.config.mts ./apps/admin/tsconfig.json ./apps/admin/
-ENV AWS_REGION=$AWS_REGION \
-  NEXT_PUBLIC_USER_POOL_ID=$NEXT_PUBLIC_USER_POOL_ID \
-  NEXT_PUBLIC_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_USER_POOL_CLIENT_ID
-RUN npm run build -w @internal/admin
+COPY ./apps/assistant-bff/src ./apps/assistant-bff/src
+COPY ./apps/assistant-bff/tsconfig.json ./apps/assistant-bff/
+RUN npm run build -w @internal/assistant-bff
 
 
 FROM node:24-slim
 
 WORKDIR /app
 
-COPY ./apps/admin/package.json ./apps/admin/
+COPY ./apps/assistant-bff/package.json ./apps/assistant-bff/
 COPY ./packages/rdb/package.json ./packages/rdb/
 COPY ./.npmrc ./package-lock.json ./package.json ./
-RUN npm ci -w @internal/admin --include-workspace-root --omit=dev
+RUN npm ci -w @internal/assistant-bff --include-workspace-root --omit=dev
 
-COPY ./apps/admin/next.config.mts ./apps/admin/
-COPY --from=builder /app/apps/admin/.next ./apps/admin/.next
+COPY --from=builder /app/apps/assistant-bff/dist ./apps/assistant-bff/dist
 COPY --from=builder /app/packages/rdb/dist ./packages/rdb/dist
 COPY --from=builder /app/tini ./
 
-ENV PORT=3000
 USER node
 ENTRYPOINT ["./tini", "--"]
-CMD ["./node_modules/.bin/next", "start", "./apps/admin"]
+CMD ["node", "./apps/assistant-bff/dist/src/bootstrap/index.js"]
