@@ -30,6 +30,7 @@ model Project {
   faqs                            Faq[]
   knowledgeBaseIsUploading        Boolean    @default(false) @map("knowledge_base_is_uploading")
   knowledgeBaseLastUploadDateTime DateTime?  @map("knowledge_base_last_upload_date_time")
+  chatCount                       Int        @default(0) @map("chat_count")
 
   @@map("projects")
 }
