@@ -1,19 +1,12 @@
 {
-  "name": "@internal/node-example",
+  "name": "@internal/marketing",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
-  "imports": {
-    "#src/*": "./dist/src/*"
-  },
   "scripts": {
-    "dev": "tsx watch ./src/index.ts",
-    "build": "tsc -b",
-    "start": "node ./dist/src/index.js",
-    "test": "run-s test:{typecheck,vitest}",
-    "test:typecheck": "tsc --noEmit",
-    "test:vitest": "vitest run",
+    "dev": ":",
+    "test": ":",
     "lint:check": "run-s lint:check:{eslint,prettier}",
     "lint:check:eslint": "eslint .",
     "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
@@ -21,12 +14,6 @@
     "lint:fix:eslint": "eslint --fix .",
     "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
   },
-  "dependencies": {
-    "@internal/shared": "*",
-    "dotenv": "17.3.1"
-  },
-  "devDependencies": {
-    "tsx": "4.21.0",
-    "vitest": "4.1.0"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
