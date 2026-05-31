@@ -11,6 +11,7 @@ export default {
       'apps/assistant-bff',
       'apps/assistant-web',
       'apps/functions',
+      'apps/marketing',
       'packages/rdb',
     ].map((workspace) => [
       `${workspace}/**`,
