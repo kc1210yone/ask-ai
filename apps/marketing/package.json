@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "dev": ":",
+    "dev": "serve ./src",
     "test": ":",
     "lint:check": "run-s lint:check:{eslint,prettier}",
     "lint:check:eslint": "eslint .",
@@ -14,6 +14,7 @@
     "lint:fix:eslint": "eslint --fix .",
     "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "serve": "14.2.6"
+  }
 }
