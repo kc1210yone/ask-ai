@@ -29,9 +29,12 @@ export class AssistantElement extends HTMLElement {
     const projectId = this.getAttribute('project-id');
     invariant(projectId, 'project-id属性がありません。');
 
+    const rawZIndex = this.getAttribute('z-index');
+    const zIndex = rawZIndex !== null ? parseInt(rawZIndex, 10) : undefined;
+
     this.root.render(
       <StrictMode>
-        <Assistant projectId={projectId} />
+        <Assistant projectId={projectId} zIndex={zIndex} />
       </StrictMode>,
     );
   }

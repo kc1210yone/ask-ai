@@ -2,6 +2,7 @@ import { createContext } from 'react';
 
 export interface ContextValue {
   projectId: string;
+  zIndex?: number | undefined;
   assistantIsOpen: boolean;
   setAssistantIsOpen: (value: boolean) => void;
 }

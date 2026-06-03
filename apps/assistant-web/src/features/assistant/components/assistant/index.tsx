@@ -5,11 +5,12 @@ import { Chat } from './chat';
 
 interface Props {
   projectId: string;
+  zIndex?: number | undefined;
 }
 
-export const Assistant = ({ projectId }: Props): ReactNode => {
+export const Assistant = ({ projectId, zIndex }: Props): ReactNode => {
   return (
-    <AssistantProvider projectId={projectId}>
+    <AssistantProvider projectId={projectId} zIndex={zIndex}>
       <AssistantButton />
       <Chat />
     </AssistantProvider>
