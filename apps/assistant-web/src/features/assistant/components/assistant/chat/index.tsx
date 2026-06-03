@@ -11,7 +11,7 @@ export const Chat = (): ReactNode => {
   return (
     <ChatProvider>
       {assistantIsOpen && (
-        <div className="fixed right-8 bottom-8 flex h-96 w-80 flex-col rounded-xl border border-solid border-gray-200 bg-white">
+        <div className="fixed right-8 bottom-8 flex h-96 w-80 max-w-[calc(100vw-64px)] flex-col rounded-xl border border-solid border-gray-200 bg-white">
           <ChatHeader />
           <ChatMessages />
           <ChatForm />
