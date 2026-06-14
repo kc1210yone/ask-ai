@@ -7,6 +7,7 @@ import {
 
 const BEDROCK_AGENT_ID = '855FTTEZR5';
 const BEDROCK_AGENT_ALIAS_ID = '9TCHRYR2PC';
+const KNOWLEDGE_BASE_ID = 'QSCOK2GG0W';
 
 export const bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient({
   region: 'us-east-1',
@@ -17,14 +18,29 @@ export const invokeAgent = async (
   projectId: string,
   inputMessage: string,
 ): Promise<AsyncGenerator<string>> => {
-  // TODO
-  console.log(projectId);
   const response = await bedrockAgentRuntimeClient.send(
     new InvokeAgentCommand({
       agentId: BEDROCK_AGENT_ID,
       agentAliasId: BEDROCK_AGENT_ALIAS_ID,
       sessionId,
       inputText: inputMessage,
+      sessionState: {
+        knowledgeBaseConfigurations: [
+          {
+            knowledgeBaseId: KNOWLEDGE_BASE_ID,
+            retrievalConfiguration: {
+              vectorSearchConfiguration: {
+                filter: {
+                  equals: {
+                    key: 'projectId',
+                    value: projectId,
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
     }),
   );
   return generateOutputMessageChunks(response);
