@@ -5,8 +5,8 @@ import {
   type InvokeAgentCommandOutput,
 } from '@aws-sdk/client-bedrock-agent-runtime';
 
-const BEDROCK_AGENT_ID = 'AFZV2506DY';
-const BEDROCK_AGENT_ALIAS_ID = 'JROKIVARG6';
+const BEDROCK_AGENT_ID = '855FTTEZR5';
+const BEDROCK_AGENT_ALIAS_ID = '9TCHRYR2PC';
 
 export const bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient();
 
@@ -16,12 +16,7 @@ export const invokeAgent = async (
   inputMessage: string,
 ): Promise<AsyncGenerator<string>> => {
   // TODO
-  if (Math.random() < 0) {
-    console.log(projectId);
-  }
-  if (Math.random() >= 0) {
-    return generateDummyOutputMessageChunks();
-  }
+  console.log(projectId);
   const response = await bedrockAgentRuntimeClient.send(
     new InvokeAgentCommand({
       agentId: BEDROCK_AGENT_ID,
@@ -42,19 +37,5 @@ async function* generateOutputMessageChunks(
     const chunk = event.chunk;
     assert(chunk);
     yield textDecoder.decode(chunk.bytes);
-  }
-}
-
-async function* generateDummyOutputMessageChunks(): AsyncGenerator<string> {
-  const chunks = [
-    'こんにちは！\n',
-    'これは',
-    'ダミーの',
-    'ストリーミング',
-    'レスポンスです。',
-  ];
-  for (const chunk of chunks) {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    yield chunk;
   }
 }

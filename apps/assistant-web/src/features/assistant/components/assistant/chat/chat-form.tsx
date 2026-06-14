@@ -59,7 +59,7 @@ export const ChatForm = (): ReactNode => {
           {...form.register('message')}
           placeholder="AIに質問しましょう。"
           rows={2}
-          className="flex-1 resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400 disabled:opacity-50"
+          className="flex-1 resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm text-black outline-none focus:border-blue-400 disabled:opacity-50"
           onKeyDown={(event) => void onTextAreaKeyDown(event)}
         />
         <button
