@@ -8,7 +8,9 @@ import {
 const BEDROCK_AGENT_ID = '855FTTEZR5';
 const BEDROCK_AGENT_ALIAS_ID = '9TCHRYR2PC';
 
-export const bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient();
+export const bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient({
+  region: 'us-east-1',
+});
 
 export const invokeAgent = async (
   sessionId: string,
