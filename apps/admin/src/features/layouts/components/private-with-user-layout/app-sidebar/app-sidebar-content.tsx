@@ -3,6 +3,7 @@
 import 'client-only';
 import {
   CloudUploadIcon,
+  CreditCardIcon,
   FileIcon,
   FileQuestionMarkIcon,
   FolderCogIcon,
@@ -96,6 +97,21 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
             </SidebarMenu>
           </SidebarGroupContent>
         )}
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>プラン・請求</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/billing">
+                  <CreditCardIcon />
+                  <span>プラン・請求</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
       </SidebarGroup>
       <SidebarGroup>
         <SidebarGroupLabel>テーマ</SidebarGroupLabel>

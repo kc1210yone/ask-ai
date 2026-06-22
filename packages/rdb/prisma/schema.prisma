@@ -8,14 +8,31 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid()) @db.VarChar(25)
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
-  deletedAt     DateTime? @map("deleted_at")
-  cognitoUserId String    @unique @map("cognito_user_id") @db.VarChar(36)
-  projects      Project[]
+  id               String        @id @default(cuid()) @db.VarChar(25)
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  deletedAt        DateTime?     @map("deleted_at")
+  cognitoUserId    String        @unique @map("cognito_user_id") @db.VarChar(36)
+  stripeCustomerId String?       @unique @map("stripe_customer_id") @db.VarChar(255)
+  projects         Project[]
+  subscription     Subscription?
 
   @@map("users")
+}
+
+model Subscription {
+  id                   String   @id @default(cuid()) @db.VarChar(25)
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+  userId               String   @unique @map("user_id") @db.VarChar(25)
+  user                 User     @relation(fields: [userId], references: [id])
+  stripeSubscriptionId String   @unique @map("stripe_subscription_id") @db.VarChar(255)
+  // "active" | "canceled" | "past_due" | "unpaid" | "trialing" など
+  status               String   @db.VarChar(50)
+  currentPeriodStart   DateTime @map("current_period_start")
+  currentPeriodEnd     DateTime @map("current_period_end")
+
+  @@map("subscriptions")
 }
 
 model Project {
