@@ -65,7 +65,7 @@ export const BillingPage = async ({
       <Card className="mt-8">
         <CardHeader>
           <CardTitle>スタンダードプラン</CardTitle>
-          <CardDescription>月額 ¥10,000（税込）</CardDescription>
+          <CardDescription>月額 ¥980（税込）</CardDescription>
         </CardHeader>
         <CardContent>
           {subscription ? (

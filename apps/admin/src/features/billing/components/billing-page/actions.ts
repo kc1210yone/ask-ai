@@ -40,8 +40,8 @@ export const createCheckoutSessionAction = async (): Promise<never> => {
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
-    mode: 'subscription',
     line_items: [{ price: priceId, quantity: 1 }],
+    mode: 'subscription',
     success_url: `${appUrl}/billing?success=true`,
     cancel_url: `${appUrl}/billing?canceled=true`,
   });
