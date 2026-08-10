@@ -15,8 +15,8 @@ const stripe = new Stripe(stripeSecretKey);
 
 // Stripe Checkoutセッションを作成してStripeのチェックアウトページへリダイレクトする
 export const createCheckoutSessionAction = async (): Promise<never> => {
-  const appUrl = process.env['NEXT_PUBLIC_APP_URL'];
-  invariant(appUrl, 'NEXT_PUBLIC_APP_URL が設定されていません。');
+  const appUrl = process.env['APP_URL'];
+  invariant(appUrl, 'APP_URL が設定されていません。');
 
   const priceId = process.env['STRIPE_PRICE_ID'];
   invariant(priceId, 'STRIPE_PRICE_ID が設定されていません。');
