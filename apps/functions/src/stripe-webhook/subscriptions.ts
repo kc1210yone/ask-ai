@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { prisma } from '@internal/rdb/index.js';
 import type Stripe from 'stripe';
 import { stripe } from './stripe-client.js';
@@ -8,9 +9,7 @@ const getPeriodFromSubscription = (
   subscription: Stripe.Subscription,
 ): { currentPeriodStart: Date; currentPeriodEnd: Date } => {
   const firstItem = subscription.items.data[0];
-  if (!firstItem) {
-    throw new Error('サブスクリプションにアイテムが存在しません。');
-  }
+  assert(firstItem, 'サブスクリプションにアイテムが存在しません。');
   return {
     currentPeriodStart: new Date(firstItem.current_period_start * 1000),
     currentPeriodEnd: new Date(firstItem.current_period_end * 1000),

@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2,
@@ -27,9 +28,7 @@ export const handler = async (
   }
 
   const webhookSecret = process.env['STRIPE_WEBHOOK_SECRET'];
-  if (!webhookSecret) {
-    throw new Error('STRIPE_WEBHOOK_SECRET が設定されていません。');
-  }
+  assert(webhookSecret, 'STRIPE_WEBHOOK_SECRET が設定されていません。');
 
   const body = event.isBase64Encoded
     ? Buffer.from(event.body ?? '', 'base64').toString('utf-8')
