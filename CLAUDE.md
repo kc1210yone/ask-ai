@@ -30,6 +30,10 @@
   ただし、戻り値の型が複雑な書き方しかできない場合は省略すること。
 - 変数名や関数名には単語の省略形を用いないこと。
 - 可読性のために日本語のコメントを適宜入れること。
+- TypeScriptのコードでは、Assertion（プログラム上の不変条件の検証）には以下を使用すること。
+  - サーバサイド：`import assert from 'node:assert/strict';`
+  - ブラウザ上：`import invariant from 'tiny-invariant';`
+  - ただし、Next.jsのコードはサーバ・ブラウザ両方で使われるため、サーバ用のコードであってもassertではなくinvariant使用に統一。
 
 ## アーキテクチャ
 
