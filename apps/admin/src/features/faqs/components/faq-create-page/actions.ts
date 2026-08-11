@@ -5,11 +5,16 @@ import { prisma } from '@internal/rdb/index.js';
 import { revalidatePath } from 'next/cache';
 import { FormSchema, type FormSchemaType } from './types';
 import { getAuthUserOrRedirect } from '#src/features/auth';
+import {
+  findSubscription,
+  isSubscriptionActive,
+  FREE_PLAN_ITEM_LIMIT,
+} from '#src/features/billing';
 import { findUserOrRedirect } from '#src/features/users';
 import { serverLogger } from '#src/lib/logger';
 
 interface ActionResponse {
-  status: 'ok' | 'error';
+  status: 'ok' | 'error' | 'limit_exceeded';
 }
 
 export const formAction = async (
@@ -35,6 +40,21 @@ export const formAction = async (
     return {
       status: 'error',
     };
+  }
+
+  const subscription = await findSubscription(user.id);
+  if (!isSubscriptionActive(subscription)) {
+    const faqCount = await prisma.faq.count({
+      where: { projectId, deletedAt: null },
+    });
+    if (faqCount >= FREE_PLAN_ITEM_LIMIT) {
+      serverLogger.warn('無料プランのFAQ登録上限に達しています。', {
+        projectId,
+      });
+      return {
+        status: 'limit_exceeded',
+      };
+    }
   }
 
   await prisma.faq.create({

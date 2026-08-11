@@ -24,30 +24,27 @@ export const postChatHandler: RequestHandler = async (request, response) => {
 
   const project = await prisma.project.findUnique({
     where: { id: params.projectId, deletedAt: null },
+    include: { user: { include: { subscription: true } } },
   });
   if (!project) {
     throw new HttpError({ statusCode: 400, message: 'Invalid project.' });
   }
 
-  const updateResult = await prisma.project.updateMany({
-    where: {
-      id: params.projectId,
-      chatCount: {
-        lt: 1000,
-      },
-    },
-    data: {
-      chatCount: {
-        increment: 1,
-      },
-    },
-  });
-  if (updateResult.count === 0) {
+  const isSubscriptionActive = project.user.subscription?.status === 'active';
+  if (
+    (!isSubscriptionActive && project.chatCount >= 100) ||
+    project.chatCount >= 1000
+  ) {
     throw new HttpError({
       statusCode: 429,
       message: 'Reached chat count limit.',
     });
   }
+
+  await prisma.project.update({
+    where: { id: params.projectId },
+    data: { chatCount: { increment: 1 } },
+  });
 
   const sseResponse = new SseResponse(response);
 

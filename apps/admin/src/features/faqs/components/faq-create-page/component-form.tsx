@@ -47,6 +47,18 @@ export const ComponentForm = ({ projectId, className }: Props) => {
       console.warn(error);
       response = null;
     }
+    if (response?.status === 'limit_exceeded') {
+      toast.error('無料プランのFAQ登録上限（5件）に達しました。', {
+        action: {
+          label: '課金ページへ',
+          onClick: () => {
+            router.push('/billing');
+          },
+        },
+      });
+      setIsLoading(false);
+      return;
+    }
     if (!response || response.status === 'error') {
       toast.error('FAQの作成に失敗しました。');
       setIsLoading(false);

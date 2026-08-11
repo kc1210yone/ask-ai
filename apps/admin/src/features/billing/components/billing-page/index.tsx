@@ -1,9 +1,12 @@
 import 'server-only';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
+import { CheckCircle2Icon, TriangleAlertIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { findSubscription } from '../../server';
 import { createCheckoutSessionAction } from './actions';
+import { Alert, AlertDescription } from '#src/components/ui/alert';
+import { Badge } from '#src/components/ui/badge';
 import { Button } from '#src/components/ui/button';
 import {
   Card,
@@ -52,14 +55,20 @@ export const BillingPage = async ({
 
       {/* 決済完了・キャンセル時のフィードバックメッセージ */}
       {success && (
-        <p className="mt-4 rounded-md bg-green-50 p-4 text-sm text-green-700">
-          サブスクリプションへの登録が完了しました。ご利用ありがとうございます。
-        </p>
+        <Alert className="mt-4">
+          <CheckCircle2Icon />
+          <AlertDescription>
+            サブスクリプションへの登録が完了しました。ご利用ありがとうございます。
+          </AlertDescription>
+        </Alert>
       )}
       {canceled && (
-        <p className="mt-4 rounded-md bg-yellow-50 p-4 text-sm text-yellow-700">
-          決済がキャンセルされました。引き続きご検討ください。
-        </p>
+        <Alert variant="destructive" className="mt-4">
+          <TriangleAlertIcon />
+          <AlertDescription>
+            決済がキャンセルされました。引き続きご検討ください。
+          </AlertDescription>
+        </Alert>
       )}
 
       <Card className="mt-8">
@@ -72,15 +81,13 @@ export const BillingPage = async ({
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="text-muted-foreground text-sm">状態</span>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                    subscription.status === 'active'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-muted text-muted-foreground'
-                  }`}
+                <Badge
+                  variant={
+                    subscription.status === 'active' ? 'default' : 'secondary'
+                  }
                 >
                   {getStatusLabel(subscription.status)}
-                </span>
+                </Badge>
               </div>
               <div className="text-sm">
                 <span className="text-muted-foreground">現在の契約期間</span>
