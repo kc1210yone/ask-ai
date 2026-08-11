@@ -22,6 +22,7 @@ Workspaceのディレクトリではなくプロジェクトルートのディ�
 - `npm run lint:check -w @internal/rdb`: ESLint/Prettierによるチェック。
 - `npm run lint:fix -w @internal/rdb`: ESLint/Prettierによる自動Fix。
 - `npx -w @internal/rdb prisma <command>`: Prismaのコマンドを実行。
+  `<command>`は`migrate dev`, `generate`, `studio`など。
 
 ## アーキテクチャ
 

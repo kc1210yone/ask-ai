@@ -4,8 +4,8 @@
 
 import 'dotenv/config';
 import type { Context } from 'aws-lambda';
-import { handler as knowledgeBaseIngestHandler } from './knowledge-base-ingest/index.js';
-import { handler as knowledgeBaseUploadHandler } from './knowledge-base-upload/index.js';
+import { handler as knowledgeBaseIngestHandler } from './functions/knowledge-base-ingest/index.js';
+import { handler as knowledgeBaseUploadHandler } from './functions/knowledge-base-upload/index.js';
 
 await knowledgeBaseUploadHandler(
   {
