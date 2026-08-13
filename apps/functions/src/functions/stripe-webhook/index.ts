@@ -1,9 +1,5 @@
 import assert from 'node:assert/strict';
-import type {
-  APIGatewayProxyEventV2,
-  APIGatewayProxyResultV2,
-  Context,
-} from 'aws-lambda';
+import type { LambdaFunctionURLHandler } from 'aws-lambda';
 import type Stripe from 'stripe';
 import { stripe } from './stripe-client.js';
 import {
@@ -13,12 +9,8 @@ import {
 } from './subscriptions.js';
 import { logger } from '#src/lib/logger/index.js';
 
-// Stripe WebhookをLambda Function URL / API Gatewayで受け取るHandler
-export const handler = async (
-  event: APIGatewayProxyEventV2,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _context: Context,
-): Promise<APIGatewayProxyResultV2> => {
+// Stripe WebhookをLambda Function URLで受け取るHandler
+export const handler: LambdaFunctionURLHandler = async (event) => {
   const signature = event.headers['stripe-signature'];
   if (!signature) {
     return {
