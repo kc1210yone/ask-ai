@@ -1,12 +1,11 @@
 import 'server-only';
-import { TZDate } from '@date-fns/tz';
 import { prisma } from '@internal/rdb/index.js';
-import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { UploadButton } from './upload-button';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { formatWithTimeZone } from '#src/lib/date-time-utils';
 import { serverLogger } from '#src/lib/logger';
 
 interface Props {
@@ -38,8 +37,8 @@ export const KnowledgeBaseUploadPage = async ({
       <p className="mt-4">
         最終反映日時:{' '}
         {project.knowledgeBaseLastUploadDateTime
-          ? format(
-              new TZDate(project.knowledgeBaseLastUploadDateTime, 'Asia/Tokyo'),
+          ? formatWithTimeZone(
+              project.knowledgeBaseLastUploadDateTime,
               'yyyy/MM/dd HH:mm',
             )
           : '-'}

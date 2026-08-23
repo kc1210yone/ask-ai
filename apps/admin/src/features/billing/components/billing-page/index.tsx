@@ -1,6 +1,4 @@
 import 'server-only';
-import { format } from 'date-fns';
-import { ja } from 'date-fns/locale';
 import { CheckCircle2Icon, TriangleAlertIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { findSubscription } from '../../server';
@@ -17,6 +15,7 @@ import {
 } from '#src/components/ui/card';
 import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
+import { formatWithTimeZone } from '#src/lib/date-time-utils';
 
 interface Props {
   success?: boolean;
@@ -92,13 +91,15 @@ export const BillingPage = async ({
               <div className="text-sm">
                 <span className="text-muted-foreground">現在の契約期間</span>
                 <p className="mt-1">
-                  {format(subscription.currentPeriodStart, 'yyyy年M月d日', {
-                    locale: ja,
-                  })}{' '}
+                  {formatWithTimeZone(
+                    subscription.currentPeriodStart,
+                    'yyyy年M月d日',
+                  )}{' '}
                   〜{' '}
-                  {format(subscription.currentPeriodEnd, 'yyyy年M月d日', {
-                    locale: ja,
-                  })}
+                  {formatWithTimeZone(
+                    subscription.currentPeriodEnd,
+                    'yyyy年M月d日',
+                  )}
                 </p>
               </div>
             </div>
