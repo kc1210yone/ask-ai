@@ -3,6 +3,7 @@
 import 'client-only';
 import {
   CloudUploadIcon,
+  Code2Icon,
   CreditCardIcon,
   FileIcon,
   FileQuestionMarkIcon,
@@ -102,6 +103,17 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
                   >
                     <CloudUploadIcon />
                     <span>ナレッジベースの反映</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link
+                    href={`/projects/${projectId}/embed-snippet`}
+                    onClick={closeMobileSidebar}
+                  >
+                    <Code2Icon />
+                    <span>設置方法</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
