@@ -2,7 +2,7 @@
 
 import 'client-only';
 import { CheckIcon, CopyIcon } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { toast } from 'sonner';
 import { Button } from '#src/components/ui/button';
 
@@ -13,6 +13,15 @@ interface Props {
 
 export const CopySnippetButton = ({ snippet, className }: Props): ReactNode => {
   const [isCopied, setIsCopied] = useState(false);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current) {
+        clearTimeout(resetTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const onClick = async (): Promise<void> => {
     try {
@@ -24,7 +33,10 @@ export const CopySnippetButton = ({ snippet, className }: Props): ReactNode => {
     }
     setIsCopied(true);
     toast.success('コピーしました。');
-    setTimeout(() => {
+    if (resetTimeoutRef.current) {
+      clearTimeout(resetTimeoutRef.current);
+    }
+    resetTimeoutRef.current = setTimeout(() => {
       setIsCopied(false);
     }, 2000);
   };
