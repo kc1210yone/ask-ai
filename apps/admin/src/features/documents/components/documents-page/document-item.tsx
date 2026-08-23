@@ -16,7 +16,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from '#src/components/ui/item';
-import { cn } from '#src/lib/utils';
+import { cn } from '#src/lib/ui-utils';
 
 interface Props {
   projectId: string;

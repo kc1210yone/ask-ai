@@ -7,7 +7,7 @@ import { Toaster } from '#src/components/ui/sonner';
 import { TooltipProvider } from '#src/components/ui/tooltip';
 import { ConfigureAmplifyClientSide } from '#src/features/auth';
 import { ThemeProvider } from '#src/features/theme';
-import { cn } from '#src/lib/utils';
+import { cn } from '#src/lib/ui-utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 

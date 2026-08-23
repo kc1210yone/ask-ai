@@ -18,7 +18,7 @@ import {
 } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
 import { Textarea } from '#src/components/ui/textarea';
-import { cn } from '#src/lib/utils';
+import { cn } from '#src/lib/ui-utils';
 
 interface Props {
   projectId: string;

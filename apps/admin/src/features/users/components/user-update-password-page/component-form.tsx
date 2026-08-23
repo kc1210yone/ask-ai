@@ -13,7 +13,7 @@ import { z } from 'zod';
 import { Button } from '#src/components/ui/button';
 import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
 import { Input } from '#src/components/ui/input';
-import { cn } from '#src/lib/utils';
+import { cn } from '#src/lib/ui-utils';
 
 const FormSchema = z
   .object({
