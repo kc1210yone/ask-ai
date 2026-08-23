@@ -8,28 +8,44 @@ datasource db {
 }
 
 model User {
+  // ユーザーのID
   id               String        @id @default(cuid()) @db.VarChar(25)
+  // 作成日時
   createdAt        DateTime      @default(now()) @map("created_at")
+  // 更新日時
   updatedAt        DateTime      @updatedAt @map("updated_at")
+  // 論理削除日時（削除されていない場合はnull）
   deletedAt        DateTime?     @map("deleted_at")
+  // AWS CognitoのユーザーID
   cognitoUserId    String        @unique @map("cognito_user_id") @db.VarChar(36)
+  // Stripeの顧客ID（サブスクリプションに一度も登録していない場合はnull）
   stripeCustomerId String?       @unique @map("stripe_customer_id") @db.VarChar(255)
+  // ユーザーが保有するプロジェクト
   projects         Project[]
+  // ユーザーのサブスクリプション（登録していない場合はnull）
   subscription     Subscription?
 
   @@map("users")
 }
 
 model Subscription {
+  // サブスクリプションのID
   id                   String   @id @default(cuid()) @db.VarChar(25)
+  // 作成日時
   createdAt            DateTime @default(now()) @map("created_at")
+  // 更新日時
   updatedAt            DateTime @updatedAt @map("updated_at")
+  // サブスクリプションが紐づくユーザーのID
   userId               String   @unique @map("user_id") @db.VarChar(25)
+  // サブスクリプションが紐づくユーザー
   user                 User     @relation(fields: [userId], references: [id])
+  // StripeのサブスクリプションID
   stripeSubscriptionId String   @unique @map("stripe_subscription_id") @db.VarChar(255)
-  // "active" | "canceled" | "past_due" | "unpaid" | "trialing" など
+  // Stripeサブスクリプションのstatus（"active" | "canceled" | "past_due" | "unpaid" | "trialing" など）
   status               String   @db.VarChar(50)
+  // 現在の契約期間の開始日時
   currentPeriodStart   DateTime @map("current_period_start")
+  // 現在の契約期間の終了日時
   currentPeriodEnd     DateTime @map("current_period_end")
   // 現在の契約期間の終了時に解約される予定かどうか
   cancelAtPeriodEnd    Boolean  @default(false) @map("cancel_at_period_end")
@@ -38,43 +54,71 @@ model Subscription {
 }
 
 model Project {
+  // プロジェクトのID
   id                              String     @id @default(cuid()) @db.VarChar(25)
+  // 作成日時
   createdAt                       DateTime   @default(now()) @map("created_at")
+  // 更新日時
   updatedAt                       DateTime   @updatedAt @map("updated_at")
+  // 論理削除日時（削除されていない場合はnull）
   deletedAt                       DateTime?  @map("deleted_at")
+  // プロジェクトを保有するユーザーのID
   userId                          String     @map("user_id") @db.VarChar(25)
+  // プロジェクトを保有するユーザー
   user                            User       @relation(fields: [userId], references: [id])
+  // プロジェクト名
   name                            String     @db.VarChar(255)
+  // プロジェクトに紐づくドキュメント
   documents                       Document[]
+  // プロジェクトに紐づくFAQ
   faqs                            Faq[]
+  // ナレッジベースの反映処理が実行中かどうか
   knowledgeBaseIsUploading        Boolean    @default(false) @map("knowledge_base_is_uploading")
+  // ナレッジベースを最後に反映した日時（一度も反映していない場合はnull）
   knowledgeBaseLastUploadDateTime DateTime?  @map("knowledge_base_last_upload_date_time")
+  // AIアシスタントとのチャット回数の累計（無料プランは100回、有料プランは1000回で上限に達する）
   chatCount                       Int        @default(0) @map("chat_count")
 
   @@map("projects")
 }
 
 model Document {
+  // ドキュメントのID
   id        String    @id @default(cuid()) @db.VarChar(25)
+  // 作成日時
   createdAt DateTime  @default(now()) @map("created_at")
+  // 更新日時
   updatedAt DateTime  @updatedAt @map("updated_at")
+  // 論理削除日時（削除されていない場合はnull）
   deletedAt DateTime? @map("deleted_at")
+  // ドキュメントが紐づくプロジェクトのID
   projectId String    @map("project_id") @db.VarChar(25)
+  // ドキュメントが紐づくプロジェクト
   project   Project   @relation(fields: [projectId], references: [id])
+  // 一覧で見分けやすくするためのタイトル（AIアシスタントの回答には使用されない）
   title     String    @db.VarChar(255)
+  // AIアシスタントが回答時に参照する本文
   content   String    @db.Text
 
   @@map("documents")
 }
 
 model Faq {
+  // FAQのID
   id        String    @id @default(cuid()) @db.VarChar(25)
+  // 作成日時
   createdAt DateTime  @default(now()) @map("created_at")
+  // 更新日時
   updatedAt DateTime  @updatedAt @map("updated_at")
+  // 論理削除日時（削除されていない場合はnull）
   deletedAt DateTime? @map("deleted_at")
+  // FAQが紐づくプロジェクトのID
   projectId String    @map("project_id") @db.VarChar(25)
+  // FAQが紐づくプロジェクト
   project   Project   @relation(fields: [projectId], references: [id])
+  // サイトユーザーから寄せられそうな質問
   question  String    @db.VarChar(255)
+  // 質問に対する回答
   answer    String    @db.Text
 
   @@map("faqs")
