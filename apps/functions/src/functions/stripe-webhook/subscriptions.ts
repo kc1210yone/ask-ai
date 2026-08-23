@@ -63,12 +63,14 @@ export const handleCheckoutSessionCompleted = async (
       status: subscription.status,
       currentPeriodStart,
       currentPeriodEnd,
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
     },
     update: {
       stripeSubscriptionId,
       status: subscription.status,
       currentPeriodStart,
       currentPeriodEnd,
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
     },
   });
 
@@ -92,6 +94,7 @@ export const handleSubscriptionUpdated = async (
       status: subscription.status,
       currentPeriodStart,
       currentPeriodEnd,
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
     },
   });
 

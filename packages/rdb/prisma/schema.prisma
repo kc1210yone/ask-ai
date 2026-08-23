@@ -31,6 +31,8 @@ model Subscription {
   status               String   @db.VarChar(50)
   currentPeriodStart   DateTime @map("current_period_start")
   currentPeriodEnd     DateTime @map("current_period_end")
+  // 現在の契約期間の終了時に解約される予定かどうか
+  cancelAtPeriodEnd    Boolean  @default(false) @map("cancel_at_period_end")
 
   @@map("subscriptions")
 }

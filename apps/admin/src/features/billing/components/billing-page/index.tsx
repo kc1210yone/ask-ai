@@ -3,6 +3,8 @@ import { CheckCircle2Icon, TriangleAlertIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { findSubscription } from '../../server';
 import { createCheckoutSessionAction } from './actions';
+import { CancelSubscriptionButton } from './cancel-subscription-button';
+import { ResumeSubscriptionButton } from './resume-subscription-button';
 import { Alert, AlertDescription } from '#src/components/ui/alert';
 import { Badge } from '#src/components/ui/badge';
 import { Button } from '#src/components/ui/button';
@@ -77,31 +79,54 @@ export const BillingPage = async ({
         </CardHeader>
         <CardContent>
           {subscription ? (
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="text-muted-foreground text-sm">状態</span>
-                <Badge
-                  variant={
-                    subscription.status === 'active' ? 'default' : 'secondary'
-                  }
-                >
-                  {getStatusLabel(subscription.status)}
-                </Badge>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground text-sm">状態</span>
+                  <Badge
+                    variant={
+                      subscription.status === 'active' ? 'default' : 'secondary'
+                    }
+                  >
+                    {getStatusLabel(subscription.status)}
+                  </Badge>
+                </div>
+                <div className="text-sm">
+                  <span className="text-muted-foreground">現在の契約期間</span>
+                  <p className="mt-1">
+                    {formatWithTimeZone(
+                      subscription.currentPeriodStart,
+                      'yyyy年M月d日',
+                    )}{' '}
+                    〜{' '}
+                    {formatWithTimeZone(
+                      subscription.currentPeriodEnd,
+                      'yyyy年M月d日',
+                    )}
+                  </p>
+                </div>
               </div>
-              <div className="text-sm">
-                <span className="text-muted-foreground">現在の契約期間</span>
-                <p className="mt-1">
-                  {formatWithTimeZone(
-                    subscription.currentPeriodStart,
-                    'yyyy年M月d日',
-                  )}{' '}
-                  〜{' '}
-                  {formatWithTimeZone(
-                    subscription.currentPeriodEnd,
-                    'yyyy年M月d日',
-                  )}
-                </p>
-              </div>
+
+              {subscription.status === 'active' &&
+                (subscription.cancelAtPeriodEnd ? (
+                  <div className="space-y-3">
+                    <p className="text-muted-foreground text-sm">
+                      {formatWithTimeZone(
+                        subscription.currentPeriodEnd,
+                        'yyyy年M月d日',
+                      )}
+                      の契約期間終了をもって解約される予定です。
+                    </p>
+                    <ResumeSubscriptionButton />
+                  </div>
+                ) : (
+                  <CancelSubscriptionButton
+                    currentPeriodEndLabel={formatWithTimeZone(
+                      subscription.currentPeriodEnd,
+                      'yyyy年M月d日',
+                    )}
+                  />
+                ))}
             </div>
           ) : (
             <div className="space-y-4">
