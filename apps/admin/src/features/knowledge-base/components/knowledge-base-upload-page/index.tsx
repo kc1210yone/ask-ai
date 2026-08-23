@@ -31,8 +31,7 @@ export const KnowledgeBaseUploadPage = async ({
     <>
       <h2 className="text-xl font-semibold">ナレッジベースの反映</h2>
       <p className="text-muted-foreground mt-4">
-        ナレッジベースとはドキュメントとFAQのことです。
-        ナレッジベースの反映を行うことで、ナレッジベースのデータをAIアシスタントに同期します。
+        ナレッジベースとは、登録済みのドキュメントとFAQをまとめたものです。反映を行うと、最新のナレッジベースの内容がAIアシスタントに同期されます。
       </p>
       <p className="mt-4">
         最終反映日時:{' '}

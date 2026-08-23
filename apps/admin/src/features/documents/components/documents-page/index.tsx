@@ -57,7 +57,7 @@ export const DocumentsPage = async ({
         )}
       </div>
       <p className="text-muted-foreground mt-4">
-        ドキュメントは、AIアシスタントが参照する単体の情報です。
+        ドキュメントとは、AIアシスタントが回答時に参照する単体の情報のことです。
       </p>
       {documents.length === 0 ? (
         <Empty>
@@ -67,7 +67,7 @@ export const DocumentsPage = async ({
             </EmptyMedia>
             <EmptyTitle>ドキュメントがまだ作成されていません</EmptyTitle>
             <EmptyDescription>
-              ドキュメントは、AIアシスタントが参照する単体の情報です。
+              「作成」ボタンから、最初のドキュメントを登録しましょう。
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>

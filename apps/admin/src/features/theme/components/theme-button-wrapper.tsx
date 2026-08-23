@@ -30,7 +30,9 @@ export const ThemeButtonWrapper = ({ children }: Props): ReactNode => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>テーマ設定</DialogTitle>
-          <DialogDescription>テーマを選択してください。</DialogDescription>
+          <DialogDescription>
+            画面の表示テーマを選択してください。
+          </DialogDescription>
         </DialogHeader>
         <ButtonGroup orientation="vertical" className="w-full">
           <Button

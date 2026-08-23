@@ -54,7 +54,7 @@ export const DashboardPage = async ({
           <CardHeader>
             <CardTitle>ドキュメント</CardTitle>
             <CardDescription>
-              ドキュメントは、AIアシスタントが参照する単体の情報です。
+              ドキュメントとは、AIアシスタントが回答時に参照する単体の情報のことです。
             </CardDescription>
             <CardAction>詳細を見る</CardAction>
           </CardHeader>
@@ -68,7 +68,9 @@ export const DashboardPage = async ({
           <CardHeader>
             <CardTitle>FAQ</CardTitle>
             <CardDescription>
-              <p>FAQは、AIアシスタントが参照する質問と回答のペアです。</p>
+              <p>
+                FAQとは、AIアシスタントが回答時に参照する、質問と回答のペア形式の情報のことです。
+              </p>
             </CardDescription>
             <CardAction>詳細を見る</CardAction>
           </CardHeader>

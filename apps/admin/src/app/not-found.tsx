@@ -10,7 +10,9 @@ const NotFound = (): ReactNode => {
         <CircleXIcon className="size-20" />
         <div className="ml-8 flex flex-col">
           <h1 className="text-3xl font-semibold">Ask AI 管理画面</h1>
-          <p className="mt-4 text-xl">ページが見つかりませんでした。</p>
+          <p className="mt-4 text-xl">
+            お探しのページが見つかりませんでした。URLをご確認ください。
+          </p>
           <Link href="/" className="mt-8 w-fit hover:underline">
             管理画面トップ
           </Link>

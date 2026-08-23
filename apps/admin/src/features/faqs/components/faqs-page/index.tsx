@@ -55,7 +55,7 @@ export const FaqsPage = async ({ projectId }: Props): Promise<ReactNode> => {
         )}
       </div>
       <p className="text-muted-foreground mt-4">
-        FAQは、AIアシスタントが参照する質問と回答のペアです。
+        FAQとは、AIアシスタントが回答時に参照する、質問と回答のペア形式の情報のことです。
       </p>
       {faqs.length === 0 ? (
         <Empty>
@@ -65,7 +65,7 @@ export const FaqsPage = async ({ projectId }: Props): Promise<ReactNode> => {
             </EmptyMedia>
             <EmptyTitle>FAQがまだ作成されていません</EmptyTitle>
             <EmptyDescription>
-              FAQは、AIアシスタントが参照する質問と回答のペアです。
+              「作成」ボタンから、最初のFAQを登録しましょう。
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>

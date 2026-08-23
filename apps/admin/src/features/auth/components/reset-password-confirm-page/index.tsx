@@ -25,7 +25,7 @@ export const ResetPasswordConfirmPage = async (): Promise<ReactNode> => {
             <h2>パスワードのリセット</h2>
           </CardTitle>
           <CardDescription>
-            確認コードと新しいパスワードを入力してください。
+            メールに送信された確認コードと、新しいパスワードを入力してください。
           </CardDescription>
         </CardHeader>
         <CardContent>

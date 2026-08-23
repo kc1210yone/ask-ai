@@ -49,7 +49,7 @@ export const BillingPage = async ({
     <>
       <h2 className="text-xl font-semibold">プラン・請求</h2>
       <p className="text-muted-foreground mt-4">
-        サブスクリプションの状態を確認・管理できます。
+        現在のサブスクリプションの状態を確認できます。未登録の場合は、下記から新規にお申し込みいただけます。
       </p>
 
       {/* 決済完了・キャンセル時のフィードバックメッセージ */}
@@ -57,7 +57,7 @@ export const BillingPage = async ({
         <Alert className="mt-4">
           <CheckCircle2Icon />
           <AlertDescription>
-            サブスクリプションへの登録が完了しました。ご利用ありがとうございます。
+            サブスクリプションへのご登録が完了しました。ご利用ありがとうございます。
           </AlertDescription>
         </Alert>
       )}
@@ -65,7 +65,7 @@ export const BillingPage = async ({
         <Alert variant="destructive" className="mt-4">
           <TriangleAlertIcon />
           <AlertDescription>
-            決済がキャンセルされました。引き続きご検討ください。
+            決済手続きがキャンセルされました。よろしければ、あらためてお手続きください。
           </AlertDescription>
         </Alert>
       )}
@@ -106,7 +106,7 @@ export const BillingPage = async ({
           ) : (
             <div className="space-y-4">
               <p className="text-muted-foreground text-sm">
-                現在サブスクリプションに登録されていません。
+                現在、サブスクリプションにご登録いただいていません。下のボタンからお申し込みいただけます。
               </p>
               <form action={createCheckoutSessionAction}>
                 <Button type="submit">サブスクリプションを開始する</Button>

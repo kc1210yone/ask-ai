@@ -25,7 +25,7 @@ export const SignUpConfirmPage = async (): Promise<ReactNode> => {
             <h2>アカウント認証</h2>
           </CardTitle>
           <CardDescription>
-            メールに送信された確認コードを入力してください。
+            ご登録のメールアドレス宛に送信された確認コードを入力してください。
           </CardDescription>
         </CardHeader>
         <CardContent>

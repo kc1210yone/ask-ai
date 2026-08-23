@@ -27,7 +27,9 @@ export const LoginPage = async (): Promise<ReactNode> => {
           <CardTitle>
             <h2>ログイン</h2>
           </CardTitle>
-          <CardDescription>管理画面にログインしてください。</CardDescription>
+          <CardDescription>
+            登録済みのメールアドレスとパスワードでログインしてください。
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ComponentForm />

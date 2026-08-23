@@ -30,7 +30,7 @@ export const ProjectUpdatePage = async ({
     <>
       <h2 className="text-xl font-semibold">プロジェクト設定</h2>
       <p className="text-muted-foreground mt-4">
-        プロジェクトの設定を変更してください。
+        プロジェクトの名前など、設定を変更できます。
       </p>
       <ComponentForm project={project} className="mt-8" />
     </>

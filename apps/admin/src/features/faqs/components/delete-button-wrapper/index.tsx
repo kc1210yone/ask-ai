@@ -50,7 +50,7 @@ export const DeleteButtonWrapper = ({
         <AlertDialogHeader>
           <AlertDialogTitle>FAQを削除しますか？</AlertDialogTitle>
           <AlertDialogDescription>
-            このFAQは削除されます。
+            このFAQを削除します。この操作は取り消せません。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

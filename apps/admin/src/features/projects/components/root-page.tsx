@@ -31,7 +31,7 @@ export const RootPage = async (): Promise<ReactNode> => {
     <div className="flex flex-col gap-6">
       <h2 className="text-xl font-semibold">プロジェクトを選択</h2>
       <p className="text-muted-foreground">
-        これから操作するプロジェクトを選択してください。
+        複数のプロジェクトが登録されています。操作するプロジェクトを選択してください。
       </p>
       <div className="grid gap-4">
         {projects.map((project) => (

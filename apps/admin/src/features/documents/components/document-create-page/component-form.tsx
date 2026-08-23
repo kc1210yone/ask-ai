@@ -86,7 +86,7 @@ export const ComponentForm = ({ projectId, className }: Props) => {
               placeholder="プロダクトの説明"
             />
             <FieldDescription>
-              ドキュメントを探しやすくするためのタイトルです。AIアシスタントはタイトルは参照しません。
+              一覧で見分けやすくするためのタイトルです。AIアシスタントの回答には使用されません。
             </FieldDescription>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
@@ -106,7 +106,7 @@ export const ComponentForm = ({ projectId, className }: Props) => {
               className="h-50"
             />
             <FieldDescription>
-              AIアシスタントに読み込ませたい内容を入力してください。
+              AIアシスタントが回答の参考にする内容を入力してください。
             </FieldDescription>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>

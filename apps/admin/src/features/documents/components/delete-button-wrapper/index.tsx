@@ -50,7 +50,7 @@ export const DeleteButtonWrapper = ({
         <AlertDialogHeader>
           <AlertDialogTitle>ドキュメントを削除しますか？</AlertDialogTitle>
           <AlertDialogDescription>
-            このドキュメントは削除されます。
+            このドキュメントを削除します。この操作は取り消せません。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

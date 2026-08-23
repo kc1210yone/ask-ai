@@ -86,7 +86,7 @@ export const ComponentForm = ({ projectId, className }: Props) => {
               placeholder="AIアシスタントはどうやってサイトに設置しますか？"
             />
             <FieldDescription>
-              AIアシスタントに認識させるQ&AのQの部分です。ユーザーからの想定質問を入力します。
+              サイトユーザーから寄せられそうな質問を入力してください。AIアシスタントがこの質問を認識するために使用します。
             </FieldDescription>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
@@ -106,7 +106,7 @@ export const ComponentForm = ({ projectId, className }: Props) => {
               className="h-50"
             />
             <FieldDescription>
-              AIアシスタントに認識させるQ&AのAの部分です。ユーザーからの想定質問への回答を入力します。
+              上の質問に対する回答を入力してください。AIアシスタントがそのまま回答の参考にします。
             </FieldDescription>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>

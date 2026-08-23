@@ -28,7 +28,7 @@ export const SignUpPage = async (): Promise<ReactNode> => {
             <h2>アカウント作成</h2>
           </CardTitle>
           <CardDescription>
-            管理画面の新規アカウントを作成します。
+            管理画面を利用するための新規アカウントを作成します。
           </CardDescription>
         </CardHeader>
         <CardContent>
