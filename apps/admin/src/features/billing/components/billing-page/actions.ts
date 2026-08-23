@@ -87,10 +87,18 @@ export const cancelSubscriptionAction = async (): Promise<ActionResponse> => {
     return { status: 'error' };
   }
 
-  await prisma.subscription.update({
-    where: { id: subscription.id },
-    data: { cancelAtPeriodEnd: true },
-  });
+  try {
+    await prisma.subscription.update({
+      where: { id: subscription.id },
+      data: { cancelAtPeriodEnd: true },
+    });
+  } catch (error) {
+    serverLogger.error(
+      'Stripe側は解約を予約しましたが、DBの更新に失敗しました。',
+      { error, userId: user.id },
+    );
+    return { status: 'error' };
+  }
 
   serverLogger.info('サブスクリプションの解約を予約しました。', {
     userId: user.id,
@@ -127,10 +135,18 @@ export const resumeSubscriptionAction = async (): Promise<ActionResponse> => {
     return { status: 'error' };
   }
 
-  await prisma.subscription.update({
-    where: { id: subscription.id },
-    data: { cancelAtPeriodEnd: false },
-  });
+  try {
+    await prisma.subscription.update({
+      where: { id: subscription.id },
+      data: { cancelAtPeriodEnd: false },
+    });
+  } catch (error) {
+    serverLogger.error(
+      'Stripe側は解約予約を取り消しましたが、DBの更新に失敗しました。',
+      { error, userId: user.id },
+    );
+    return { status: 'error' };
+  }
 
   serverLogger.info('サブスクリプションの解約予約を取り消しました。', {
     userId: user.id,

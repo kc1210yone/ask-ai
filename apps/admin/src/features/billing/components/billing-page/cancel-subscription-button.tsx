@@ -27,6 +27,7 @@ export const CancelSubscriptionButton = ({
 }: Props): ReactNode => {
   const router = useRouter();
 
+  const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const onAction = async (): Promise<void> => {
@@ -38,19 +39,20 @@ export const CancelSubscriptionButton = ({
       console.warn(error);
       response = null;
     }
+    setIsLoading(false);
     if (!response || response.status === 'error') {
       toast.error('サブスクリプションの解約に失敗しました。');
-      setIsLoading(false);
       return;
     }
+    setOpen(false);
     toast.success('サブスクリプションの解約を予約しました。');
     router.refresh();
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button type="button" variant="outline" disabled={isLoading}>
+        <Button type="button" variant="outline">
           解約する
         </Button>
       </AlertDialogTrigger>
@@ -65,10 +67,14 @@ export const CancelSubscriptionButton = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>キャンセル</AlertDialogCancel>
+          <AlertDialogCancel disabled={isLoading}>キャンセル</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
-            onClick={() => void onAction()}
+            disabled={isLoading}
+            onClick={(event) => {
+              event.preventDefault();
+              void onAction();
+            }}
           >
             解約する
           </AlertDialogAction>
