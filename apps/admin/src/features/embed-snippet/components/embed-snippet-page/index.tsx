@@ -29,10 +29,11 @@ export const EmbedSnippetPage = async ({
     notFound();
   }
 
-  const snippet = `<ask-ai-assistant
+  const assistantTag = `<ask-ai-assistant
   project-id="${project.id}"
-></ask-ai-assistant>
-<script
+></ask-ai-assistant>`;
+
+  const scriptTag = `<script
   type="module"
   src="${ASSISTANT_WEB_SCRIPT_URL}"
 ></script>`;
@@ -41,13 +42,34 @@ export const EmbedSnippetPage = async ({
     <>
       <h2 className="text-xl font-semibold">設置方法</h2>
       <p className="text-muted-foreground mt-4">
-        以下のスニペットを、AIアシスタントを表示したいWebサイトのHTMLに貼り付けてください。貼り付けるだけで、チャットウィジェットが自動的に表示されます。
+        以下の2つのタグを、それぞれ指定の場所にあわせてWebサイトのHTMLに貼り付けてください。
       </p>
-      <div className="mt-4 flex flex-col gap-4">
-        <pre className="bg-muted overflow-x-auto rounded-md p-4 text-sm">
-          <code>{snippet}</code>
-        </pre>
-        <CopySnippetButton snippet={snippet} className="self-start" />
+      <div className="mt-8 flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
+          <div>
+            <p className="font-medium">① AIアシスタントのボタン</p>
+            <p className="text-muted-foreground text-sm">
+              ボタンを表示したい箇所に埋め込んでください。
+            </p>
+          </div>
+          <pre className="bg-muted overflow-x-auto rounded-md p-4 text-sm">
+            <code>{assistantTag}</code>
+          </pre>
+          <CopySnippetButton snippet={assistantTag} className="self-start" />
+        </div>
+        <div className="flex flex-col gap-4">
+          <div>
+            <p className="font-medium">② 読み込み用スクリプト</p>
+            <p className="text-muted-foreground text-sm">
+              ページ下部（{'</body>'}
+              の直前など）に埋め込んでください。
+            </p>
+          </div>
+          <pre className="bg-muted overflow-x-auto rounded-md p-4 text-sm">
+            <code>{scriptTag}</code>
+          </pre>
+          <CopySnippetButton snippet={scriptTag} className="self-start" />
+        </div>
       </div>
     </>
   );
