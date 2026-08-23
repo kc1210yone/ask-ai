@@ -17,6 +17,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '#src/components/ui/sidebar';
 
 interface Props {
@@ -26,6 +27,7 @@ interface Props {
 
 export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
   const router = useRouter();
+  const { setOpenMobile } = useSidebar();
 
   const params = useParams<{ projectId?: string }>();
   const projectId = params.projectId ?? null;
@@ -34,9 +36,13 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
     router.refresh();
   }, [projectId, router]);
 
+  const closeMobileSidebar = (): void => {
+    setOpenMobile(false);
+  };
+
   return (
     <SidebarHeader>
-      <Link href="/">
+      <Link href="/" onClick={closeMobileSidebar}>
         <h1 className="flex h-16 items-center justify-center border-b text-xl font-semibold">
           Ask AI 管理画面
         </h1>
@@ -54,14 +60,17 @@ export const AppSidebarHeader = ({ project, projects }: Props): ReactNode => {
             <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
               {projects.map((project) => (
                 <DropdownMenuItem key={project.id} asChild>
-                  <Link href={`/projects/${project.id}/dashboard`}>
+                  <Link
+                    href={`/projects/${project.id}/dashboard`}
+                    onClick={closeMobileSidebar}
+                  >
                     <FolderIcon />
                     {project.name}
                   </Link>
                 </DropdownMenuItem>
               ))}
               <DropdownMenuItem key="@create" asChild>
-                <Link href={`/projects/create`}>
+                <Link href={`/projects/create`} onClick={closeMobileSidebar}>
                   <FolderPlusIcon />
                   新規作成
                 </Link>

@@ -18,6 +18,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '#src/components/ui/sidebar';
 import type { AuthUser } from '#src/features/auth';
 
@@ -27,6 +28,11 @@ interface Props {
 
 export const AppSidebarFooter = ({ authUser }: Props): ReactNode => {
   const router = useRouter();
+  const { setOpenMobile } = useSidebar();
+
+  const closeMobileSidebar = (): void => {
+    setOpenMobile(false);
+  };
 
   const logout = async (): Promise<void> => {
     try {
@@ -36,6 +42,7 @@ export const AppSidebarFooter = ({ authUser }: Props): ReactNode => {
       toast.error('ログアウトに失敗しました。');
       return;
     }
+    setOpenMobile(false);
     router.push('/auth/login');
     toast.success('ログアウトしました。');
   };
@@ -53,7 +60,10 @@ export const AppSidebarFooter = ({ authUser }: Props): ReactNode => {
             </SidebarMenuButton>
             <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
               <DropdownMenuItem asChild>
-                <Link href="/users/update-password">
+                <Link
+                  href="/users/update-password"
+                  onClick={closeMobileSidebar}
+                >
                   <KeyIcon />
                   パスワード変更
                 </Link>

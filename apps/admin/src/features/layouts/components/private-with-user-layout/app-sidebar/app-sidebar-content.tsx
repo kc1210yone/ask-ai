@@ -22,6 +22,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '#src/components/ui/sidebar';
 import {
   Tooltip,
@@ -35,6 +36,12 @@ interface Props {
 }
 
 export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
+  const { setOpenMobile } = useSidebar();
+
+  const closeMobileSidebar = (): void => {
+    setOpenMobile(false);
+  };
+
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -42,7 +49,7 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
         <Tooltip>
           <TooltipTrigger asChild>
             <SidebarGroupAction asChild>
-              <Link href={`/projects/create`}>
+              <Link href={`/projects/create`} onClick={closeMobileSidebar}>
                 <PlusIcon />
               </Link>
             </SidebarGroupAction>
@@ -56,7 +63,10 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href={`/projects/${projectId}/dashboard`}>
+                  <Link
+                    href={`/projects/${projectId}/dashboard`}
+                    onClick={closeMobileSidebar}
+                  >
                     <LayoutDashboardIcon />
                     <span>ダッシュボード</span>
                   </Link>
@@ -64,7 +74,10 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href={`/projects/${projectId}/documents`}>
+                  <Link
+                    href={`/projects/${projectId}/documents`}
+                    onClick={closeMobileSidebar}
+                  >
                     <FileIcon />
                     <span>ドキュメント</span>
                   </Link>
@@ -72,7 +85,10 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href={`/projects/${projectId}/faqs`}>
+                  <Link
+                    href={`/projects/${projectId}/faqs`}
+                    onClick={closeMobileSidebar}
+                  >
                     <FileQuestionMarkIcon />
                     <span>FAQ</span>
                   </Link>
@@ -80,7 +96,10 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href={`/projects/${projectId}/knowledge-base/upload`}>
+                  <Link
+                    href={`/projects/${projectId}/knowledge-base/upload`}
+                    onClick={closeMobileSidebar}
+                  >
                     <CloudUploadIcon />
                     <span>ナレッジベースの反映</span>
                   </Link>
@@ -88,7 +107,10 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href={`/projects/${projectId}/update`}>
+                  <Link
+                    href={`/projects/${projectId}/update`}
+                    onClick={closeMobileSidebar}
+                  >
                     <FolderCogIcon />
                     <span>プロジェクト設定</span>
                   </Link>
@@ -104,7 +126,7 @@ export const AppSidebarContent = ({ projectId }: Props): ReactNode => {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <Link href="/billing">
+                <Link href="/billing" onClick={closeMobileSidebar}>
                   <CreditCardIcon />
                   <span>プラン・請求</span>
                 </Link>
