@@ -25,7 +25,7 @@ COPY ./apps/admin/next.config.mts ./apps/admin/postcss.config.mts ./apps/admin/t
 ENV AWS_REGION=$AWS_REGION \
   NEXT_PUBLIC_USER_POOL_ID=$NEXT_PUBLIC_USER_POOL_ID \
   NEXT_PUBLIC_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_USER_POOL_CLIENT_ID
-RUN npm run build -w @internal/admin
+RUN STRIPE_SECRET_KEY=dummy npm run build -w @internal/admin
 
 
 FROM node:24-slim
