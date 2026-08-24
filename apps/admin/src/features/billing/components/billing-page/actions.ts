@@ -11,16 +11,22 @@ import { getAuthUserOrRedirect } from '#src/features/auth';
 import { findUserOrRedirect } from '#src/features/users';
 import { serverLogger } from '#src/lib/logger';
 
-const stripeSecretKey = process.env['STRIPE_SECRET_KEY'];
-invariant(stripeSecretKey, 'STRIPE_SECRET_KEY が設定されていません。');
-const stripe = new Stripe(stripeSecretKey);
-
 interface ActionResponse {
   status: 'ok' | 'error';
 }
 
+// StripeのSecret Keyはビルド時ではなく実行時にのみ利用可能なため、
+// モジュール読み込み時ではなく呼び出し時に遅延初期化する
+const getStripeClient = (): Stripe => {
+  const stripeSecretKey = process.env['STRIPE_SECRET_KEY'];
+  invariant(stripeSecretKey, 'STRIPE_SECRET_KEY が設定されていません。');
+  return new Stripe(stripeSecretKey);
+};
+
 // Stripe Checkoutセッションを作成してStripeのチェックアウトページへリダイレクトする
 export const createCheckoutSessionAction = async (): Promise<never> => {
+  const stripe = getStripeClient();
+
   const appUrl = process.env['APP_URL'];
   invariant(appUrl, 'APP_URL が設定されていません。');
 
@@ -66,6 +72,8 @@ export const createCheckoutSessionAction = async (): Promise<never> => {
 
 // サブスクリプションを現在の契約期間の終了時に解約する
 export const cancelSubscriptionAction = async (): Promise<ActionResponse> => {
+  const stripe = getStripeClient();
+
   const authUser = await getAuthUserOrRedirect();
   const user = await findUserOrRedirect(authUser.userId);
 
@@ -111,6 +119,8 @@ export const cancelSubscriptionAction = async (): Promise<ActionResponse> => {
 
 // 現在の契約期間の終了時の解約予約を取り消す
 export const resumeSubscriptionAction = async (): Promise<ActionResponse> => {
+  const stripe = getStripeClient();
+
   const authUser = await getAuthUserOrRedirect();
   const user = await findUserOrRedirect(authUser.userId);
 
