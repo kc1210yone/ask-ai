@@ -1,0 +1,33 @@
+import nextEslintPluginNext from '@next/eslint-plugin-next';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import eslintPluginReact from 'eslint-plugin-react';
+import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
+import rootConfig from '../../eslint.config.ts';
+
+export default defineConfig(
+  rootConfig,
+  globalIgnores(['src/components/ui/']),
+  {
+    ...eslintPluginReact.configs.flat['recommended'],
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ...eslintPluginReact.configs.flat['recommended']!.rules,
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
+  eslintPluginReactHooks.configs.flat.recommended,
+  {
+    plugins: {
+      '@next/next': nextEslintPluginNext,
+    },
+    rules: {
+      ...nextEslintPluginNext.configs.recommended.rules,
+      ...nextEslintPluginNext.configs['core-web-vitals'].rules,
+    },
+  },
+);

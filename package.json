@@ -1,0 +1,47 @@
+{
+  "name": "ask-ai",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "prepare": "command -v husky >/dev/null 2>&1 && husky || true",
+    "test": "npm run test --workspaces",
+    "lint:check": "npm run lint:check --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "20.5.0",
+    "@eslint/js": "9.39.4",
+    "@next/eslint-plugin-next": "16.2.1",
+    "@types/node": "24.10.13",
+    "@typescript-eslint/eslint-plugin": "8.57.1",
+    "@typescript-eslint/parser": "8.57.1",
+    "eslint": "9.39.4",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-refresh": "0.5.2",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "globals": "17.4.0",
+    "husky": "9.1.7",
+    "lint-staged": "16.4.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "3.8.1",
+    "prettier-plugin-tailwindcss": "0.7.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.57.1"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "volta": {
+    "node": "24.13.1"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "@internal/assistant-bff",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "imports": {
+    "#src/*": "./dist/src/*"
+  },
+  "scripts": {
+    "dev": "tsx watch ./src/bootstrap/index.ts",
+    "build": "tsc -b",
+    "start": "node ./dist/src/bootstrap/index.js",
+    "test": "run-s test:{typecheck,vitest}",
+    "test:typecheck": "tsc --noEmit",
+    "test:vitest": "vitest run",
+    "lint:check": "run-s lint:check:{eslint,prettier}",
+    "lint:check:eslint": "eslint .",
+    "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
+    "lint:fix": "run-s lint:fix:{eslint,prettier}",
+    "lint:fix:eslint": "eslint --fix .",
+    "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-agent-runtime": "3.1041.0",
+    "@internal/rdb": "*",
+    "cors": "2.8.6",
+    "dotenv": "17.4.2",
+    "express": "5.2.1",
+    "winston": "3.19.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "tsx": "4.21.0",
+    "vitest": "4.1.2"
+  }
+}

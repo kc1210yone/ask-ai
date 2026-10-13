@@ -1,0 +1,2478 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ask AI — あなたのサイトに、AIアシスタントを。</title>
+    <meta
+      name="description"
+      content="ドキュメントを登録するだけで、訪問者の質問に自動で回答するAIアシスタントをWebサイトに設置できるサービス。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --purple: #7c3aed;
+        --purple-light: #9d5ff5;
+        --purple-dark: #5b21b6;
+        --cyan: #06b6d4;
+        --cyan-light: #22d3ee;
+        --bg-deep: #0f0a1e;
+        --bg-mid: #130f24;
+        --bg-card: #1a1535;
+        --bg-card-hover: #211b42;
+        --text-primary: #f8f7ff;
+        --text-secondary: #a89ec9;
+        --text-muted: #6b5f8a;
+        --border: rgba(124, 58, 237, 0.25);
+        --border-light: rgba(255, 255, 255, 0.08);
+        --glow-purple: rgba(124, 58, 237, 0.4);
+        --glow-cyan: rgba(6, 182, 212, 0.3);
+      }
+
+      html {
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+      }
+
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background-color: var(--bg-deep);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* ===== NAVBAR ===== */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition:
+          background 0.3s ease,
+          backdrop-filter 0.3s ease,
+          border-color 0.3s ease;
+        border-bottom: 1px solid transparent;
+      }
+
+      .navbar.scrolled {
+        background: rgba(15, 10, 30, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom-color: var(--border-light);
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--text-primary);
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+      }
+
+      .nav-logo-icon {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, var(--purple), var(--cyan));
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: var(--text-primary);
+      }
+
+      /* ===== HAMBURGER ===== */
+      .nav-hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 36px;
+        height: 36px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 8px;
+        transition: background 0.2s;
+      }
+
+      .nav-hamburger:hover {
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .nav-hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: var(--text-primary);
+        border-radius: 2px;
+        transition:
+          transform 0.3s ease,
+          opacity 0.3s ease;
+        transform-origin: center;
+      }
+
+      .nav-hamburger.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+
+      .nav-hamburger.open span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+
+      .nav-hamburger.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+
+      .nav-mobile-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999;
+        background: rgba(15, 10, 30, 0.97);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        pointer-events: none;
+      }
+
+      .nav-mobile-menu.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-mobile-menu a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        transition: color 0.2s;
+      }
+
+      .nav-mobile-menu a:hover,
+      .nav-mobile-menu a:active {
+        color: var(--text-primary);
+      }
+
+      .nav-mobile-menu .btn {
+        font-size: 1rem;
+        padding: 0.875rem 2.5rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.5rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--purple), var(--purple-light));
+        color: #fff;
+        box-shadow: 0 4px 15px var(--glow-purple);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px var(--glow-purple);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+      }
+
+      .btn-outline:hover {
+        background: rgba(124, 58, 237, 0.1);
+        border-color: var(--purple-light);
+      }
+
+      .btn-large {
+        padding: 0.875rem 2.5rem;
+        font-size: 1rem;
+        border-radius: 12px;
+      }
+
+      /* ===== SECTIONS ===== */
+      section {
+        padding: 6rem 2rem;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .section-label {
+        display: inline-block;
+        padding: 0.3rem 1rem;
+        border-radius: 999px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.4);
+        color: var(--purple-light);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.25rem;
+      }
+
+      .section-title {
+        font-size: clamp(1.75rem, 4vw, 2.75rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+
+      .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        max-width: 560px;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .text-gradient {
+        background: linear-gradient(
+          135deg,
+          var(--purple-light),
+          var(--cyan-light)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ===== HERO ===== */
+      #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding-top: 6rem;
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(
+            ellipse at 70% 50%,
+            rgba(124, 58, 237, 0.15) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse at 20% 80%,
+            rgba(6, 182, 212, 0.1) 0%,
+            transparent 50%
+          ),
+          linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 100%);
+      }
+
+      .hero-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.6;
+        animation: float 8s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      .hero-blob-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.4),
+          transparent 70%
+        );
+        top: -100px;
+        right: -100px;
+        animation-delay: 0s;
+      }
+
+      .hero-blob-2 {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(6, 182, 212, 0.3),
+          transparent 70%
+        );
+        bottom: 100px;
+        left: -50px;
+        animation-delay: -3s;
+      }
+
+      .hero-blob-3 {
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          rgba(157, 95, 245, 0.3),
+          transparent 70%
+        );
+        top: 40%;
+        left: 40%;
+        animation-delay: -6s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) scale(1);
+        }
+        33% {
+          transform: translateY(-20px) scale(1.05);
+        }
+        66% {
+          transform: translateY(10px) scale(0.97);
+        }
+      }
+
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        mask-image: radial-gradient(
+          ellipse at 50% 50%,
+          black 20%,
+          transparent 80%
+        );
+      }
+
+      .hero-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+        width: 100%;
+      }
+
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 1rem;
+        background: rgba(124, 58, 237, 0.12);
+        border: 1px solid rgba(124, 58, 237, 0.35);
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--purple-light);
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-eyebrow-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--cyan);
+        border-radius: 50%;
+        animation: pulse-dot 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.8);
+        }
+      }
+
+      .hero-title {
+        font-size: clamp(2.5rem, 5vw, 3.75rem);
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+        margin-bottom: 1.25rem;
+      }
+
+      .hero-description {
+        font-size: 1.15rem;
+        color: var(--text-secondary);
+        max-width: 480px;
+        margin-bottom: 2.5rem;
+        line-height: 1.7;
+      }
+
+      .hero-cta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .hero-note {
+        margin-top: 1.5rem;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* ===== CHAT MOCKUP ===== */
+      .chat-mockup {
+        background: linear-gradient(
+          160deg,
+          rgba(26, 21, 53, 0.9),
+          rgba(19, 15, 36, 0.95)
+        );
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(255, 255, 255, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.07);
+        transform: perspective(1000px) rotateY(-5deg) rotateX(3deg);
+        transition: transform 0.5s ease;
+      }
+
+      .chat-mockup:hover {
+        transform: perspective(1000px) rotateY(-2deg) rotateX(1deg);
+      }
+
+      .chat-header {
+        padding: 1rem 1.25rem;
+        background: rgba(124, 58, 237, 0.15);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .chat-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--purple), var(--cyan));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+      }
+
+      .chat-header-info {
+        flex: 1;
+      }
+
+      .chat-header-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .chat-header-status {
+        font-size: 0.7rem;
+        color: var(--cyan);
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .status-dot {
+        width: 5px;
+        height: 5px;
+        background: var(--cyan);
+        border-radius: 50%;
+        animation: pulse-dot 2s ease-in-out infinite;
+      }
+
+      .chat-body {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-height: 280px;
+      }
+
+      .chat-message {
+        display: flex;
+        gap: 0.625rem;
+        align-items: flex-start;
+      }
+
+      .chat-message.user {
+        flex-direction: row-reverse;
+      }
+
+      .msg-avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+      }
+
+      .msg-avatar.ai {
+        background: linear-gradient(135deg, var(--purple), var(--cyan));
+      }
+
+      .msg-avatar.human {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-light);
+      }
+
+      .msg-bubble {
+        padding: 0.625rem 0.875rem;
+        border-radius: 12px;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        max-width: 80%;
+      }
+
+      .chat-message.user .msg-bubble {
+        background: rgba(124, 58, 237, 0.2);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        border-top-right-radius: 4px;
+        color: var(--text-primary);
+      }
+
+      .chat-message.ai .msg-bubble {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-light);
+        border-top-left-radius: 4px;
+        color: var(--text-secondary);
+      }
+
+      .chat-typing {
+        display: flex;
+        gap: 0.625rem;
+        align-items: center;
+      }
+
+      .typing-dots {
+        display: flex;
+        gap: 4px;
+        padding: 0.625rem 0.875rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        border-top-left-radius: 4px;
+      }
+
+      .typing-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--text-muted);
+        border-radius: 50%;
+        animation: typing 1.2s ease-in-out infinite;
+      }
+
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typing {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        50% {
+          transform: translateY(-4px);
+          opacity: 1;
+        }
+      }
+
+      .chat-input-area {
+        padding: 0.75rem 1rem;
+        border-top: 1px solid var(--border-light);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .chat-input-field {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .chat-send-btn {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, var(--purple), var(--purple-light));
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+      }
+
+      /* ===== PAIN SECTION ===== */
+      #pain {
+        background: var(--bg-mid);
+        position: relative;
+      }
+
+      .pain-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 3rem;
+      }
+
+      .pain-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+        border-radius: 16px;
+        padding: 1.75rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pain-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.08),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .pain-card:hover::before {
+        opacity: 1;
+      }
+
+      .pain-card:hover {
+        border-color: var(--border);
+        transform: translateY(-3px);
+      }
+
+      .pain-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .pain-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+
+      .pain-text {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* ===== HOW IT WORKS ===== */
+      #how-it-works {
+        background: var(--bg-deep);
+      }
+
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-top: 3.5rem;
+        position: relative;
+      }
+
+      .steps-grid::before {
+        content: '';
+        position: absolute;
+        top: 2.5rem;
+        left: calc(16.67% + 2rem);
+        right: calc(16.67% + 2rem);
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--purple),
+          var(--cyan),
+          var(--purple)
+        );
+        opacity: 0.4;
+      }
+
+      .step-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+        border-radius: 20px;
+        padding: 2rem 1.75rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: default;
+        min-width: 0;
+      }
+
+      .step-card:hover {
+        border-color: var(--border);
+        background: var(--bg-card-hover);
+        transform: translateY(-4px);
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.3),
+          0 0 30px var(--glow-purple);
+      }
+
+      .step-number {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: 900;
+        margin: 0 auto 1.25rem;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 8px 20px var(--glow-purple);
+      }
+
+      .step-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 0.625rem;
+        color: var(--text-primary);
+      }
+
+      .step-text {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.65;
+      }
+
+      .step-code {
+        display: block;
+        margin-top: 1rem;
+        background: rgba(124, 58, 237, 0.12);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.72rem;
+        font-family: 'Courier New', monospace;
+        color: var(--cyan-light);
+        text-align: left;
+        white-space: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* ===== FEATURES ===== */
+      #features {
+        background: var(--bg-mid);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 3rem;
+      }
+
+      .feature-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+        border-radius: 16px;
+        padding: 1.75rem;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .feature-card:hover {
+        border-color: var(--border);
+        background: var(--bg-card-hover);
+        transform: translateY(-2px);
+      }
+
+      .feature-icon-wrap {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.2),
+          rgba(6, 182, 212, 0.1)
+        );
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+      }
+
+      .feature-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+
+      .feature-text {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* ===== TECH SECTION ===== */
+      #tech {
+        background: var(--bg-deep);
+      }
+
+      .tech-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .tech-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.875rem;
+        margin-top: 2rem;
+      }
+
+      .tech-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.125rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        transition: all 0.2s;
+      }
+
+      .tech-badge:hover {
+        border-color: var(--border);
+        color: var(--text-primary);
+      }
+
+      .tech-badge-icon {
+        font-size: 1rem;
+      }
+
+      .tech-visual {
+        position: relative;
+      }
+
+      .tech-card-stack {
+        position: relative;
+        height: 320px;
+      }
+
+      .tech-card {
+        position: absolute;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        width: 100%;
+      }
+
+      .tech-card-1 {
+        top: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.15),
+          rgba(19, 15, 36, 0.95)
+        );
+      }
+
+      .tech-card-2 {
+        top: 130px;
+        left: 0;
+        right: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(6, 182, 212, 0.1),
+          rgba(19, 15, 36, 0.95)
+        );
+        border-color: rgba(6, 182, 212, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        .tech-card-stack {
+          position: static;
+          height: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .tech-card {
+          position: static;
+        }
+      }
+
+      .tech-card-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+      }
+
+      .tech-card-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+      }
+
+      .tech-progress {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 99px;
+        overflow: hidden;
+        margin-bottom: 0.375rem;
+      }
+
+      .tech-progress-fill {
+        height: 100%;
+        border-radius: 99px;
+        background: linear-gradient(90deg, var(--purple), var(--cyan));
+        animation: progress-grow 2s ease-out 0.5s both;
+      }
+
+      @keyframes progress-grow {
+        from {
+          width: 0;
+        }
+      }
+
+      .tech-progress-fill-95 {
+        width: 95%;
+      }
+      .tech-progress-fill-88 {
+        width: 88%;
+      }
+      .tech-progress-fill-92 {
+        width: 92%;
+      }
+
+      .tech-progress-label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* ===== DEMO SECTION ===== */
+      #demo {
+        background: var(--bg-mid);
+      }
+
+      .demo-inner {
+        text-align: center;
+      }
+
+      .demo-widget-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 3rem;
+      }
+
+      /* ===== CTA SECTION ===== */
+      #cta {
+        background: var(--bg-deep);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-bg {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 100%,
+          rgba(124, 58, 237, 0.2) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+      }
+
+      .cta-inner {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      .cta-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.2;
+        margin-bottom: 1.25rem;
+      }
+
+      .cta-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 2.5rem;
+      }
+
+      .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      /* ===== PRICING ===== */
+      #pricing {
+        background: var(--bg-mid);
+      }
+
+      .pricing-card {
+        max-width: 480px;
+        margin: 3rem auto 0;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.4),
+          0 0 40px var(--glow-purple);
+      }
+
+      .pricing-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--purple), var(--cyan));
+      }
+
+      .pricing-badge {
+        display: inline-block;
+        padding: 0.25rem 0.875rem;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.4);
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--purple-light);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.25rem;
+      }
+
+      .pricing-plan-name {
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+
+      .pricing-amount {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+        margin-bottom: 0.375rem;
+      }
+
+      .pricing-currency {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .pricing-number {
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        background: linear-gradient(
+          135deg,
+          var(--purple-light),
+          var(--cyan-light)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+      }
+
+      .pricing-period {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .pricing-tax {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+      }
+
+      .pricing-divider {
+        height: 1px;
+        background: var(--border-light);
+        margin-bottom: 1.5rem;
+      }
+
+      .pricing-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.875rem;
+        margin-bottom: 2rem;
+      }
+
+      .pricing-features li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+
+      .pricing-check {
+        color: var(--cyan-light);
+        font-size: 1rem;
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+      }
+
+      .pricing-note {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        text-align: center;
+        margin-top: 1rem;
+        line-height: 1.6;
+      }
+
+      /* ===== POLICY SECTIONS ===== */
+      .policy-section {
+        background: var(--bg-deep);
+        padding: 5rem 2rem;
+      }
+
+      .policy-section:nth-child(even) {
+        background: var(--bg-mid);
+      }
+
+      .policy-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .policy-summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding: 0.625rem 1.5rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+        transition:
+          border-color 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .policy-summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .policy-summary:hover {
+        border-color: var(--purple-light);
+        background: var(--bg-card-hover);
+      }
+
+      .policy-summary::after {
+        content: '▾';
+        color: var(--text-muted);
+        transition: transform 0.2s ease;
+      }
+
+      .policy-details[open] .policy-summary::after {
+        transform: rotate(180deg);
+      }
+
+      .policy-details[open] .policy-summary {
+        margin-bottom: 0.5rem;
+      }
+
+      .policy-body {
+        max-width: 760px;
+        margin: 2.5rem auto 0;
+      }
+
+      .policy-body h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 2rem 0 0.625rem;
+        padding-bottom: 0.375rem;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .policy-body h3:first-child {
+        margin-top: 0;
+      }
+
+      .policy-body p,
+      .policy-body li {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.8;
+      }
+
+      .policy-body ul,
+      .policy-body ol {
+        padding-left: 1.5rem;
+        margin: 0.5rem 0;
+      }
+
+      .policy-body li {
+        margin-bottom: 0.375rem;
+      }
+
+      .policy-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0.75rem 0;
+        font-size: 0.875rem;
+      }
+
+      .policy-table th,
+      .policy-table td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border: 1px solid var(--border-light);
+        vertical-align: top;
+        line-height: 1.7;
+      }
+
+      .policy-table th {
+        background: rgba(124, 58, 237, 0.08);
+        color: var(--text-primary);
+        font-weight: 600;
+        width: 30%;
+        white-space: nowrap;
+      }
+
+      .policy-table td {
+        color: var(--text-secondary);
+      }
+
+      /* ===== FOOTER ===== */
+      footer {
+        background: var(--bg-mid);
+        border-top: 1px solid var(--border-light);
+        padding: 3rem 2rem 2rem;
+        text-align: center;
+      }
+
+      .footer-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .footer-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .footer-brand {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      .footer-tagline {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .footer-nav {
+        display: flex;
+        gap: 3rem;
+        flex-wrap: wrap;
+      }
+
+      .footer-nav-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        text-align: left;
+      }
+
+      .footer-nav-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+      }
+
+      .footer-nav-group a {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .footer-nav-group a:hover {
+        color: var(--text-primary);
+      }
+
+      .footer-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .footer-copy {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .footer-contact {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .footer-contact a {
+        color: var(--text-secondary);
+        text-decoration: none;
+      }
+
+      .footer-contact a:hover {
+        color: var(--text-primary);
+      }
+
+      /* ===== SCROLL REVEAL ===== */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .reveal-delay-1 {
+        transition-delay: 0.1s;
+      }
+      .reveal-delay-2 {
+        transition-delay: 0.2s;
+      }
+      .reveal-delay-3 {
+        transition-delay: 0.3s;
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 768px) {
+        section {
+          padding: 4rem 1.25rem;
+        }
+
+        /* Navbar */
+        .nav-links {
+          display: none;
+        }
+        .navbar .btn-primary {
+          display: none;
+        }
+        .nav-hamburger {
+          display: flex;
+        }
+
+        /* Hero */
+        #hero {
+          padding-top: 5rem;
+          min-height: auto;
+          padding-bottom: 3rem;
+        }
+
+        .hero-content {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+          text-align: center;
+        }
+
+        .hero-description {
+          margin: 0 auto 2rem;
+        }
+        .hero-eyebrow {
+          display: inline-flex;
+        }
+        .hero-cta {
+          justify-content: center;
+        }
+
+        .hero-note {
+          justify-content: center;
+          flex-wrap: wrap;
+          text-align: center;
+          gap: 0.25rem 0.5rem;
+        }
+
+        .chat-mockup {
+          transform: none;
+          max-width: 100%;
+          margin: 0 auto;
+        }
+
+        /* Grids */
+        .pain-grid,
+        .steps-grid,
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .steps-grid::before {
+          display: none;
+        }
+
+        /* Tech */
+        .tech-inner {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        /* Footer */
+        .footer-top {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .footer-brand {
+          align-items: center;
+        }
+
+        .footer-nav {
+          justify-content: center;
+          gap: 2rem;
+        }
+
+        .footer-nav-group {
+          text-align: center;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        /* Policy */
+        .policy-table th {
+          width: auto;
+          white-space: normal;
+        }
+
+        /* CTA */
+        .cta-buttons {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .cta-buttons .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        section {
+          padding: 3.5rem 1rem;
+        }
+
+        .btn-large {
+          padding: 0.875rem 1.5rem;
+          font-size: 0.95rem;
+        }
+
+        .hero-title {
+          font-size: 2.2rem;
+        }
+
+        .section-title {
+          font-size: 1.75rem;
+        }
+
+        .section-subtitle {
+          font-size: 1rem;
+        }
+
+        .hero-description {
+          font-size: 1rem;
+        }
+
+        .pain-card,
+        .feature-card {
+          padding: 1.25rem;
+        }
+
+        .step-card {
+          padding: 1.5rem 1.25rem;
+        }
+
+        .chat-body {
+          min-height: 220px;
+        }
+
+        .step-code {
+          font-size: 0.68rem;
+        }
+
+        .cta-title {
+          font-size: 1.9rem;
+        }
+
+        .cta-subtitle {
+          font-size: 0.95rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <a href="#hero" class="nav-logo">
+        <div class="nav-logo-icon">✦</div>
+        Ask AI
+      </a>
+      <ul class="nav-links">
+        <li><a href="#how-it-works">使い方</a></li>
+        <li><a href="#features">機能</a></li>
+        <li><a href="#pricing">料金</a></li>
+        <li><a href="#demo">デモ</a></li>
+      </ul>
+      <a
+        href="https://admin.ask-ai.cognova-ai.com/auth/sign-up"
+        class="btn btn-primary"
+        >無料で始める</a
+      >
+      <button
+        class="nav-hamburger"
+        id="hamburger"
+        aria-label="メニューを開く"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="nav-mobile-menu" id="mobileMenu" aria-hidden="true">
+      <a href="#how-it-works" class="mobile-link">使い方</a>
+      <a href="#features" class="mobile-link">機能</a>
+      <a href="#pricing" class="mobile-link">料金</a>
+      <a href="#demo" class="mobile-link">デモ</a>
+      <a
+        href="https://admin.ask-ai.cognova-ai.com/auth/sign-up"
+        class="btn btn-primary"
+        >無料で始める</a
+      >
+    </div>
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      <div class="hero-blob hero-blob-3"></div>
+      <div class="hero-grid"></div>
+
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <div class="hero-eyebrow">
+              <span class="hero-eyebrow-dot"></span>
+              Powered by Amazon Bedrock
+            </div>
+            <h1 class="hero-title">
+              AIアシスタントを、<br />
+              <span class="text-gradient">あなたのサイトに。</span>
+            </h1>
+            <p class="hero-description">
+              ドキュメントや FAQ
+              を登録するだけで、訪問者の質問に自動で回答するAIアシスタントをWebサイトに設置できます。コーディング不要、タグ1行で導入完了。
+            </p>
+            <div class="hero-cta">
+              <a
+                href="https://admin.ask-ai.cognova-ai.com/auth/sign-up"
+                class="btn btn-primary btn-large"
+                >無料で始める →</a
+              >
+              <a href="#demo" class="btn btn-outline btn-large">デモを見る</a>
+            </div>
+            <p class="hero-note">
+              ✓ 5分で導入 &nbsp;·&nbsp; ✓ いつでもキャンセル可
+            </p>
+          </div>
+
+          <div class="chat-mockup">
+            <div class="chat-header">
+              <div class="chat-avatar">🤖</div>
+              <div class="chat-header-info">
+                <div class="chat-header-name">AIアシスタント</div>
+                <div class="chat-header-status">
+                  <span class="status-dot"></span>オンライン
+                </div>
+              </div>
+            </div>
+            <div class="chat-body">
+              <div class="chat-message user">
+                <div class="msg-avatar human">👤</div>
+                <div class="msg-bubble">返品ポリシーについて教えてください</div>
+              </div>
+              <div class="chat-message ai">
+                <div class="msg-avatar ai">✦</div>
+                <div class="msg-bubble">
+                  商品到着後30日以内であれば、未使用・未開封の商品を対象に返品を承っております。返品をご希望の場合は、サポートページよりお申し込みください。
+                </div>
+              </div>
+              <div class="chat-message user">
+                <div class="msg-avatar human">👤</div>
+                <div class="msg-bubble">送料はかかりますか？</div>
+              </div>
+              <div class="chat-typing">
+                <div class="msg-avatar ai">✦</div>
+                <div class="typing-dots">
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                </div>
+              </div>
+            </div>
+            <div class="chat-input-area">
+              <div class="chat-input-field">メッセージを入力...</div>
+              <div class="chat-send-btn">→</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAIN SECTION -->
+    <section id="pain">
+      <div class="container">
+        <div class="reveal text-center">
+          <span class="section-label">よくある課題</span>
+          <h2 class="section-title">こんな悩み、ありませんか？</h2>
+          <p class="section-subtitle" style="margin: 0 auto">
+            Webサイト運営者が抱えるカスタマーサポートの課題を、AIが解決します。
+          </p>
+        </div>
+        <div class="pain-grid">
+          <div class="pain-card reveal reveal-delay-1">
+            <span class="pain-icon">📬</span>
+            <div class="pain-title">同じ問い合わせが繰り返される</div>
+            <p class="pain-text">
+              「営業時間は？」「返品方法は？」など、毎回同じ質問への対応にスタッフのリソースが奪われている。
+            </p>
+          </div>
+          <div class="pain-card reveal reveal-delay-2">
+            <span class="pain-icon">📄</span>
+            <div class="pain-title">FAQページが読まれない</div>
+            <p class="pain-text">
+              せっかく FAQ
+              を整備しても、訪問者がそのページにたどり着かず、結局サポートへの問い合わせが減らない。
+            </p>
+          </div>
+          <div class="pain-card reveal reveal-delay-3">
+            <span class="pain-icon">🌙</span>
+            <div class="pain-title">夜間・休日の対応ができない</div>
+            <p class="pain-text">
+              時間外の問い合わせは翌営業日まで放置せざるを得ず、機会損失や顧客満足度の低下につながっている。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works">
+      <div class="container">
+        <div class="reveal text-center">
+          <span class="section-label">使い方</span>
+          <h2 class="section-title">
+            3ステップで<span class="text-gradient">導入完了</span>
+          </h2>
+          <p class="section-subtitle" style="margin: 0 auto">
+            専門知識は不要。最短5分でAIアシスタントをサイトに設置できます。
+          </p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card reveal reveal-delay-1">
+            <div class="step-number">1</div>
+            <div class="step-title">情報を登録する</div>
+            <p class="step-text">
+              管理画面から、AIアシスタントに参照させたいドキュメントや FAQ
+              を登録します。テキストをそのまま貼り付けるだけで OK。
+            </p>
+          </div>
+          <div class="step-card reveal reveal-delay-2">
+            <div class="step-number">2</div>
+            <div class="step-title">AIが自動で学習する</div>
+            <p class="step-text">
+              登録した情報は自動でベクトル化され、Amazon Bedrock
+              のナレッジベースに蓄積されます。追加・更新もリアルタイムに反映。
+            </p>
+          </div>
+          <div class="step-card reveal reveal-delay-3">
+            <div class="step-number">3</div>
+            <div class="step-title">タグを貼り付ける</div>
+            <p class="step-text">
+              管理画面で発行される2つのタグを、あなたのサイトの HTML
+              に貼り付けるだけ。ボタン用のタグは表示したい場所に、読み込み用のスクリプトはページ下部に配置します。
+            </p>
+            <div class="step-code">
+              &lt;ask-ai-assistant project-id="..."&gt;&lt;/ask-ai-assistant&gt;
+            </div>
+            <div class="step-code" style="margin-top: 0.5rem">
+              &lt;script src="..."&gt;&lt;/script&gt;
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="container">
+        <div class="reveal text-center">
+          <span class="section-label">機能</span>
+          <h2 class="section-title">
+            必要な機能が<span class="text-gradient">すべて揃っている</span>
+          </h2>
+          <p class="section-subtitle" style="margin: 0 auto">
+            管理から設置まで、AIアシスタント運用に必要なものを一つのサービスで。
+          </p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon-wrap">📄</div>
+            <div class="feature-title">ドキュメント管理</div>
+            <p class="feature-text">
+              商品説明・利用規約・マニュアルなどのテキストをそのまま登録。AIが自動でナレッジベースに取り込みます。
+            </p>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feature-icon-wrap">💬</div>
+            <div class="feature-title">FAQ 管理</div>
+            <p class="feature-text">
+              質問と回答のペアを直感的に登録・編集。よくある質問への正確な回答精度を高めます。
+            </p>
+          </div>
+          <div class="feature-card reveal reveal-delay-3">
+            <div class="feature-icon-wrap">🗂️</div>
+            <div class="feature-title">マルチプロジェクト</div>
+            <p class="feature-text">
+              複数のWebサイトを「プロジェクト」として一括管理。サイトごとに異なる情報を持つAIアシスタントを設置できます。
+            </p>
+          </div>
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon-wrap">🚀</div>
+            <div class="feature-title">かんたん設置</div>
+            <p class="feature-text">
+              スクリプトタグを1行追加するだけで設置完了。難しい設定は不要で、すぐにAIアシスタントを公開できます。
+            </p>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feature-icon-wrap">⚡</div>
+            <div class="feature-title">リアルタイム回答</div>
+            <p class="feature-text">
+              ストリーミング形式でAIの回答をリアルタイムに表示。ユーザーを待たせません。
+            </p>
+          </div>
+          <div class="feature-card reveal reveal-delay-3">
+            <div class="feature-icon-wrap">🔒</div>
+            <div class="feature-title">セキュアな認証</div>
+            <p class="feature-text">
+              AWS Cognito
+              による堅牢な認証基盤で、管理画面へのアクセスを安全に保護します。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECH SECTION -->
+    <section id="tech">
+      <div class="container">
+        <div class="tech-inner">
+          <div class="reveal">
+            <span class="section-label">信頼の技術基盤</span>
+            <h2 class="section-title">
+              エンタープライズ品質の<br /><span class="text-gradient"
+                >AIインフラ</span
+              >
+            </h2>
+            <p class="section-subtitle">
+              Amazon Web Services
+              のマネージドサービスを採用。高い可用性・セキュリティ・スケーラビリティを実現します。
+            </p>
+            <div class="tech-badges">
+              <div class="tech-badge">
+                <span class="tech-badge-icon">☁️</span> Amazon Bedrock
+              </div>
+              <div class="tech-badge">
+                <span class="tech-badge-icon">🧠</span> RAG
+              </div>
+              <div class="tech-badge">
+                <span class="tech-badge-icon">🔐</span> AWS Cognito
+              </div>
+              <div class="tech-badge">
+                <span class="tech-badge-icon">⚡</span> AWS Lambda
+              </div>
+              <div class="tech-badge">
+                <span class="tech-badge-icon">🗄️</span> Amazon S3
+              </div>
+            </div>
+          </div>
+
+          <div class="tech-visual reveal reveal-delay-2">
+            <div class="tech-card-stack">
+              <div class="tech-card tech-card-1">
+                <div class="tech-card-label">AI 回答精度</div>
+                <div class="tech-card-value">RAG（検索拡張生成）採用</div>
+                <div class="tech-progress">
+                  <div class="tech-progress-fill tech-progress-fill-95"></div>
+                </div>
+                <div class="tech-progress-label">
+                  <span>回答関連性</span><span>95%</span>
+                </div>
+                <div class="tech-progress" style="margin-top: 0.5rem">
+                  <div class="tech-progress-fill tech-progress-fill-88"></div>
+                </div>
+                <div class="tech-progress-label">
+                  <span>ハルシネーション抑制</span><span>88%</span>
+                </div>
+              </div>
+              <div class="tech-card tech-card-2">
+                <div class="tech-card-label">インフラ信頼性</div>
+                <div class="tech-card-value">AWS マネージドサービス</div>
+                <div class="tech-progress">
+                  <div class="tech-progress-fill tech-progress-fill-92"></div>
+                </div>
+                <div class="tech-progress-label">
+                  <span>稼働率 SLA</span><span>99.9%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO SECTION -->
+    <section id="demo">
+      <div class="container">
+        <div class="demo-inner reveal">
+          <span class="section-label">ライブデモ</span>
+          <h2 class="section-title">
+            実際に<span class="text-gradient">試してみる</span>
+          </h2>
+          <p class="section-subtitle" style="margin: 0 auto 0.5rem">
+            右下のウィジェットは本物の Ask AI です。話しかけてみてください。
+          </p>
+        </div>
+        <div class="demo-widget-wrap">
+          <ask-ai-assistant
+            project-id="cmp9d81430002072bp683zfym"
+            z-index="9999"
+          ></ask-ai-assistant>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="pricing">
+      <div class="container">
+        <div class="reveal text-center">
+          <span class="section-label">料金</span>
+          <h2 class="section-title">
+            シンプルな<span class="text-gradient">料金プラン</span>
+          </h2>
+          <p class="section-subtitle" style="margin: 0 auto">
+            月額固定料金で、全機能を制限なくご利用いただけます。
+          </p>
+        </div>
+        <div class="pricing-card reveal">
+          <div class="pricing-badge">スタンダードプラン</div>
+          <div class="pricing-plan-name">月額サブスクリプション</div>
+          <div class="pricing-amount">
+            <span class="pricing-currency">¥</span>
+            <span class="pricing-number">980</span>
+            <span class="pricing-period">/ 月</span>
+          </div>
+          <p class="pricing-tax">税込価格。毎月自動更新。</p>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>
+              <span class="pricing-check">✓</span>
+              AIアシスタントの設置（プロジェクト数：無制限）
+            </li>
+            <li>
+              <span class="pricing-check">✓</span>
+              ドキュメント・FAQ の登録・編集（件数：無制限）
+            </li>
+            <li>
+              <span class="pricing-check">✓</span>
+              Amazon Bedrock によるナレッジベース自動構築
+            </li>
+            <li>
+              <span class="pricing-check">✓</span>
+              AIアシスタントのウィジェット設置スクリプト発行
+            </li>
+            <li>
+              <span class="pricing-check">✓</span>
+              ストリーミング形式のリアルタイム回答
+            </li>
+            <li>
+              <span class="pricing-check">✓</span>
+              管理画面へのセキュアアクセス（AWS Cognito 認証）
+            </li>
+          </ul>
+          <a
+            href="https://admin.ask-ai.cognova-ai.com/auth/sign-up"
+            class="btn btn-primary btn-large"
+            style="width: 100%; justify-content: center"
+            >今すぐ始める →</a
+          >
+          <p class="pricing-note">
+            クレジットカードでお支払いいただけます。<br />
+            いつでもマイページよりキャンセル可能です。返金ポリシーは<a
+              href="#law"
+              style="color: var(--purple-light)"
+              >こちら</a
+            >をご確認ください。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section id="cta">
+      <div class="cta-bg"></div>
+      <div class="container">
+        <div class="cta-inner reveal">
+          <h2 class="cta-title">
+            まずは無料で<br />
+            <span class="text-gradient">お試しください</span>
+          </h2>
+          <p class="cta-subtitle">
+            導入にかかる時間はわずか5分。今すぐ始められます。
+          </p>
+          <div class="cta-buttons">
+            <a
+              href="https://admin.ask-ai.cognova-ai.com/auth/sign-up"
+              class="btn btn-primary btn-large"
+              >無料アカウントを作成 →</a
+            >
+            <a href="#how-it-works" class="btn btn-outline btn-large"
+              >使い方を見る</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 利用規約 -->
+    <section id="terms" class="policy-section">
+      <div class="container">
+        <div class="text-center">
+          <span class="section-label">Legal</span>
+          <h2 class="section-title" style="font-size: 1.75rem">利用規約</h2>
+        </div>
+        <details class="policy-details">
+          <summary class="policy-summary">利用規約を表示する</summary>
+          <div class="policy-body">
+            <h3>第1条（適用）</h3>
+            <p>
+              本利用規約（以下「本規約」）は、Ask
+              AI（以下「当サービス」）の利用条件を定めるものです。登録ユーザーの皆さまには、本規約に従って当サービスをご利用いただきます。
+            </p>
+
+            <h3>第2条（利用登録）</h3>
+            <p>
+              登録希望者が当サービスの定める方法によって利用登録を申請し、当サービスがこれを承認することによって、利用登録が完了するものとします。
+            </p>
+
+            <h3>第3条（料金・支払方法）</h3>
+            <p>
+              登録ユーザーは、当サービスの有料プランを利用する場合、当サービスが定める利用料金を、当サービスが指定する方法により支払うものとします。月額料金は毎月自動更新されます。
+            </p>
+
+            <h3>第4条（解約・返金）</h3>
+            <p>
+              登録ユーザーはいつでもマイページの「プラン・請求」より解約手続きを行うことができます。解約は当該月の請求期間終了をもって有効となり、以降の課金は停止されます。既に支払済みの月額料金は原則として返金いたしません。ただし、当サービスの重大な瑕疵に起因する場合はこの限りではありません。
+            </p>
+
+            <h3>第5条（禁止事項）</h3>
+            <p>登録ユーザーは以下の行為を行ってはなりません。</p>
+            <ul>
+              <li>法令または公序良俗に違反する行為</li>
+              <li>当サービスのサーバーまたはネットワークへの不正アクセス</li>
+              <li>当サービスの運営を妨害する行為</li>
+              <li>他のユーザーに関する個人情報等の収集・蓄積</li>
+              <li>その他、当サービスが不適切と判断する行為</li>
+            </ul>
+
+            <h3>第6条（サービス提供の停止等）</h3>
+            <p>
+              当サービスは、以下の場合にはサービスの全部または一部の提供を停止することがあります。システムの保守点検または更新を行う場合、地震・火災・停電などの不可抗力によりサービスの提供が困難となった場合、その他サービス提供が困難と判断した場合。
+            </p>
+
+            <h3>第7条（免責事項）</h3>
+            <p>
+              当サービスは、サービスに起因して登録ユーザーに生じた損害について、当サービスの故意または重大な過失がある場合を除き、責任を負わないものとします。
+            </p>
+
+            <h3>第8条（サービス内容の変更等）</h3>
+            <p>
+              当サービスは、登録ユーザーへの事前の告知をもって、サービス内容を変更または終了することがあります。
+            </p>
+
+            <h3>第9条（利用規約の変更）</h3>
+            <p>
+              当サービスは、必要と判断した場合には、登録ユーザーへの通知なしに本規約を変更することがあります。
+            </p>
+
+            <h3>第10条（準拠法・裁判管轄）</h3>
+            <p>
+              本規約の解釈にあたっては、日本法を準拠法とします。当サービスに関して紛争が生じた場合には、当サービスの所在地を管轄する裁判所を専属的合意管轄とします。
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- プライバシーポリシー -->
+    <section id="privacy" class="policy-section">
+      <div class="container">
+        <div class="text-center">
+          <span class="section-label">Legal</span>
+          <h2 class="section-title" style="font-size: 1.75rem">
+            プライバシーポリシー
+          </h2>
+        </div>
+        <details class="policy-details">
+          <summary class="policy-summary">
+            プライバシーポリシーを表示する
+          </summary>
+          <div class="policy-body">
+            <h3>取得する情報</h3>
+            <p>当サービスは、サービスの提供にあたり以下の情報を取得します。</p>
+            <ul>
+              <li>メールアドレス（アカウント登録時）</li>
+              <li>
+                お支払い情報（決済代行会社 Stripe
+                を通じて処理。当サービスはカード情報を保有しません）
+              </li>
+              <li>登録いただいたドキュメント・FAQ のデータ</li>
+              <li>サービス利用状況に関するログ情報</li>
+            </ul>
+
+            <h3>情報の利用目的</h3>
+            <ul>
+              <li>当サービスの提供・運営・改善</li>
+              <li>ご利用料金の請求</li>
+              <li>サービスに関する重要なお知らせの通知</li>
+              <li>お問い合わせへの対応</li>
+            </ul>
+
+            <h3>第三者提供</h3>
+            <p>
+              当サービスは、以下の場合を除き、個人情報を第三者に提供しません。
+            </p>
+            <ul>
+              <li>ご本人の同意がある場合</li>
+              <li>法令に基づく場合</li>
+              <li>人の生命・身体・財産の保護に必要な場合</li>
+            </ul>
+
+            <h3>利用するサービス</h3>
+            <p>
+              当サービスは以下のサービスを利用しており、各サービスのプライバシーポリシーが適用されます。
+            </p>
+            <ul>
+              <li>
+                Amazon Web Services（AWS）— サーバーインフラ・AIモデル処理
+              </li>
+              <li>Stripe — 決済処理</li>
+            </ul>
+
+            <h3>Cookie の使用</h3>
+            <p>
+              当サービスはセッション管理のために Cookie
+              を使用することがあります。ブラウザの設定により Cookie
+              を無効にすることができますが、サービスの一部が正常に機能しない場合があります。
+            </p>
+
+            <h3>個人情報の管理</h3>
+            <p>
+              当サービスは、個人情報の漏洩・滅失または毀損の防止その他の個人情報の安全管理のために必要かつ適切な措置を講じます。
+            </p>
+
+            <h3>お問い合わせ</h3>
+            <p>
+              個人情報の取り扱いに関するお問い合わせは、下記の連絡先までご連絡ください。
+            </p>
+            <p>
+              メール：<a
+                href="mailto:kc1210yone+askai@gmail.com"
+                style="color: var(--purple-light)"
+                >kc1210yone+askai@gmail.com</a
+              >
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 特定商取引法に基づく表記 -->
+    <section id="law" class="policy-section">
+      <div class="container">
+        <div class="text-center">
+          <span class="section-label">Legal</span>
+          <h2 class="section-title" style="font-size: 1.75rem">
+            特定商取引法に基づく表記
+          </h2>
+        </div>
+        <div class="policy-body">
+          <table class="policy-table">
+            <tbody>
+              <tr>
+                <th>サービス名</th>
+                <td>Ask AI</td>
+              </tr>
+              <tr>
+                <th>運営者</th>
+                <td>Cognova AI</td>
+              </tr>
+              <tr>
+                <th>所在地</th>
+                <td>請求があった場合には遅滞なく開示します。</td>
+              </tr>
+              <tr>
+                <th>お問い合わせ</th>
+                <td>
+                  メール：<a
+                    href="mailto:kc1210yone+askai@gmail.com"
+                    style="color: var(--purple-light)"
+                    >kc1210yone+askai@gmail.com</a
+                  ><br />
+                  受付時間：平日 10:00〜18:00（土日祝・年末年始を除く）
+                </td>
+              </tr>
+              <tr>
+                <th>販売価格</th>
+                <td>スタンダードプラン：¥980 / 月（税込）</td>
+              </tr>
+              <tr>
+                <th>支払方法</th>
+                <td>
+                  クレジットカード（Visa・Mastercard・American Express・JCB）
+                </td>
+              </tr>
+              <tr>
+                <th>支払時期</th>
+                <td>
+                  サブスクリプション開始時に初回課金。以降、毎月同日に自動更新・課金されます。
+                </td>
+              </tr>
+              <tr>
+                <th>サービス提供時期</th>
+                <td>決済完了後、直ちにご利用いただけます。</td>
+              </tr>
+              <tr>
+                <th>返品・キャンセル</th>
+                <td>
+                  管理画面の「プラン・請求」ページより、いつでも解約手続きが可能です。<br />
+                  解約は当該月の請求期間終了をもって有効となり、以降の課金は発生しません。<br />
+                  既に支払済みの月額料金は、原則として返金いたしません。ただし、当サービスの重大な瑕疵に起因する場合はご相談ください。<br />
+                  サービスの性質上、デジタルコンテンツのご提供となるため、クーリングオフ制度は適用されません。
+                </td>
+              </tr>
+              <tr>
+                <th>動作環境</th>
+                <td>
+                  最新バージョンの Google Chrome・Firefox・Safari・Microsoft
+                  Edge を推奨します。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href="#hero" class="footer-logo">
+              <div class="nav-logo-icon">✦</div>
+              Ask AI
+            </a>
+            <p class="footer-tagline">あなたのサイトに、AIアシスタントを。</p>
+          </div>
+          <nav class="footer-nav">
+            <div class="footer-nav-group">
+              <p class="footer-nav-title">サービス</p>
+              <a href="#how-it-works">使い方</a>
+              <a href="#features">機能</a>
+              <a href="#pricing">料金</a>
+              <a href="#demo">デモ</a>
+            </div>
+            <div class="footer-nav-group">
+              <p class="footer-nav-title">法的情報</p>
+              <a href="#terms">利用規約</a>
+              <a href="#privacy">プライバシーポリシー</a>
+              <a href="#law">特定商取引法に基づく表記</a>
+            </div>
+            <div class="footer-nav-group">
+              <p class="footer-nav-title">お問い合わせ</p>
+              <a href="mailto:kc1210yone+askai@gmail.com"
+                >kc1210yone+askai@gmail.com</a
+              >
+            </div>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2024 Cognova AI. All rights reserved.</p>
+          <p class="footer-contact">
+            <a href="#terms">利用規約</a>　·
+            <a href="#privacy">プライバシーポリシー</a>　·
+            <a href="#law">特定商取引法</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ASSISTANT WIDGET SCRIPT -->
+    <script
+      type="module"
+      src="https://assistant-web.ask-ai.cognova-ai.com/ask-ai-assistant.js"
+    ></script>
+
+    <!-- INTERACTIONS -->
+    <script>
+      const navbar = document.getElementById('navbar');
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (window.scrollY > 30) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+        },
+        { passive: true },
+      );
+
+      // Hamburger menu
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobileMenu');
+
+      const openMenu = () => {
+        hamburger.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        mobileMenu.style.display = 'flex';
+        requestAnimationFrame(() => {
+          mobileMenu.classList.add('open');
+          mobileMenu.setAttribute('aria-hidden', 'false');
+        });
+        document.body.style.overflow = 'hidden';
+      };
+
+      const closeMenu = () => {
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        mobileMenu.addEventListener(
+          'transitionend',
+          () => {
+            if (!mobileMenu.classList.contains('open')) {
+              mobileMenu.style.display = '';
+            }
+          },
+          { once: true },
+        );
+      };
+
+      hamburger.addEventListener('click', () => {
+        if (hamburger.classList.contains('open')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      // Close mobile menu on link click
+      document
+        .querySelectorAll('.mobile-link, .nav-mobile-menu .btn')
+        .forEach((link) => {
+          link.addEventListener('click', closeMenu);
+        });
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (event) => {
+          const targetId = anchor.getAttribute('href');
+          if (targetId === '#') return;
+          const target = document.querySelector(targetId);
+          if (target) {
+            event.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Scroll reveal
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.12 },
+      );
+
+      document.querySelectorAll('.reveal').forEach((element) => {
+        observer.observe(element);
+      });
+    </script>
+  </body>
+</html>

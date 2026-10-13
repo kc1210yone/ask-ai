@@ -1,0 +1,38 @@
+{
+  "name": "@internal/rdb",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "imports": {
+    "#rdb/*": "./dist/src/*"
+  },
+  "exports": {
+    "./*": "./dist/src/*"
+  },
+  "scripts": {
+    "dev": "tsx watch -r dotenv/config ./src/index.ts",
+    "build": "tsc -b",
+    "test": "run-s test:typecheck",
+    "test:typecheck": "tsc --noEmit",
+    "lint:check": "run-s lint:check:{eslint,prettier,prisma}",
+    "lint:check:eslint": "eslint .",
+    "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
+    "lint:check:prisma": "prisma validate",
+    "lint:fix": "run-s lint:fix:{eslint,prettier,prisma}",
+    "lint:fix:eslint": "eslint --fix .",
+    "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore .",
+    "lint:fix:prisma": "prisma format"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "3.1041.0",
+    "@prisma/adapter-mariadb": "7.7.0",
+    "@prisma/client": "7.7.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "dotenv": "17.4.2",
+    "prisma": "7.7.0",
+    "tsx": "4.21.0"
+  }
+}

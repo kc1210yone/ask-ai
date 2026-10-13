@@ -1,0 +1,45 @@
+import type { ErrorRequestHandler, Response } from 'express';
+import { HttpError } from '#src/lib/errors/index.js';
+import { logger } from '#src/lib/logger/index.js';
+
+export const errorHandler: ErrorRequestHandler = (
+  error,
+  _request,
+  response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next,
+) => {
+  if (
+    error instanceof HttpError &&
+    400 <= error.statusCode &&
+    error.statusCode < 500
+  ) {
+    logger.warn(error);
+  } else {
+    logger.error(error);
+  }
+
+  if (!response.headersSent) {
+    whenHeadersNotSent(error, response);
+  } else {
+    whenHeadersSent(response);
+  }
+};
+
+const whenHeadersNotSent = (error: unknown, response: Response): void => {
+  if (error instanceof HttpError) {
+    response.status(error.statusCode).json({
+      error: error.message,
+    });
+  } else {
+    response.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const whenHeadersSent = (response: Response): void => {
+  if (response.get('Content-Type') === 'text/event-stream') {
+    response.write('event: app-error\n');
+    response.write('data: {"error": "unknown"}\n\n');
+  }
+  response.end();
+};

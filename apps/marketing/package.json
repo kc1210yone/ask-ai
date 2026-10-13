@@ -1,0 +1,20 @@
+{
+  "name": "@internal/marketing",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "dev": "serve ./src",
+    "test": ":",
+    "lint:check": "run-s lint:check:{eslint,prettier}",
+    "lint:check:eslint": "eslint .",
+    "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
+    "lint:fix": "run-s lint:fix:{eslint,prettier}",
+    "lint:fix:eslint": "eslint --fix .",
+    "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
+  },
+  "devDependencies": {
+    "serve": "14.2.6"
+  }
+}

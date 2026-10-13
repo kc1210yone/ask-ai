@@ -1,0 +1,37 @@
+{
+  "name": "@internal/functions",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "imports": {
+    "#src/*": "./dist/src/*"
+  },
+  "scripts": {
+    "dev": "tsx watch ./src/index.ts",
+    "build": "tsc -b",
+    "test": "run-s test:{typecheck,vitest}",
+    "test:typecheck": "tsc --noEmit",
+    "test:vitest": "vitest run",
+    "lint:check": "run-s lint:check:{eslint,prettier}",
+    "lint:check:eslint": "eslint .",
+    "lint:check:prettier": "prettier --check --ignore-path ../../.prettierignore .",
+    "lint:fix": "run-s lint:fix:{eslint,prettier}",
+    "lint:fix:eslint": "eslint --fix .",
+    "lint:fix:prettier": "prettier --write --ignore-path ../../.prettierignore ."
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-agent": "3.1041.0",
+    "@aws-sdk/client-s3": "3.1041.0",
+    "@internal/rdb": "*",
+    "stripe": "22.2.1",
+    "winston": "3.19.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.161",
+    "dotenv": "17.4.2",
+    "tsx": "4.21.0",
+    "vitest": "4.1.2"
+  }
+}

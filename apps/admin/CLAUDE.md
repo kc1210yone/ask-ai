@@ -1,0 +1,83 @@
+# Admin
+
+管理ユーザー用の管理画面。
+AIアシスタントが回答するときに参照するデータを入稿するシステム。
+このディレクトリはモノレポのワークスペースの一つである。
+
+## 技術スタック
+
+- React 19
+- Next.js 16
+- Tailwind CSS 4
+- shadcn/ui
+- Vitest
+- React Compiler
+- React Hook Form 7.x, @hookform/resolvers/zod
+- AWS Cognito
+- AWS Amplify
+- date-fns
+- tiny-invariant
+- Zod 4
+
+## コードスタイル
+
+- UIはできるだけshadcn/uiを使うこと。
+
+## コマンド
+
+Workspaceのディレクトリではなくプロジェクトルートのディレクトリから実行。
+
+- `npm run dev -w @internal/admin`: Next.jsのDevモード起動。
+- `npm run test:typecheck -w @internal/admin`: TypeScriptのタイプチェック。
+- `npm run test:vitest -w @internal/admin`: Vitestによるテスト。
+- `npm run lint:check -w @internal/admin`: ESLint/Prettierによるチェック。
+- `npm run lint:fix -w @internal/admin`: ESLint/Prettierによる自動Fix。
+- `npx -w @internal/admin shadcn add <component>`: shadcn/uiのコンポーネント追加。追加後、スタイルのFixを実行すること。
+
+## アーキテクチャ
+
+### 全体構成
+
+- `#src` (`./src`): ソースディレクトリ。
+- `#src/app`: ルーティング。この層は薄くし、機能の実装はできるだけfeaturesに置く。
+- `#src/components`: 共通で使うコンポーネント。
+- `#src/components/ui`: 共通で使うUIパーツ。shadcn/uiのコンポーネントを入れる。
+- `#src/features`: 各機能の実装。
+- `#src/hooks`: 共通で使うフック。
+- `#src/lib`: 共通で使うロジック。
+- `#src/types`: 共通で使う型。
+
+### app配下
+
+- `#src/app/(private)`: 認証が必要なページ。
+- `#src/app/(private)/(with-user)`: RDBにすでにユーザーが存在する場合用のページ。
+- `#src/app/(private)/(with-user)/(with-project)`: プロジェクトが選択されている時用のページ。
+- `#src/app/(private)/(with-user)/(without-project)`: プロジェクトが選択されていない時用や、特定のプロジェクトに依存しないページ。
+- `#src/app/(private)/(without-user)`: ログインはなされているけれどもまだRDBにユーザーが存在しない時用のページ。
+- `#src/app/(public)`: 認証が不要なページ。
+- `#src/app/(public)/auth`: サインアップやログインなど認証関係のページ。
+
+### features配下
+
+- `#src/features/auth`: 認証・認可関係。
+- `#src/features/documents`: ドキュメント関係。
+- `#src/features/faqs`: FAQ関係。
+- `#src/features/layouts`: レイアウト。
+- `#src/features/projects`: プロジェクト関係。
+- `#src/features/theme`: テーマ関係。
+- `#src/features/users`: ユーザー関係。
+
+### 各feature配下
+
+- `#src/features/*/actions`: サーバアクション。
+- `#src/features/*/components`: コンポーネント。
+- `#src/features/*/hooks`: フック。
+- `#src/features/*/lib`: ロジック。
+- `#src/features/*/providers`: プロバイダ。
+- `#src/features/*/server`: サーバサイドのロジック。
+- `#src/features/*/types`: 型。
+- `#src/features/*/index.ts`: featureの外部に公開したいものをexportする。
+
+## その他注意事項
+
+- テストは書かない。

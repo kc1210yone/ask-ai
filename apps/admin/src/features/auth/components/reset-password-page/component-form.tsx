@@ -1,0 +1,104 @@
+'use client';
+
+import 'client-only';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { resetPassword } from 'aws-amplify/auth';
+import { useRouter } from 'next/navigation';
+import { useState, type ReactNode } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import invariant from 'tiny-invariant';
+import { z } from 'zod';
+import { Button } from '#src/components/ui/button';
+import { Field, FieldError, FieldLabel } from '#src/components/ui/field';
+import { Input } from '#src/components/ui/input';
+import { useAuth } from '#src/features/auth/providers/auth-provider';
+
+const FormSchema = z.object({
+  username: z
+    .email('有効なメールアドレスを入力してください。')
+    .max(254, '254文字以内で入力してください。'),
+});
+type FormSchemaType = z.infer<typeof FormSchema>;
+
+export const ComponentForm = (): ReactNode => {
+  const router = useRouter();
+
+  const { setUsername } = useAuth();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      username: '',
+    },
+  });
+
+  const onSubmit = async (data: FormSchemaType): Promise<void> => {
+    setIsLoading(true);
+    let result;
+    try {
+      result = await resetPassword({
+        username: data.username,
+      });
+    } catch (error) {
+      console.warn(error);
+      invariant(error instanceof Error);
+      let errorMessage;
+      switch (error.name) {
+        case 'LimitExceededException':
+          errorMessage = 'しばらくしてから再度お試しください。';
+          break;
+        default:
+          errorMessage = 'パスワードのリセットに失敗しました。';
+          break;
+      }
+      toast.error(errorMessage, {
+        position: 'top-center',
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    switch (result.nextStep.resetPasswordStep) {
+      case 'CONFIRM_RESET_PASSWORD_WITH_CODE':
+        setUsername(data.username);
+        router.push('/auth/reset-password-confirm');
+        break;
+      default:
+        throw new Error('Unexpected resetPasswordStep.');
+    }
+  };
+
+  return (
+    <form
+      onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
+      className="flex flex-col gap-4"
+    >
+      <Controller
+        name="username"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>
+              ユーザー名（メールアドレス）
+            </FieldLabel>
+            <Input
+              {...field}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+              placeholder="email@example.com"
+              type="email"
+              autoComplete="email"
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+      <Field>
+        <Button disabled={isLoading}>パスワードをリセット</Button>
+      </Field>
+    </form>
+  );
+};
